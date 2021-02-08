@@ -12,11 +12,40 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	cucumberRuntime {
+		extendsFrom testImplementation
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Cucumber
+	testImplementation 'io.cucumber:cucumber-java:6.8.1'
+	testImplementation 'io.cucumber:cucumber-junit:6.8.1'
+
+	// JUnit 5
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
+
+	// JUnit 4 - Vintage Engine
+	testImplementation("junit:junit:4.13")
+	testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.7.1")
 }
 
 test {
 	useJUnitPlatform()
+}
+
+task cucumber() {
+	dependsOn assemble, testClasses
+	doLast {
+		javaexec {
+			main = "io.cucumber.core.cli.Main"
+			classpath = configurations.cucumberRuntime + sourceSets.main.output + sourceSets.test.output
+			args = ['--plugin', 'pretty', '--glue', 'edu.uno.advcomparch', 'src/test/resources/edu/uno/advcomparch']
+		}
+	}
 }
