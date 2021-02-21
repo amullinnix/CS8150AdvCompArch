@@ -1,5 +1,6 @@
 package edu.uno.advcomparch;
 
+import edu.uno.advcomparch.controller.CacheController;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.springframework.beans.factory.annotation.Autowired;
