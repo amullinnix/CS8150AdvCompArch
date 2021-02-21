@@ -1,9 +1,7 @@
 package edu.uno.advcomparch.controller;
 
 import edu.uno.advcomparch.model.Data;
-import org.springframework.stereotype.Controller;
 
-@Controller
 public interface CacheController {
 
     // service a read request from the CPU.
