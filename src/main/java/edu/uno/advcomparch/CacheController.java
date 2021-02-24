@@ -1,5 +1,6 @@
 package edu.uno.advcomparch;
 
+import edu.uno.advcomparch.instruction.Instruction;
 import org.springframework.stereotype.Controller;
 
 import java.util.LinkedList;

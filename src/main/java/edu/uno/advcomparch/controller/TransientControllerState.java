@@ -1,6 +1,6 @@
 package edu.uno.advcomparch.controller;
 
-public enum TransientStates {
+public enum TransientControllerState {
     // Waiting for data from L1 for read.
     RD_WAIT_D,
     // Waiting for data from L2 for read.
