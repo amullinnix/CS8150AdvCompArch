@@ -44,6 +44,10 @@ dependencies {
 	// AssertJ
 	testCompile("org.assertj:assertj-core:3.11.1")
 
+	// RabbitMQ
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.amqp:spring-rabbit-test'
 }
 
 test {
