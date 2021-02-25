@@ -1,5 +1,12 @@
 package edu.uno.advcomparch.storage;
 
-public interface DynamicRandomAccessMemory {
+import lombok.Data;
+
+import java.util.Map;
+
+@Data
+public class DynamicRandomAccessMemory {
+
+    private Map<String, String> memory;
 
 }

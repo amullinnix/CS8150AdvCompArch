@@ -13,6 +13,6 @@ public class Instruction {
 
     private String address;
 
-    //CPU? L1C? L2C? etc?
+    //TODO: This might be offset, instead?
     private int source;
 }

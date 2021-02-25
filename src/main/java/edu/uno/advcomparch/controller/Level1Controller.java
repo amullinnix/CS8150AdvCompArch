@@ -1,6 +1,7 @@
 package edu.uno.advcomparch.controller;
 
 import edu.uno.advcomparch.instruction.Instruction;
+import edu.uno.advcomparch.instruction.Message;
 import lombok.Data;
 
 import java.util.*;
@@ -14,19 +15,28 @@ public class Level1Controller {
 
     private List<String> messageList;
 
-    private Queue<Instruction> queue;
+    private Queue<Message> queue;
 
-    public Level1Controller() {
+    public Level1Controller(Queue<Message> queue) {
         this.level1Data = new HashMap<>();
         this.messageList = new ArrayList<>();
-        this.queue = new LinkedBlockingQueue<>();  //used LinkedBlockingQueue in case of concurrency
+        this.queue = queue;
     }
 
     //I think this might be the interface method we are looking for
-    public void processInstruction(Instruction instruction) {
+    public void processInstruction() {
         //I expect this to "put" instructions or messages on other queues, for now, using a message list
 
         //Do we need to calculate the address components?
+
+        //Get the first message from our queue
+        Message message = this.queue.poll();
+
+        if(message == null) {
+            return; //fail fast
+        }
+        
+        Instruction instruction = message.getInstruction();
 
         //Check level 1 data for a "hit"
         String address = instruction.getAddress();
