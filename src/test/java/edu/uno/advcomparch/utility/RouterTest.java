@@ -2,12 +2,15 @@ package edu.uno.advcomparch.utility;
 
 import edu.uno.advcomparch.instruction.Instruction;
 import edu.uno.advcomparch.instruction.Message;
+import edu.uno.advcomparch.model.Controller;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static edu.uno.advcomparch.model.Controller.CPU;
+import static edu.uno.advcomparch.model.Controller.LEVEL_1_CACHE;
 import static org.junit.Assert.assertEquals;
 
 
@@ -31,8 +34,8 @@ public class RouterTest {
         //Inject two queues into router
         Router router = new Router(level1Queue, cpuQueue);
 
-        message.setSource("CPU");
-        message.setDestination("Level1");
+        message.setSource(CPU);
+        message.setDestination(LEVEL_1_CACHE);
 
         router.route(message);
 
@@ -43,8 +46,8 @@ public class RouterTest {
     public void routeMessageToCpu() {
         Router router = new Router(level1Queue, cpuQueue);
 
-        message.setSource("Level1");
-        message.setDestination("CPU");
+        message.setSource(LEVEL_1_CACHE);
+        message.setDestination(CPU);
 
         router.route(message);
 
