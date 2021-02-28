@@ -2,14 +2,16 @@ package edu.uno.advcomparch.controller;
 
 import edu.uno.advcomparch.instruction.Instruction;
 import edu.uno.advcomparch.instruction.Message;
-import lombok.Data;
+import edu.uno.advcomparch.model.Data;
 
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
 
-//TODO: Do we want this class to implement the Cache Controller Interface?
-@Data
-public class Level1Controller {
+// Requirements:
+//      Split, 4-way, write-back, write-allocate, 32 byte block size and size 8KB.
+//      L1C must support valid, dirty bits.
+//      Assume that L1D is dual-ported – one read and one write port.
+@lombok.Data
+public class Level1Controller implements CacheController {
 
     private Map<Address, String> level1Data;
 
@@ -51,5 +53,15 @@ public class Level1Controller {
         }
         //else request from next level down
 
+    }
+
+    @Override
+    public Data<?> cpuRead() {
+        throw new UnsupportedOperationException("cpuRead - Unsupported Operation");
+    }
+
+    @Override
+    public void cpuWrite(Data<?> data) {
+        throw new UnsupportedOperationException("cpuWrite - Unsupported Operation");
     }
 }

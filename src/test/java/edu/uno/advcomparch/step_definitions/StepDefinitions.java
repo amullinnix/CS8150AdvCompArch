@@ -1,5 +1,6 @@
-package edu.uno.advcomparch;
+package edu.uno.advcomparch.step_definitions;
 
+import edu.uno.advcomparch.IsItFriday;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;

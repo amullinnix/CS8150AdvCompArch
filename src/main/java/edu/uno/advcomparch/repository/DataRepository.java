@@ -1,12 +1,21 @@
 package edu.uno.advcomparch.repository;
 
 import edu.uno.advcomparch.model.Data;
+import lombok.NoArgsConstructor;
 
-public interface DataRepository {
+// We could provide default implementations here or make this an abstract class.
+@NoArgsConstructor
+public class DataRepository<T,A> {
 
-    Data<?> get();
+    public Data<T> get(A address) {
+        throw new UnsupportedOperationException("Get - Unsupported Operation");
+    }
 
-    Data<?> victimize();
+    public Data<T> victimize(A address) {
+        throw new UnsupportedOperationException("Victimize - Unsupported Operation");
+    }
 
-    void write(Data<?> data);
+    public void write(Data<?> data) {
+        throw new UnsupportedOperationException("Write - Unsupported Operation");
+    }
 }
