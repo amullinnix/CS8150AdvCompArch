@@ -11,7 +11,16 @@ import java.util.List;
 @Data
 public class DynamicRandomAccessMemory<T> {
 
+    private static final int MAIN_MEMORY_SIZE_IN_BYTES = 131072;  //128KB
+
+    //TODO: Decide on which implementation is best
+    private byte[] memory;
+
+    public DynamicRandomAccessMemory() {
+        memory = new byte[MAIN_MEMORY_SIZE_IN_BYTES];
+    }
+
     // List for array indexing, could probably initialize to size for 128Kb requirement
-    private List<T> memory = new ArrayList<>();
+    private List<T> dram = new ArrayList<>();
 
 }

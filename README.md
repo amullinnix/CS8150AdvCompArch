@@ -18,3 +18,7 @@ A: TBD
 #### Q: I'm not sure what is meant by implementing buses. We were going to simply have each controller put messages on the other controller's queues for processing. Can you elaborate a bit more? 
 
 A: TBD
+
+#### Q: Confirming, tag is not included in cache size, right?
+
+A: TBD
