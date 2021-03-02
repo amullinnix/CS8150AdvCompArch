@@ -24,6 +24,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// Spring Statemachine
+	implementation 'org.springframework.statemachine:spring-statemachine-core:2.2.2.RELEASE'
+
 	// Guava
 	implementation("com.google.guava:guava:30.1-jre")
 
