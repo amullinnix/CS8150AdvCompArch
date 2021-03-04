@@ -4,6 +4,7 @@ import edu.uno.advcomparch.instruction.Instruction;
 import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.model.Data;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 // Requirements:
@@ -13,8 +14,7 @@ import java.util.*;
 @lombok.Data
 public class Level1Controller implements CacheController {
 
-
-    private byte[][][] data;
+    private List<CacheSet> data;  //maybe call this, I dunno, cache, instead? ;)
 
     private List<String> messageList;
 
@@ -22,17 +22,17 @@ public class Level1Controller implements CacheController {
 
     public Level1Controller(Queue<Message> queue) {
 
-        data = new byte[64][][];
-        for(int j = 0; j < 64; j++) {
-
-            byte[][] set = new byte[4][];
-            for (int i = 0; i < 4; i++) {  //put 4 cache blocks in one set
-                byte[] cacheBlock = new byte[32+6];  //cache block size + tag size
-                set[i] = cacheBlock;
+        //Initialize the cache!
+        data = new ArrayList<>();
+        for(int i = 0; i < 64; i++) {
+            CacheSet set = new CacheSet();
+            for(int j = 0; j < 4; j++) {
+                CacheBlock block = new CacheBlock(6, 32);
+                set.add(block);
             }
-
-            data[j] = set;
+            data.add(set);
         }
+
 
         this.messageList = new ArrayList<>();
         this.queue = queue;
@@ -70,61 +70,77 @@ public class Level1Controller implements CacheController {
         int decimalIndex = Integer.parseInt(index, 2);
 
         //fetch that set
-        byte[][] set = data[decimalIndex];
-
-        //naive approach, just check the first one
-        byte[] cacheBlock = set[0];
-
-        //get the tag, or the first 6 bytes
-        byte[] tagFromCache = Arrays.copyOfRange(cacheBlock, 0, 6);
-        System.out.println("Tag from Cache: " + Arrays.toString(tagFromCache));
+        CacheSet set = data.get(decimalIndex);
 
         //compare the tag to our address' tag
         String tag = address.getTag();
         byte [] tagBytes = tag.getBytes();
         System.out.println("Tag from Address: " + Arrays.toString(tagBytes));
 
-        return (Arrays.equals(tagFromCache, tagBytes));
+        //less naive approach, check them all
+        for(CacheBlock block : set.getBlocks()) {
+            if(Arrays.equals(block.getTag(), tagBytes)) {
+                return true;
+            }
+        }
 
+        return false;
     }
 
     public void writeDataToCache(Address address, byte b) {
         //index tells the set we are using
-        String index = address.getIndex();
+        String index = address.getIndex().replaceFirst("^0+(?!$)", "");
         int decimalIndex = Integer.parseInt(index, 2);
         System.out.println("The decimal index is: " + decimalIndex);
 
         //fetch the set (with the 4 cache blocks)
-        byte[][] set = data[decimalIndex];
+        CacheSet set = data.get(decimalIndex);
 
-        //naive approach, just stick in first entry for now
-        byte[] cacheBlock = set[0];
+        //less naive approach, find first empty cache block
+        CacheBlock emptyBlock = null;
+
+        for(CacheBlock block : set.getBlocks()) {
+            if(block.isEmpty()) {   //TODO: Java 8+ ify this.
+                System.out.println("empty block found!");
+                emptyBlock = block;
+                break;
+            } else {
+                System.out.println("block not empty :(");
+            }
+        }
+
+        if(emptyBlock == null) {
+            System.out.println("Set is full - oh noes!");
+        }
 
         //must put tag in there
-        String tag = address.getTag();
+        String tag = address.getTag().replaceFirst("^0(?!$)", "");
         int decimalTag = Integer.parseInt(tag, 2);
         System.out.println("The decimal tag is: " + decimalTag);
-        for(int i = 0; i < tag.length(); i++) {
-            cacheBlock[i] = (byte) tag.charAt(i);
-        }
+
+        emptyBlock.setTag(address.getTag().getBytes());
 
         //now add the data using the offset
         String offset = address.getOffset();
         int decimalOffset = Integer.parseInt(offset, 2);
         System.out.println("The decimal offset is: " + decimalOffset);
-        cacheBlock[decimalOffset + 5] = b;  //add the tag size - why 5 and not 6?
-
+        byte[] block = emptyBlock.getBlock();
+        block[decimalOffset] = b;
+        //do we need to set it back? We'll find out!
     }
 
     public void printData() {
 
-        System.out.println("Printing data of length: " + data.length);
-        for(int i = 0; i < data.length; i++) {
-            System.out.print("Set " + i + ": ");
-            byte[][] set = data[i];
-            for(int j = 0; j < set.length; j++) {
-                byte[] block = set[j];
-                System.out.print(Arrays.toString(block));
+        System.out.println("Printing data of length: " + data.size());
+
+        int i = 0;
+        for(CacheSet set : data) {
+            System.out.println("Set " + i++ + ": ");
+            List<CacheBlock> blocks = set.getBlocks();
+            for(CacheBlock block : blocks) {
+                System.out.print("t: " + Arrays.toString(block.getTag()));
+                System.out.print("b: " + Arrays.toString(block.getBlock()));
+                System.out.println();
             }
             System.out.println();
         }
