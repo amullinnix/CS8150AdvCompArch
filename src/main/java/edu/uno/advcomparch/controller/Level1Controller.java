@@ -14,6 +14,12 @@ import java.util.*;
 @lombok.Data
 public class Level1Controller implements CacheController {
 
+    //TODO: Consider calculating this and extracting as well
+    public static final int NUMBER_OF_SETS = 64;
+    public static final int NUMBER_OF_BLOCKS = 4;
+    public static final int TAG_SIZE = 6;
+    public static final int BLOCK_SIZE = 32;
+
     private List<CacheSet> data;  //maybe call this, I dunno, cache, instead? ;)
 
     private List<String> messageList;
@@ -24,10 +30,10 @@ public class Level1Controller implements CacheController {
 
         //Initialize the cache!
         data = new ArrayList<>();
-        for(int i = 0; i < 64; i++) {
+        for(int i = 0; i < NUMBER_OF_SETS; i++) {
             CacheSet set = new CacheSet();
-            for(int j = 0; j < 4; j++) {
-                CacheBlock block = new CacheBlock(6, 32);
+            for(int j = 0; j < NUMBER_OF_BLOCKS; j++) {
+                CacheBlock block = new CacheBlock(TAG_SIZE, BLOCK_SIZE);
                 set.add(block);
             }
             data.add(set);
@@ -103,7 +109,7 @@ public class Level1Controller implements CacheController {
             if(block.isEmpty()) {   //TODO: Java 8+ ify this.
                 System.out.println("empty block found!");
                 emptyBlock = block;
-                break;
+                break;  //I hate breaks
             } else {
                 System.out.println("block not empty :(");
             }
@@ -129,22 +135,62 @@ public class Level1Controller implements CacheController {
         //do we need to set it back? We'll find out!
     }
 
+    public byte getByteAtAddress(Address address) {
+        //get the index to figure out the set
+        String index = address.getIndex();
+        int decimalIndex = Integer.parseInt(index, 2);
+
+        //fetch that set
+        CacheSet set = data.get(decimalIndex);
+
+        //compare the tag to our address' tag
+        String tag = address.getTag();
+        byte [] tagBytes = tag.getBytes();
+        System.out.println("Tag from Address: " + Arrays.toString(tagBytes));
+
+        //find the matching block
+        for(CacheBlock block : set.getBlocks()) {
+            if(Arrays.equals(block.getTag(), tagBytes)) {
+                String offset = address.getOffset();
+                int decimalOffset = Integer.parseInt(offset, 2);
+                System.out.println("The decimal offset is: " + decimalOffset);
+                return block.getBlock()[decimalOffset];
+            }
+        }
+
+        return 1;  //ugly
+    }
+
+    public byte[] getDataAtAddress(Address address, int i) {
+
+        byte[] bytes = new byte[]{};
+
+        return bytes;
+    }
+
     public void printData() {
 
         System.out.println("Printing data of length: " + data.size());
 
-        int i = 0;
-        for(CacheSet set : data) {
-            System.out.println("Set " + i++ + ": ");
-            List<CacheBlock> blocks = set.getBlocks();
-            for(CacheBlock block : blocks) {
-                System.out.print("t: " + Arrays.toString(block.getTag()));
-                System.out.print("b: " + Arrays.toString(block.getBlock()));
-                System.out.println();
-            }
+        for(int i = 0; i < data.size(); i++) {
+            printSingleSet(i);
             System.out.println();
         }
     }
+
+    public void printSingleSet(int setToPrint) {
+
+        CacheSet set = data.get(setToPrint);
+        System.out.println("Set " + setToPrint + ": ");
+
+        List<CacheBlock> blocks = set.getBlocks();
+        for(CacheBlock block : blocks) {
+            System.out.print("t: " + Arrays.toString(block.getTag()));
+            System.out.print("b: " + Arrays.toString(block.getBlock()));
+            System.out.println();
+        }
+    }
+
 
     @Override
     public Data<?> cpuRead() {

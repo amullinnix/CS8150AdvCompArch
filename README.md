@@ -22,3 +22,7 @@ A: Didn't quite get this, but he said something about being able to ignore bus s
 #### Q: Confirming, tag is not included in cache size, right?
 
 A: Definitely not.
+
+#### Q: Let's say you have a tag, and write one byte, same tag, different offset. Same cache block?
+
+A: Pretty sure yes, let's find out.

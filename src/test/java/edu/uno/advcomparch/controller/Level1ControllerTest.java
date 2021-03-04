@@ -97,14 +97,48 @@ public class Level1ControllerTest {
         byte b2 = 4;
 
         controller.writeDataToCache(address1, b1);
-        controller.printData();
+        controller.printSingleSet(42);
         System.out.println("\n\nsecond write");
         controller.writeDataToCache(address2, b2);
-        controller.printData();
+        controller.printSingleSet(42);
 
         //both should be present, in the same set
         assertEquals(true, controller.isDataPresentInCache(address1));
         assertEquals(true, controller.isDataPresentInCache(address2));
+    }
+
+    @Test
+    public void getDataFromCache() {
+        Address address = new Address("000111", "000100", "00101");
+        byte b = 13;
+
+        controller.writeDataToCache(address, b);
+        byte fromCache = controller.getByteAtAddress(address);
+        controller.printSingleSet(4);
+
+        assertEquals(b, fromCache);
+    }
+
+    //This test needs to come after being able to write to multiple locations in same block
+    @Ignore
+    @Test
+    public void getMultipleBytes() {
+        Address address = new Address("000111", "000100", "00100");
+        byte b = 13;
+        controller.writeDataToCache(address, b);
+
+        address = new Address("000111", "000100", "00100");
+        b = 14;
+        controller.writeDataToCache(address, b);
+
+        address = new Address("000111", "000100", "00100");
+        b = 15;
+        controller.writeDataToCache(address, b);
+        controller.printSingleSet(4);
+
+        byte[] fromCache = controller.getDataAtAddress(address, 3);
+
+        assertEquals(new byte[] {13, 14, 15}, fromCache);
     }
 
 }
