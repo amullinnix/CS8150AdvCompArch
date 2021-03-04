@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -120,25 +121,27 @@ public class Level1ControllerTest {
     }
 
     //This test needs to come after being able to write to multiple locations in same block
-    @Ignore
     @Test
     public void getMultipleBytes() {
         Address address = new Address("000111", "000100", "00100");
         byte b = 13;
         controller.writeDataToCache(address, b);
 
-        address = new Address("000111", "000100", "00100");
+        address = new Address("000111", "000100", "00101");
         b = 14;
         controller.writeDataToCache(address, b);
 
-        address = new Address("000111", "000100", "00100");
+        address = new Address("000111", "000100", "00110");
         b = 15;
         controller.writeDataToCache(address, b);
         controller.printSingleSet(4);
 
+        //reset address offset ;)
+        address.setOffset("00100");
+
         byte[] fromCache = controller.getDataAtAddress(address, 3);
 
-        assertEquals(new byte[] {13, 14, 15}, fromCache);
+        assertEquals(true, Arrays.equals(new byte[] {13, 14, 15}, fromCache));
     }
 
 }

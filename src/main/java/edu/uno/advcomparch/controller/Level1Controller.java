@@ -103,7 +103,14 @@ public class Level1Controller implements CacheController {
         CacheSet set = data.get(decimalIndex);
 
         //less naive approach, find first empty cache block
+        //TODO: We need to account for matching tag
         CacheBlock emptyBlock = null;
+
+        //must put tag in there
+        String tag = address.getTag().replaceFirst("^0(?!$)", "");
+        int decimalTag = Integer.parseInt(tag, 2);
+        System.out.println("The decimal tag is: " + decimalTag);
+
 
         for(CacheBlock block : set.getBlocks()) {
             if(block.isEmpty()) {   //TODO: Java 8+ ify this.
@@ -112,6 +119,11 @@ public class Level1Controller implements CacheController {
                 break;  //I hate breaks
             } else {
                 System.out.println("block not empty :(");
+                if(Arrays.equals(block.getTag(), address.getTag().getBytes())) {
+                    System.out.println("tag matches!");
+                    emptyBlock = block;
+                    break;
+                }
             }
         }
 
@@ -119,10 +131,6 @@ public class Level1Controller implements CacheController {
             System.out.println("Set is full - oh noes!");
         }
 
-        //must put tag in there
-        String tag = address.getTag().replaceFirst("^0(?!$)", "");
-        int decimalTag = Integer.parseInt(tag, 2);
-        System.out.println("The decimal tag is: " + decimalTag);
 
         emptyBlock.setTag(address.getTag().getBytes());
 
@@ -164,6 +172,28 @@ public class Level1Controller implements CacheController {
     public byte[] getDataAtAddress(Address address, int i) {
 
         byte[] bytes = new byte[]{};
+
+        //get the index to figure out the set
+        String index = address.getIndex();
+        int decimalIndex = Integer.parseInt(index, 2);
+
+        //fetch that set
+        CacheSet set = data.get(decimalIndex);
+
+        //compare the tag to our address' tag
+        String tag = address.getTag();
+        byte [] tagBytes = tag.getBytes();
+        System.out.println("Tag from Address: " + Arrays.toString(tagBytes));
+
+        //find the matching block
+        for(CacheBlock block : set.getBlocks()) {
+            if(Arrays.equals(block.getTag(), tagBytes)) {
+                String offset = address.getOffset();
+                int decimalOffset = Integer.parseInt(offset, 2);
+                System.out.println("The decimal offset is: " + decimalOffset);
+                bytes = Arrays.copyOfRange(block.getBlock(), decimalOffset, decimalOffset + i);
+            }
+        }
 
         return bytes;
     }
