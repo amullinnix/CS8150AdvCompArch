@@ -38,3 +38,4 @@ can easily be created.
 * Write buffer needs to be implemented
 * Victim Cache needs to be implemented
 * Improve the "full cache block" strategy
+* I also want to consider validation, i.e. cannot have 10 bit index for 8KB cache

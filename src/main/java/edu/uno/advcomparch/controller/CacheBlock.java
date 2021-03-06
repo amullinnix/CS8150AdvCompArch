@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class CacheBlock {
 
+    //Beginning to wonder if there is really any reason for tag to be byte[]
     private byte[] tag;
     private byte[] block;
 
