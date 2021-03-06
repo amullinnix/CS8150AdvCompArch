@@ -27,4 +27,11 @@ public class CacheBlockTest {
         assertEquals(false, sut.isEmpty());
     }
 
+    @Test
+    public void getTagAsString() {
+        sut.setTag(new byte[]{49,48,49,48});
+
+        assertEquals("1010", sut.getTagString());
+    }
+
 }

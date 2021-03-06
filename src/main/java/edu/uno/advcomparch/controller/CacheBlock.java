@@ -34,4 +34,8 @@ public class CacheBlock {
 
         return false;
     }
+
+    public String getTagString() {
+        return new String(tag);
+    }
 }

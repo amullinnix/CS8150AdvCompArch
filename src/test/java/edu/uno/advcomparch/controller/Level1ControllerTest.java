@@ -148,4 +148,74 @@ public class Level1ControllerTest {
         assertEquals(Arrays.toString(new byte[] {13, 14, 15}), Arrays.toString(fromCache));
     }
 
+    @Test
+    public void canWriteToSetWithEmptyBlocks() {
+        Address address = new Address("000111", "000100", "00100");
+
+        assertEquals(true, controller.canWriteToCache(address));
+    }
+
+    @Test
+    public void canWriteToFullSetWithMatchingTag() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+        controller.writeDataToCache(address, b);
+
+        address.setTag("000101");  //same set, different tag
+        controller.writeDataToCache(address, b);
+
+        address.setTag("000110");  //same set, different tag
+        controller.writeDataToCache(address, b);
+
+        address.setTag("000111");  //same set, different tag
+        controller.writeDataToCache(address, b);
+
+        controller.printSingleSet(4);
+
+        assertEquals(true, controller.canWriteToCache(address));
+    }
+
+    @Test
+    public void cannotWriteToFullSet() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+        controller.writeDataToCache(address, b);
+
+        address.setTag("000101");  //same set, different tag
+        controller.writeDataToCache(address, b);
+
+        address.setTag("000110");  //same set, different tag
+        controller.writeDataToCache(address, b);
+
+        address.setTag("000111");  //same set, different tag
+        controller.writeDataToCache(address, b);
+
+        controller.printSingleSet(4);
+
+        address.setTag("001000");  //set should be full at this point, no room for new tag
+
+        assertEquals(false, controller.canWriteToCache(address));
+    }
+
+    /**
+     * Purpose of this test is basically to force us to implement getting a full cache block. In other words,
+     * if a set is full, and we have a new tag, then we are going to have to evict a cache block. Let's start
+     * by retrieving the one we want to evict. What we do with it can be implemented later.
+     */
+    @Test
+    public void getFullSet() {
+        Address address = new Address("000100", "000100", "00100");
+        byte[] b = new byte[]{13, 14, 15};
+
+        //no need to fill cache up, one write will suffice
+        controller.writeDataToCache(address, b);
+
+        CacheBlock block = controller.getCacheBlock(address);
+
+        assertEquals("000100", block.getTagString());
+
+        byte[] expected = new byte[]{0,0,0,0,13,14,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        assertEquals(Arrays.toString(expected), Arrays.toString(block.getBlock()));
+
+    }
 }

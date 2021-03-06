@@ -4,6 +4,7 @@ import edu.uno.advcomparch.instruction.Instruction;
 import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.model.Data;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -104,6 +105,7 @@ public class Level1Controller implements CacheController {
 
     }
 
+    //This method might be starting to violate single responsibility principle.
     public void writeDataToCache(Address address, byte b) {
 
         //fetch the set (with the 4 cache blocks)
@@ -175,6 +177,32 @@ public class Level1Controller implements CacheController {
         return bytes;
     }
 
+    public boolean canWriteToCache(Address address) {
+        CacheSet set = data.get(address.getIndexDecimal());
+
+        for(CacheBlock block : set.getBlocks()) {
+            if(block.isEmpty()) {
+                return true;
+            } else if(Arrays.equals(address.getTag().getBytes(), block.getTag())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public CacheBlock getCacheBlock(Address address) {
+        CacheSet cacheSet = data.get(address.getIndexDecimal());
+
+        for(CacheBlock block : cacheSet.getBlocks()) {
+            if(Arrays.equals(address.getTag().getBytes(), block.getTag())) {
+                return block;
+            }
+        }
+
+        return null;
+    }
+
     public void printData() {
 
         System.out.println("Printing data of length: " + data.size());
@@ -197,7 +225,6 @@ public class Level1Controller implements CacheController {
             System.out.println();
         }
     }
-
 
     @Override
     public Data<?> cpuRead() {
