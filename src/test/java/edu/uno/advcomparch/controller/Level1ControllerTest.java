@@ -53,10 +53,7 @@ public class Level1ControllerTest {
     public void useByteArray() {
 
         //simulate a cache miss
-        Address address = new Address();
-        address.setTag("101010");
-        address.setIndex("101010");
-        address.setOffset("10101");
+        Address address = new Address("101010", "101010", "10101");
 
         boolean isHit = controller.isDataPresentInCache(address);
 
@@ -67,10 +64,7 @@ public class Level1ControllerTest {
 
     @Test
     public void writeDataToCache() {
-        Address address = new Address();
-        address.setTag("101010");
-        address.setIndex("101010");
-        address.setOffset("10101");
+        Address address = new Address("101010", "101010", "10101");
 
         byte b = 2;
         controller.writeDataToCache(address, b);
@@ -84,15 +78,8 @@ public class Level1ControllerTest {
 
     @Test
     public void storeTwoAddresses() {
-        Address address1 = new Address();
-        address1.setTag("101010");
-        address1.setIndex("101010");
-        address1.setOffset("10101");
-
-        Address address2 = new Address();
-        address2.setTag("010101");
-        address2.setIndex("101010");
-        address2.setOffset("10101");
+        Address address1 = new Address("101010", "101010", "10101");
+        Address address2 = new Address("010101", "101010", "10101");
 
         byte b1 = 2;
         byte b2 = 4;
@@ -142,6 +129,23 @@ public class Level1ControllerTest {
         byte[] fromCache = controller.getDataAtAddress(address, 3);
 
         assertEquals(true, Arrays.equals(new byte[] {13, 14, 15}, fromCache));
+    }
+
+    @Test
+    public void writeMultipleBytesAtOnce() {
+        Address address = new Address("000111", "000100", "00100");
+        byte[] bytesToWrite = new byte[] {13, 14, 15};
+        controller.writeDataToCache(address, bytesToWrite);
+
+        controller.printSingleSet(4);
+
+        //reset address offset ;)
+        address.setOffset("00100");
+
+        byte[] fromCache = controller.getDataAtAddress(address, 3);
+
+        //trying out a different assert for fun
+        assertEquals(Arrays.toString(new byte[] {13, 14, 15}), Arrays.toString(fromCache));
     }
 
 }

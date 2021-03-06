@@ -26,3 +26,15 @@ A: Definitely not.
 #### Q: Let's say you have a tag, and write one byte, same tag, different offset. Same cache block?
 
 A: Pretty sure yes, let's find out.
+
+
+---
+## General TODO Ideas
+Instead of putting TODOs everywhere, consider putting a few in here.
+
+* Need to start thinking about generalizing cache so that L2 cache
+can easily be created.
+  
+* Write buffer needs to be implemented
+* Victim Cache needs to be implemented
+* Improve the "full cache block" strategy

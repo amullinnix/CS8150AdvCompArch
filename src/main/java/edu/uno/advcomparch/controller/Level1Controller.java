@@ -4,8 +4,10 @@ import edu.uno.advcomparch.instruction.Instruction;
 import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.model.Data;
 
-import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Queue;
 
 // Requirements:
 //      Split, 4-way, write-back, write-allocate, 32 byte block size and size 8KB.
@@ -93,6 +95,23 @@ public class Level1Controller implements CacheController {
         return false;
     }
 
+    public void writeDataToCache(Address address, byte[] bytesToWrite) {
+
+        for(int i = 0; i < bytesToWrite.length; i++) {
+            this.writeDataToCache(address, bytesToWrite[i]);
+
+            //must increment the offset by one
+            Integer offset = Integer.parseInt(address.getOffset(), 2);
+            String s = Integer.toBinaryString(++offset);
+
+            //why can't I use guava?
+            String paddedOffset = String.format("%1$" + address.getOffset().length() + "s", s).replace(' ', '0');
+
+            address.setOffset(paddedOffset);
+        }
+
+    }
+
     public void writeDataToCache(Address address, byte b) {
         //index tells the set we are using
         String index = address.getIndex().replaceFirst("^0+(?!$)", "");
@@ -103,7 +122,6 @@ public class Level1Controller implements CacheController {
         CacheSet set = data.get(decimalIndex);
 
         //less naive approach, find first empty cache block
-        //TODO: We need to account for matching tag
         CacheBlock emptyBlock = null;
 
         //must put tag in there
