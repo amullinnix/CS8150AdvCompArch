@@ -27,6 +27,9 @@ A: Definitely not.
 
 A: Pretty sure yes, let's find out.
 
+#### Q: Does the tag size change between L1 and L2 cache? Yes, right?
+
+A: TBD
 
 ---
 ## General TODO Ideas
@@ -35,6 +38,7 @@ Instead of putting TODOs everywhere, consider putting a few in here.
 * Need to start thinking about generalizing cache so that L2 cache
 can easily be created.
   
+* Dirty bit needs to be done
 * Write buffer needs to be implemented
 * Victim Cache needs to be implemented
 * Improve the "full cache block" strategy

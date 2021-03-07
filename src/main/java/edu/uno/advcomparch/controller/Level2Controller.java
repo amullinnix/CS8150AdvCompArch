@@ -1,12 +1,39 @@
 package edu.uno.advcomparch.controller;
 
+import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.model.Data;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Queue;
 
 // Requirements:
 //      Unified, direct mapped, write-back, write-allocate same block size as L1 and 16KB size.
 //      L2D is also dual-ported like L1.
 //      L2 and L1 must support mutual inclusion policy, which means that if mutual inclusion is violated then you must do whatever is needed to restore it.
 public class Level2Controller implements CacheController {
+
+    private Queue<Message> queue;
+
+    //note: No sets in a direct mapped cache
+    public static final int TAG_SIZE = 9;  //is the tag size the same?
+    public static final int BLOCK_SIZE = 32;
+    public static final int NUMBER_OF_SETS = 512;   // 16KB divided by 32 byte blocks = 512 Cache Blocks
+
+    //not sure if this is correct
+    List<CacheBlock> data;
+
+    public Level2Controller(Queue<Message> queue) {
+
+        //initialize the cache
+        data = new ArrayList<>();
+        for(int i = 0; i < NUMBER_OF_SETS; i++) {
+            data.add(new CacheBlock(TAG_SIZE, BLOCK_SIZE));
+        }
+
+        this.queue = queue;
+    }
 
     @Override
     public Data<?> cpuRead() {
@@ -16,5 +43,53 @@ public class Level2Controller implements CacheController {
     @Override
     public void cpuWrite(Data<?> data) {
         throw new UnsupportedOperationException("cpuWrite - Unsupported Operation");
+    }
+
+    public boolean isDataPresentInCache(Address address) {
+
+        //get the tag
+        int tag = address.getTagDecimal();
+
+        CacheBlock block = data.get(tag);
+
+        if(address.getTag().equals(new String(block.getTag()))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void writeDataToCache(Address address, Byte b) {
+        //get the tag
+        int tag = address.getTagDecimal();
+        System.out.println("Tag is: " + tag);
+
+        //naive approach, check if the block is empty
+        CacheBlock block = data.get(tag);
+
+        if(block.isEmpty()) {
+            System.out.println("block is empty!");
+            block.setTag(address.getTag().getBytes());
+            block.getBlock()[address.getOffsetDecimal()] = b;
+        }
+    }
+
+    public void printData() {
+        System.out.println("Printing data of length: " + data.size());
+
+        for(int i = 0; i < data.size(); i++) {
+            printSingleCacheBlock(i);
+        }
+    }
+
+    public void printSingleCacheBlock(int blockToPrint) {
+
+        CacheBlock block = data.get(blockToPrint);
+
+        System.out.print("Block #" + blockToPrint + ": ");
+        System.out.print("t: " + Arrays.toString(block.getTag()));
+        System.out.print("b: " + Arrays.toString(block.getBlock()));
+        System.out.println();
+
     }
 }
