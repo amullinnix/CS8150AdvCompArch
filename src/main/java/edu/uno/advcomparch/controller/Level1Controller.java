@@ -184,7 +184,7 @@ public class Level1Controller implements CacheController {
             if(block.isEmpty()) {
                 return true;
             } else if(Arrays.equals(address.getTag().getBytes(), block.getTag())) {
-                return true;
+                return true;  //TODO consider the dirty bit
             }
         }
 

@@ -126,6 +126,7 @@ public class Level1ControllerTest {
         //reset address offset ;)
         address.setOffset("00100");
 
+        //CPURead A 3
         byte[] fromCache = controller.getDataAtAddress(address, 3);
 
         assertEquals(true, Arrays.equals(new byte[] {13, 14, 15}, fromCache));

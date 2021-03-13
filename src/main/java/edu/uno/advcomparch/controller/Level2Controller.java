@@ -20,6 +20,7 @@ public class Level2Controller implements CacheController {
     public static final int TAG_SIZE = 9;  //is the tag size the same?
     public static final int BLOCK_SIZE = 32;
     public static final int NUMBER_OF_SETS = 512;   // 16KB divided by 32 byte blocks = 512 Cache Blocks
+    //offset is 5 bits + 9 bit tag = 14 bits?
 
     //not sure if this is correct
     List<CacheBlock> data;
@@ -59,6 +60,16 @@ public class Level2Controller implements CacheController {
         return false;
     }
 
+    public void writeDataToCache(Address address, byte[] bytesToWrite) {
+
+        for(int i = 0; i < bytesToWrite.length; i++) {
+            this.writeDataToCache(address, bytesToWrite[i]);
+
+            //increment offset to write next byte in correct location
+            address.incrementOffset();
+        }
+    }
+
     public void writeDataToCache(Address address, Byte b) {
         //get the tag
         int tag = address.getTagDecimal();
@@ -67,11 +78,41 @@ public class Level2Controller implements CacheController {
         //naive approach, check if the block is empty
         CacheBlock block = data.get(tag);
 
-        if(block.isEmpty()) {
-            System.out.println("block is empty!");
+        if(block.isEmpty() || block.isNotDirty()) {
+            System.out.println("block is empty or not dirty!");
             block.setTag(address.getTag().getBytes());
             block.getBlock()[address.getOffsetDecimal()] = b;
+        } else {
+            System.out.println("block is NOT empty or it is dirty");
+            //is this where we need to do an eviction?
         }
+    }
+
+
+    public Byte getByteAtAddress(Address address) {
+        CacheBlock block = data.get(address.getTagDecimal());
+
+        if(block.isEmpty()) {
+            System.out.println("block is empty - no data to return");
+            return null;
+        } else {
+            return block.getBlock()[address.getOffsetDecimal()];
+        }
+
+    }
+
+    public byte[] getDataAtAddress(Address address, int bytesToRead) {
+        byte [] bytes = new byte[]{};
+
+        //fetch the cache block
+        CacheBlock block = data.get(address.getTagDecimal());
+
+        if(block.isEmpty() == false) {
+            int decimalOffset = address.getOffsetDecimal();
+            bytes = Arrays.copyOfRange(block.getBlock(), decimalOffset, decimalOffset + bytesToRead);
+        }
+
+        return  bytes;
     }
 
     public void printData() {
@@ -92,4 +133,5 @@ public class Level2Controller implements CacheController {
         System.out.println();
 
     }
+
 }
