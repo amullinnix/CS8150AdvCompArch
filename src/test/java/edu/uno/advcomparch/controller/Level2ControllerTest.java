@@ -14,10 +14,17 @@ public class Level2ControllerTest {
 
     private Level2Controller controller;
 
+    private CacheBlock blockToWrite;
+
     @Before
     public void setup() {
         Queue<Message> queue = new LinkedBlockingQueue<>();
+
         controller = new Level2Controller(queue);
+        blockToWrite = new CacheBlock(9, 32);
+
+        byte[] bytes = new byte[]{1,2,3,4};
+        System.arraycopy(bytes, 0, blockToWrite.getBlock(), 0, bytes.length);
     }
 
     @Test
@@ -34,9 +41,8 @@ public class Level2ControllerTest {
     @Test
     public void writeDataToCache() {
         Address address = new Address("101010101", "", "00010");
-        Byte b = 13;
 
-        controller.writeDataToCache(address, b);
+        controller.writeDataToCache(address, blockToWrite);
 
         controller.printSingleCacheBlock(341);
 
@@ -46,24 +52,23 @@ public class Level2ControllerTest {
     }
 
     @Test
-    public void getByteFromCache() {
+    public void getBlockFromCache() {
         Address address = new Address("101010101", "", "00010");
-        Byte b = 13;
 
-        controller.writeDataToCache(address, b);
+        controller.writeDataToCache(address, blockToWrite);
 
-        Byte fromCache = controller.getByteAtAddress(address);
+        CacheBlock blockFromCache = controller.getBlockAtAddress(address);
 
-        assertEquals(b, fromCache);
+        assertEquals(Arrays.toString(blockToWrite.getBlock()), Arrays.toString(blockFromCache.getBlock()));
     }
 
     @Test
-    public void getByteFromEmptyBlock() {
+    public void getEmptyBlockFromCache() {
         Address address = new Address("101010101", "", "00010");
 
-        Byte fromCache = controller.getByteAtAddress(address);
+        CacheBlock block = controller.getBlockAtAddress(address);
 
-        assertEquals(null, fromCache);
+        assertTrue(block.isEmpty());
     }
 
     /**
@@ -71,39 +76,49 @@ public class Level2ControllerTest {
      * the dirty bit stuff, but we'll get to that.
      */
     @Test
-    public void blockAndByteNotEmpty() {
-        Address address = new Address("101010101", "", "00010");
-        Byte b = 13;
+    public void blockNotEmpty() {
+        Address address = new Address("000000101", "", "00010");
 
-        controller.writeDataToCache(address, b);
-
-        controller.printSingleCacheBlock(341);
-
-        //new byte, same address
-        b = 21;
-        controller.writeDataToCache(address, b);
+        controller.writeDataToCache(address, blockToWrite);
 
         controller.printSingleCacheBlock(341);
 
-        assertEquals(b, controller.getByteAtAddress(address));
+        //new block, same address
+        byte[] bytes = new byte[]{5,6,7,8};
+        System.arraycopy(bytes, 0, blockToWrite.getBlock(), 0, bytes.length);
+        controller.writeDataToCache(address, blockToWrite);
+
+        controller.printSingleCacheBlock(341);
+
+        CacheBlock blockFromCache = controller.getBlockAtAddress(address);
+        assertEquals(Arrays.toString(blockToWrite.getBlock()), Arrays.toString(blockFromCache.getBlock()));
 
         //we need some assert for the eviction buffer thing a ma jig
     }
 
-    @Test
-    public void writeMultipleBytes() {
-        Address address = new Address("101010101", "", "00100");
-        byte[] bytes = new byte[] {13, 14, 15};
 
-        controller.writeDataToCache(address, bytes);
+    /**
+     * Writing this test to expose a flaw where we sometimes forget about java references ;)
+     */
+    @Test
+    public void bewareOfJavaReferences() {
+        Address address = new Address("101010101", "", "00010");
+
+        controller.writeDataToCache(address, blockToWrite);
 
         controller.printSingleCacheBlock(341);
 
-        //reset the offset
-        address.setOffset("00100");
+        //new block, same address
+        byte[] bytes = new byte[]{5,6,7,8};
+        System.arraycopy(bytes, 0, blockToWrite.getBlock(), 0, bytes.length);
 
-        byte[] fromCache = controller.getDataAtAddress(address, 3);
+        //do NOTHING here! Cache block should not change!  (normally, we'd write the block)
 
-        assertEquals(Arrays.toString(bytes), Arrays.toString(fromCache));
+        controller.printSingleCacheBlock(341);
+
+        CacheBlock blockFromCache = controller.getBlockAtAddress(address);
+        byte[] subSetOfBlock = Arrays.copyOfRange(blockFromCache.getBlock(), 0, 4);
+        assertEquals(Arrays.toString(new byte[] {1,2,3,4}), Arrays.toString(subSetOfBlock));
     }
+
 }

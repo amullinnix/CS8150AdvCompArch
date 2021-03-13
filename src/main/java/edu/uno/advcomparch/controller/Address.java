@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Address {
 
+    //TODO: I keep feeling like the Address just needs to have the "17 bit" representation, and then derive the
+    // tag, index, and offset. Namely because tag is different sizes for level 1 and level 2.
+
     private String tag;
     private String index;
     private String offset;

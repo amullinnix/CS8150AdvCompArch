@@ -60,59 +60,37 @@ public class Level2Controller implements CacheController {
         return false;
     }
 
-    public void writeDataToCache(Address address, byte[] bytesToWrite) {
-
-        for(int i = 0; i < bytesToWrite.length; i++) {
-            this.writeDataToCache(address, bytesToWrite[i]);
-
-            //increment offset to write next byte in correct location
-            address.incrementOffset();
-        }
-    }
-
-    public void writeDataToCache(Address address, Byte b) {
+    public void writeDataToCache(Address address, CacheBlock blockToWrite) {
         //get the tag
         int tag = address.getTagDecimal();
         System.out.println("Tag is: " + tag);
 
         //naive approach, check if the block is empty
-        CacheBlock block = data.get(tag);
+        CacheBlock blockFromCache = data.get(tag);
 
-        if(block.isEmpty() || block.isNotDirty()) {
-            System.out.println("block is empty or not dirty!");
-            block.setTag(address.getTag().getBytes());
-            block.getBlock()[address.getOffsetDecimal()] = b;
+        if(blockFromCache.isEmpty()) {
+            System.out.println("block is empty!");
+            blockFromCache.setTag(address.getTag().getBytes());
+
+            byte[] cacheBlock = blockFromCache.getBlock();
+            byte[] bytesToWrite = blockToWrite.getBlock();
+            System.arraycopy(bytesToWrite, 0, cacheBlock, 0, bytesToWrite.length);
         } else {
-            System.out.println("block is NOT empty or it is dirty");
+            System.out.println("block is NOT empty!");
             //is this where we need to do an eviction?
         }
     }
 
 
-    public Byte getByteAtAddress(Address address) {
+    public CacheBlock getBlockAtAddress(Address address) {
         CacheBlock block = data.get(address.getTagDecimal());
 
         if(block.isEmpty()) {
-            System.out.println("block is empty - no data to return");
-            return null;
-        } else {
-            return block.getBlock()[address.getOffsetDecimal()];
+            System.out.println("block is empty, just letting you know");
         }
 
-    }
+        return block;
 
-    public byte[] getDataAtAddress(Address address, int bytesToRead) {
-        byte [] bytes = new byte[]{};
-
-        //fetch the cache block
-        CacheBlock block = data.get(address.getTagDecimal());
-
-        if(block.isEmpty() == false) {
-            int decimalOffset = address.getOffsetDecimal();
-            bytes = Arrays.copyOfRange(block.getBlock(), decimalOffset, decimalOffset + bytesToRead);
-        }
-
-        return  bytes;
     }
 
     public void printData() {
