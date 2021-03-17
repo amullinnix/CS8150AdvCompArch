@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 // We could provide default implementations here or make this an abstract class.
 @NoArgsConstructor
+@lombok.Data
 public class DataRepository<T,A> {
 
     public Data<T> get(A address) {

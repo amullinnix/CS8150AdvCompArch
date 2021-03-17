@@ -30,6 +30,9 @@ dependencies {
 	// Guava
 	implementation("com.google.guava:guava:30.1-jre")
 
+	// Javax
+	compile group: 'javax.inject', name: 'javax.inject', version: '1'
+
 	// Cucumber
 	testImplementation 'io.cucumber:cucumber-java:6.8.1'
 	testImplementation 'io.cucumber:cucumber-junit:6.8.1'

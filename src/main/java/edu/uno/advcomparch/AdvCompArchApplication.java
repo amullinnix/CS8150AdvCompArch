@@ -1,7 +1,7 @@
 package edu.uno.advcomparch;
 
 import edu.uno.advcomparch.config.CacheConfiguration;
-import edu.uno.advcomparch.config.SimpleStateMachineConfiguration;
+import edu.uno.advcomparch.statemachine.L1ControllerStateMachineConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Import({
 		CacheConfiguration.class,
-		SimpleStateMachineConfiguration.class
+		L1ControllerStateMachineConfiguration.class
 })
 public class AdvCompArchApplication {
 

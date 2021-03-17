@@ -2,6 +2,7 @@ package edu.uno.advcomparch.storage;
 
 import lombok.Data;
 
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
 //      Dual Ported - Indicates multiple simultaneous access
 //      Linear Indexed - 128Kb
 @Data
+@Named
 public class DynamicRandomAccessMemory<T> {
 
     private static final int MAIN_MEMORY_SIZE_IN_BYTES = 131072;  //128KB

@@ -6,7 +6,7 @@ import edu.uno.advcomparch.instruction.Message;
 import java.util.List;
 import java.util.Queue;
 
-public class DefaultCPU implements CentralProcessingUnit {
+public class DefaultCPU implements CentralProcessingUnit<String> {
 
     private Queue<Message> queue;
 
@@ -22,6 +22,11 @@ public class DefaultCPU implements CentralProcessingUnit {
     @Override
     public void write() {
         //TODO: stubbed out
+    }
+
+    @Override
+    public void data(String data) {
+        // TODO: stubbed out
     }
 
     /**

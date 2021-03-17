@@ -7,11 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
+import javax.inject.Named;
 
 // Requirements:
 //      Unified, direct mapped, write-back, write-allocate same block size as L1 and 16KB size.
 //      L2D is also dual-ported like L1.
 //      L2 and L1 must support mutual inclusion policy, which means that if mutual inclusion is violated then you must do whatever is needed to restore it.
+@Named
+@lombok.Data
 public class Level2Controller implements CacheController {
 
     private Queue<Message> queue;
@@ -112,4 +115,8 @@ public class Level2Controller implements CacheController {
 
     }
 
+    @Override
+    public void enqueueMessage(Message message) {
+        getQueue().add(message);
+    }
 }

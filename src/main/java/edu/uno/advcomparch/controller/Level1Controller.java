@@ -4,7 +4,7 @@ import edu.uno.advcomparch.instruction.Instruction;
 import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.model.Data;
 
-import java.nio.charset.StandardCharsets;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +15,7 @@ import java.util.Queue;
 //      L1C must support valid, dirty bits.
 //      Assume that L1D is dual-ported – one read and one write port.
 @lombok.Data
+@Named
 public class Level1Controller implements CacheController {
 
     //TODO: Consider calculating this and extracting as well
@@ -234,5 +235,10 @@ public class Level1Controller implements CacheController {
     @Override
     public void cpuWrite(Data<?> data) {
         throw new UnsupportedOperationException("cpuWrite - Unsupported Operation");
+    }
+
+    @Override
+    public void enqueueMessage(Message message) {
+        getQueue().add(message);
     }
 }

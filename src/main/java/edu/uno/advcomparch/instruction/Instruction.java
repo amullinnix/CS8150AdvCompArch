@@ -1,5 +1,6 @@
 package edu.uno.advcomparch.instruction;
 
+import edu.uno.advcomparch.statemachine.L1InMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Instruction {
 
-    private InstructionType type;
+    private L1InMessage type;
 
     private String address;
 
     //TODO: This might be offset, instead?
-    private int source;
+    private String source;
 }

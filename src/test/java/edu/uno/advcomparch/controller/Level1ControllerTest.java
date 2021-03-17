@@ -1,8 +1,8 @@
 package edu.uno.advcomparch.controller;
 
 import edu.uno.advcomparch.instruction.Instruction;
-import edu.uno.advcomparch.instruction.InstructionType;
 import edu.uno.advcomparch.instruction.Message;
+import edu.uno.advcomparch.statemachine.L1InMessage;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -34,7 +34,7 @@ public class Level1ControllerTest {
     public void doFirstRead() {
         //TODO: This test needs to be rewritten for new logic
         Instruction instruction = new Instruction();
-        instruction.setType(InstructionType.CPURead);
+        instruction.setType(L1InMessage.CPUREAD);
         instruction.setAddress("000000000000000001");
 
         Message message = new Message();
