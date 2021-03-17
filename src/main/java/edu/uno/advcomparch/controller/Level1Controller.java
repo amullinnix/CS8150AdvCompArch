@@ -80,18 +80,13 @@ public class Level1Controller implements CacheController {
         //fetch the set
         CacheSet set = data.get(address.getIndexDecimal());
 
-        //compare the tag to our address' tag
-        byte [] tagBytes = address.getTag().getBytes();
-        System.out.println("Tag from Address: " + Arrays.toString(tagBytes));
+        CacheBlock block = set.getBlock(address);
 
-        //less naive approach, check them all
-        for(CacheBlock block : set.getBlocks()) {
-            if(Arrays.equals(block.getTag(), tagBytes)) {
-                return true;
-            }
+        if(block.isEmpty()) {
+            return false;
+        } else {
+            return true;
         }
-
-        return false;
     }
 
     public void writeDataToCache(Address address, byte[] bytesToWrite) {
@@ -102,9 +97,9 @@ public class Level1Controller implements CacheController {
             //must increment the offset by one to write the next byte in the correct location
             address.incrementOffset();
         }
-
     }
 
+    //TODO: refactor to use new cache set stuff
     //This method might be starting to violate single responsibility principle.
     public void writeDataToCache(Address address, byte b) {
 
@@ -144,39 +139,24 @@ public class Level1Controller implements CacheController {
         //fetch the set
         CacheSet set = data.get(address.getIndexDecimal());
 
-        //compare the tag to our address' tag
-        byte [] tagBytes = address.getTag().getBytes();
-        System.out.println("Tag from Address: " + Arrays.toString(tagBytes));
+        CacheBlock block = set.getBlock(address);
 
-        //find the matching block
-        for(CacheBlock block : set.getBlocks()) {
-            if(Arrays.equals(block.getTag(), tagBytes)) {
-                return block.getBlock()[address.getOffsetDecimal()];
-            }
-        }
-
-        return 1;  //ugly
+        return block.getBlock()[address.getOffsetDecimal()];
     }
 
     public byte[] getDataAtAddress(Address address, int bytesToRead) {
 
-        byte[] bytes = new byte[]{};
-
         //fetch the set
         CacheSet set = data.get(address.getIndexDecimal());
 
-        //find the matching block
-        for(CacheBlock block : set.getBlocks()) {
-            if(Arrays.equals(block.getTag(), address.getTag().getBytes())) {
-                int decimalOffset = address.getOffsetDecimal();
-                bytes = Arrays.copyOfRange(block.getBlock(), decimalOffset, decimalOffset + bytesToRead);
-                break; //uggh!
-            }
-        }
+        CacheBlock block = set.getBlock(address);
 
-        return bytes;
+        int decimalOffset = address.getOffsetDecimal();
+
+        return Arrays.copyOfRange(block.getBlock(), decimalOffset, decimalOffset + bytesToRead);
     }
 
+    //TODO: refactor to use new cacheset stuff
     public boolean canWriteToCache(Address address) {
         CacheSet set = data.get(address.getIndexDecimal());
 
@@ -194,13 +174,7 @@ public class Level1Controller implements CacheController {
     public CacheBlock getCacheBlock(Address address) {
         CacheSet cacheSet = data.get(address.getIndexDecimal());
 
-        for(CacheBlock block : cacheSet.getBlocks()) {
-            if(Arrays.equals(address.getTag().getBytes(), block.getTag())) {
-                return block;
-            }
-        }
-
-        return null;
+        return cacheSet.getBlock(address);
     }
 
     public void printData() {

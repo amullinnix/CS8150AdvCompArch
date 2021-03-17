@@ -58,12 +58,10 @@ public class CacheSet {
             blockFound = iterator.next();
             if(Arrays.equals(blockFound.getTag(), tagBytes)) {
                 iterator.remove();  //remove it from it's current location...
+                this.blocks.addFirst(blockFound);  //...and add it to the head (as the most recently used block)
                 break;
             }
         }
-
-        //...and add it to the head (as the most recently used block)
-        this.blocks.addFirst(blockFound);
 
         return blockFound;
     }
