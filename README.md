@@ -31,6 +31,10 @@ A: Pretty sure yes, let's find out.
 
 A: TBD
 
+#### Q: Can the L1C and L1D be combined or do they need to be separate?
+
+A: TBD
+
 ---
 ## General TODO Ideas
 Instead of putting TODOs everywhere, consider putting a few in here.
@@ -43,3 +47,5 @@ can easily be created.
 * Victim Cache needs to be implemented
 * Improve the "full cache block" strategy
 * I also want to consider validation, i.e. cannot have 10 bit index for 8KB cache
+
+

@@ -94,6 +94,9 @@ public class Level2ControllerTest {
         assertEquals(Arrays.toString(blockToWrite.getBlock()), Arrays.toString(blockFromCache.getBlock()));
 
         //we need some assert for the eviction buffer thing a ma jig
+
+        //Here's another point - should writes always succeed? Said differently, is it the responsibility of the
+        //write method to do the eviction? Maybe not so much.
     }
 
 

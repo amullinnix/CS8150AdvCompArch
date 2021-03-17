@@ -34,7 +34,7 @@ public class Level1Controller implements CacheController {
         //Initialize the cache!
         data = new ArrayList<>();
         for(int i = 0; i < NUMBER_OF_SETS; i++) {
-            CacheSet set = new CacheSet();
+            CacheSet set = new CacheSet(NUMBER_OF_BLOCKS);
             for(int j = 0; j < NUMBER_OF_BLOCKS; j++) {
                 CacheBlock block = new CacheBlock(TAG_SIZE, BLOCK_SIZE);
                 set.add(block);
