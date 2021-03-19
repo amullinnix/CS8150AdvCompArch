@@ -5,5 +5,9 @@ public enum L1InMessage {
     END,
     CPUREAD,
     DATA,
-    CPUWRITE
+    CPUWRITE,
+    // L1 Data Repository Messages
+    MISSI,
+    MISSC,
+    MISSD
 }

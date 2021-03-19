@@ -3,8 +3,10 @@ package edu.uno.advcomparch.statemachine;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
+import edu.uno.advcomparch.instruction.Instruction;
 import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.repository.DataRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +24,7 @@ import java.util.EnumSet;
 
 @Configuration
 @EnableStateMachine
+@AllArgsConstructor
 // TODO - Manage Notion of Cycle (Possibly externally). Manage Output Message building
 public class L1ControllerStateMachineConfiguration extends StateMachineConfigurerAdapter<L1ControllerState, L1InMessage> {
 
@@ -70,6 +73,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .stateExit(L1ControllerState.MISSI, exitAction());
     }
 
+    // TODO - Need to include addition states based on triggers.
     @Override
     public void configure(StateMachineTransitionConfigurer<L1ControllerState, L1InMessage> transitions) throws Exception {
         transitions.withExternal()
@@ -133,7 +137,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     // Parse the message, build output, queue instruction
     public Action<L1ControllerState, L1InMessage> L1CPURead() {
         return ctx -> {
-            // TODO - Enqueue messages, but might consider processing as well, could be done in listener
             // If queue is non empty, on state transition perform one action.
             var readMessage = ctx.getExtendedState().get("message", Message.class);
 
@@ -196,10 +199,10 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<L1ControllerState, L1InMessage> CPUData() {
         return ctx -> {
-            var message = ctx.getExtendedState().get("message", Message.class);
-            var data = message.getInstruction().getSource();
+            var instruction = ctx.getExtendedState().get("instruction", Instruction.class);
+            var data = instruction.getSource();
 
-            System.out.println(message.toString());
+            System.out.println(data);
 
             // TODO
             cpu.data(data);
