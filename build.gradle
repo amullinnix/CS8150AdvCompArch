@@ -26,9 +26,13 @@ dependencies {
 
 	// Spring Statemachine
 	implementation 'org.springframework.statemachine:spring-statemachine-core:2.2.2.RELEASE'
+	compile group: 'org.springframework.statemachine', name: 'spring-statemachine-test', version: '2.2.2.RELEASE'
 
 	// Guava
 	implementation("com.google.guava:guava:30.1-jre")
+
+	// Javax
+	compile group: 'javax.inject', name: 'javax.inject', version: '1'
 
 	// Cucumber
 	testImplementation 'io.cucumber:cucumber-java:6.8.1'

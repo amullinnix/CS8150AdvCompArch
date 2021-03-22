@@ -1,10 +1,9 @@
 package edu.uno.advcomparch.controller;
 
-import edu.uno.advcomparch.instruction.Instruction;
 import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.model.Data;
 
-import java.nio.charset.StandardCharsets;
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +14,7 @@ import java.util.Queue;
 //      L1C must support valid, dirty bits.
 //      Assume that L1D is dual-ported – one read and one write port.
 @lombok.Data
+@Named
 public class Level1Controller implements CacheController {
 
     //TODO: Consider calculating this and extracting as well
@@ -52,24 +52,24 @@ public class Level1Controller implements CacheController {
     public void processInstruction() {
         //I expect this to "put" instructions or messages on other queues, for now, using a message list
 
-        //Get the first message from our queue
-        Message message = this.queue.poll();
-
-        if(message == null) {
-            return; //fail fast
-        }
-        
-        Instruction instruction = message.getInstruction();
-
-        //Check level 1 data for a "hit"
-        //TODO: Needs to be an actual address
-        String address = instruction.getAddress();
-
-        //If we found hit, return to "source"
-        if( isDataPresentInCache(new Address()) ) {
-            messageList.add("Address " + address + " found, returning " + data);
-        }
-        //else request from next level down
+        //        //Get the first message from our queue
+//        Message message = this.queue.poll();
+//
+//        if(message == null) {
+//            return; //fail fast
+//        }
+//
+//        Instruction instruction = message.getInstruction();
+//
+//        //Check level 1 data for a "hit"
+//        //TODO: Needs to be an actual address
+//        String address = instruction.getAddress();
+//
+//        //If we found hit, return to "source"
+//        if( isDataPresentInCache(new Address()) ) {
+//            messageList.add("Address " + address + " found, returning " + data);
+//        }
+//        //else request from next level down
 
     }
 
@@ -208,5 +208,10 @@ public class Level1Controller implements CacheController {
     @Override
     public void cpuWrite(Data<?> data) {
         throw new UnsupportedOperationException("cpuWrite - Unsupported Operation");
+    }
+
+    @Override
+    public void enqueueMessage(Message message) {
+        getQueue().add(message);
     }
 }

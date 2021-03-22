@@ -15,4 +15,9 @@ public class Message {
     private Controller source;
 
     private Controller destination;
+
+    @Override
+    public String toString() {
+        return new StringBuilder().toString(); //todo
+    }
 }

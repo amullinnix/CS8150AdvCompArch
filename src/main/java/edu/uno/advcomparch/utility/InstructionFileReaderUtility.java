@@ -1,7 +1,7 @@
 package edu.uno.advcomparch.utility;
 
 import edu.uno.advcomparch.instruction.Instruction;
-import edu.uno.advcomparch.instruction.InstructionType;
+import edu.uno.advcomparch.statemachine.L1InMessage;
 import lombok.experimental.UtilityClass;
 
 import java.io.File;
@@ -13,7 +13,7 @@ import java.util.Scanner;
 @UtilityClass
 public class InstructionFileReaderUtility {
 
-    public List<Instruction> readInstruction(String filename) throws FileNotFoundException {
+    public List<Instruction> readInstructions(String filename) throws FileNotFoundException {
         var instructions = new ArrayList<Instruction>();
 
         var instructionFile = new File(filename);
@@ -22,9 +22,9 @@ public class InstructionFileReaderUtility {
         while (instructionScanner.hasNextLine()) {
             var instructionString = instructionScanner.nextLine();
             var instruction = instructionString.split("\\s+");
-            var instructionType = InstructionType.valueOf(instruction[0]);
+            var l1InMessage = L1InMessage.valueOf(instruction[0]);
 
-            instructions.add(new Instruction(instructionType, instruction[1], Integer.parseInt(instruction[2])));
+            instructions.add(new Instruction(l1InMessage, instruction[1], instruction[2]));
         }
 
         return instructions;
