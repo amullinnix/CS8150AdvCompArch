@@ -13,7 +13,7 @@ import java.util.Scanner;
 @UtilityClass
 public class InstructionFileReaderUtility {
 
-    public List<Instruction> readInstruction(String filename) throws FileNotFoundException {
+    public List<Instruction> readInstructions(String filename) throws FileNotFoundException {
         var instructions = new ArrayList<Instruction>();
 
         var instructionFile = new File(filename);

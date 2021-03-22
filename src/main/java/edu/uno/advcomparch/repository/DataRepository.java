@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @lombok.Data
 public class DataRepository<T,A> {
 
-    public Data<T> get(A address) {
+    public DataResponse get(A address) {
         throw new UnsupportedOperationException("Get - Unsupported Operation");
     }
 

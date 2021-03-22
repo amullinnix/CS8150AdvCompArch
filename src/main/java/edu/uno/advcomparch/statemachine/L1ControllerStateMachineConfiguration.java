@@ -3,13 +3,14 @@ package edu.uno.advcomparch.statemachine;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
-import edu.uno.advcomparch.instruction.Instruction;
 import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.repository.DataRepository;
+import edu.uno.advcomparch.repository.DataResponseType;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
@@ -67,13 +68,13 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
         states.withStates()
                 .initial(L1ControllerState.START)
                 .end(L1ControllerState.END)
-                .states(EnumSet.allOf(L1ControllerState.class))
-                .stateEntry(L1ControllerState.HIT, entryAction())
-                .stateDo(L1ControllerState.MISSC, executeAction(), errorAction())
-                .stateExit(L1ControllerState.MISSI, exitAction());
+                .state(L1ControllerState.RDWAITD, L1CPURead())
+                .state(L1ControllerState.MISSI, L2CCPURead())
+                .state(L1ControllerState.MISSC, L2CCPURead())
+                .state(L1ControllerState.MISSD, L2CCPURead())
+                .states(EnumSet.allOf(L1ControllerState.class));
     }
 
-    // TODO - Need to include addition states based on triggers.
     @Override
     public void configure(StateMachineTransitionConfigurer<L1ControllerState, L1InMessage> transitions) throws Exception {
         transitions.withExternal()
@@ -81,10 +82,20 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.HIT).action(initAction())
                 .and().withExternal()
                 .source(L1ControllerState.HIT).event(L1InMessage.CPUREAD)
-                .target(L1ControllerState.RDWAITD).action(L1CPURead())
+                .target(L1ControllerState.RDWAITD)// TODO Investigate Action Types - .action(L1CPURead()) Testing Action Context.
                 .and().withExternal()
                 .source(L1ControllerState.RDWAITD).event(L1InMessage.DATA)
                 .target(L1ControllerState.HIT).action(CPUData())
+                .and().withExternal()
+                // Why is this not also a state, some form of miss if L1D is a separate component
+                .source(L1ControllerState.RDWAITD).event(L1InMessage.MISSI)
+                .target(L1ControllerState.MISSI)
+                .and().withExternal()
+                .source(L1ControllerState.RDWAITD).event(L1InMessage.MISSC)
+                .target(L1ControllerState.MISSC)
+                .and().withExternal()
+                .source(L1ControllerState.RDWAITD).event(L1InMessage.MISSD)
+                .target(L1ControllerState.MISSD)
                 .and().withExternal()
                 .source(L1ControllerState.MISSI).event(L1InMessage.CPUREAD)
                 .target(L1ControllerState.RDL2WAITD).action(L2CCPURead())
@@ -134,48 +145,67 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
     @Bean
     @Autowired
-    // Parse the message, build output, queue instruction
     public Action<L1ControllerState, L1InMessage> L1CPURead() {
         return ctx -> {
             // If queue is non empty, on state transition perform one action.
-            var readMessage = ctx.getExtendedState().get("message", Message.class);
+            var data = ctx.getMessage().getHeaders().get("data", String.class);
 
-            System.out.println(readMessage.toString());
+            System.out.println("CPU to L1C: CPURead(" + data + ")");
 
-            // Current behavior dictates this be handled by the controller
-             level1Controller.enqueueMessage(readMessage);
+            var response = l1DataRepository.get(data);
+            var responseType = response.getType();
+
+            // if we get nothing back send miss.
+            if (responseType != DataResponseType.HIT) {
+
+                // construct a miss
+                var missMessage = MessageBuilder
+                        .withPayload(L1InMessage.fromDataResponseType(responseType))
+                        .setHeader("source", "L1Data")
+                        .build();
+
+                ctx.getStateMachine().sendEvent(missMessage);
+            } else {
+                var responseMessage = MessageBuilder
+                        .withPayload(L1InMessage.DATA)
+                        .setHeader("source", "L1Data")
+                        .setHeader("data", response)
+                        .build();
+
+                // Send Data back to CPU if included in similar step
+                cpu.data(data);
+
+                ctx.getStateMachine().sendEvent(responseMessage);
+            }
         };
     }
 
     @Bean
     public Action<L1ControllerState, L1InMessage> L1Data() {
         return ctx -> {
-            var message = ctx.getExtendedState().get("message", Message.class);
-            var address = message.getInstruction().getAddress();
+            var data = ctx.getMessage().getHeaders().get("data", String.class);
+            System.out.println("L1C to L1D: Data(" + data + ")");
 
-            System.out.println(message.toString());
-
-            // TODO could pass instruction or fetch
-            l1DataRepository.get(address);
-
+            l1DataRepository.write(null);
         };
     }
 
     @Bean
     public Action<L1ControllerState, L1InMessage> L1Victimize() {
         return ctx -> {
-            var message = ctx.getExtendedState().get("message", Message.class);
-            var address = message.getInstruction().getAddress();
+            var data = ctx.getMessage().getHeaders().get("data", String.class);
+            System.out.println("L1C to L1D: Victimize(" + data + ")");
 
-            System.out.println(message.toString());
-
-            l1DataRepository.victimize(address);
+            l1DataRepository.victimize(data);
         };
     }
 
     @Bean
     public Action<L1ControllerState, L1InMessage> L2CCPURead() {
         return ctx -> {
+            var data = ctx.getMessage().getHeaders().get("data", String.class);
+            System.out.println("L1C to L2C: CpuRead(" + data + ")");
+
             var message = ctx.getExtendedState().get("message", Message.class);
 
             System.out.println(message.toString());
@@ -187,11 +217,13 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<L1ControllerState, L1InMessage> L2CData() {
         return ctx -> {
+            var data = ctx.getMessage().getHeaders().get("data", String.class);
+            System.out.println("L1C to L2C: CpuRead(" + data + ")");
+
             var message = ctx.getExtendedState().get("message", Message.class);
 
             System.out.println(message.toString());
 
-            // TODO - is a data request to L2C actually a write?
             level2Controller.enqueueMessage(message);
         };
     }
@@ -199,13 +231,13 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<L1ControllerState, L1InMessage> CPUData() {
         return ctx -> {
-            var instruction = ctx.getExtendedState().get("instruction", Instruction.class);
-            var data = instruction.getSource();
-
-            System.out.println(data);
-
-            // TODO
-            cpu.data(data);
+//            var instruction = ctx.getExtendedState().get("instruction", Instruction.class);
+//            var data = instruction.getSource();
+//
+//            System.out.println(data);
+//
+//            // TODO
+//            cpu.data(data);
         };
     }
 
@@ -213,9 +245,8 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<L1ControllerState, L1InMessage> initAction() {
         return ctx -> {
             // populate message from cpu,
-            // TODO refine input messages to strip from statemachine headers.
-            ctx.getExtendedState()
-                    .getVariables().put("message", new Message());
+            // TODO - Delete (using headers)
+            ctx.getExtendedState().getVariables().put("message", new Message());
             System.out.println(ctx.getTarget().getId());
         };
     }
@@ -223,23 +254,5 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<L1ControllerState, L1InMessage> executeAction() {
         return ctx -> System.out.println("Do" + ctx.getTarget().getId());
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> errorAction() {
-        return ctx -> System.out.println(
-                "Error " + ctx.getSource().getId() + ctx.getException());
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> entryAction() {
-        return ctx -> System.out.println(
-                "Entry " + ctx.getTarget().getId());
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> exitAction() {
-        return ctx -> System.out.println(
-                "Exit " + ctx.getSource().getId() + " -> " + ctx.getTarget().getId());
     }
 }

@@ -6,6 +6,7 @@ import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.storage.DynamicRandomAccessMemory;
 import edu.uno.advcomparch.utility.InstructionFileReaderUtility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 
 import javax.inject.Inject;
@@ -33,24 +34,18 @@ public class StateMachineRunner {
 
 
     public void runStateMachine() throws Exception {
-        var instructions = InstructionFileReaderUtility.readInstruction("test.txt");
-        cpu.processInstructionSet(instructions);
-
+        var instructions = InstructionFileReaderUtility.readInstructions("test.txt");
         stateMachine.start();
 
         // input events to the StateMachine
         instructions.forEach(instruction -> {
-            stateMachine.getExtendedState().getVariables().put("message", instruction.toString());
-            stateMachine.sendEvent(instruction.getType());
+            // TODO - determine if we need to store the instruction in the extended state, and candence of messages
+            stateMachine.getExtendedState().getVariables().put("instruction", instruction);
+            stateMachine.sendEvent(MessageBuilder
+                    .withPayload(instruction.getType())
+                    .setHeader("address", instruction.getAddress())
+                    .setHeader("source", instruction.getSource())
+                    .build());
         });
-
-        // Can use headers to fetch from extend state
-//        Message<L1InMessage> message = MessageBuilder
-//                .withPayload(L1InMessage.CPUREAD)
-//                .setHeader("foo", "bar")
-//                .build();
-//         stateMachine.sendEvent(message);
-
-
     }
 }

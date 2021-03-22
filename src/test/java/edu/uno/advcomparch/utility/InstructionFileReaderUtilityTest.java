@@ -12,7 +12,7 @@ public class InstructionFileReaderUtilityTest extends AbstractCompArchTest {
 
     @Test
     public void testRead() throws FileNotFoundException {
-        var instructions = InstructionFileReaderUtility.readInstruction("./src/test/resources/instructionsTest.txt");
+        var instructions = InstructionFileReaderUtility.readInstructions("./src/test/resources/instructionsTest.txt");
 
         assertThat(instructions).hasSize(2);
 
@@ -28,7 +28,7 @@ public class InstructionFileReaderUtilityTest extends AbstractCompArchTest {
     @Test()
     public void testReadInstructionNotFound() {
         assertThatExceptionOfType(FileNotFoundException.class)
-                .isThrownBy(() -> InstructionFileReaderUtility.readInstruction("blargh"))
+                .isThrownBy(() -> InstructionFileReaderUtility.readInstructions("blargh"))
                 .withMessage("blargh (The system cannot find the file specified)");
     }
 }

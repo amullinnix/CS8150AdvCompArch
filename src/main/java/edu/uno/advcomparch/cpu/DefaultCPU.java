@@ -26,7 +26,7 @@ public class DefaultCPU implements CentralProcessingUnit<String> {
 
     @Override
     public void data(String data) {
-        // TODO: stubbed out
+        System.out.println("Received Data: " + data);
     }
 
     /**
