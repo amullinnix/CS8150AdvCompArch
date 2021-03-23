@@ -5,8 +5,9 @@ import lombok.Data;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
-//I'm feeling like this class is kind of useless atm. We'll see.
 @Data
 public class CacheSet {
 
@@ -36,7 +37,13 @@ public class CacheSet {
     }
 
     public boolean atCapacity() {
-        return blocks.size() >= capacity;
+
+        List<CacheBlock> nonEmptyBlocks = blocks
+                .stream()
+                .filter(block -> !block.isEmpty())
+                .collect(Collectors.toList());
+
+        return nonEmptyBlocks.size() >= capacity;
     }
 
     public CacheBlock getMostRecentlyUsedBlock() {
@@ -82,5 +89,21 @@ public class CacheSet {
         }
 
         return removed;
+    }
+
+    public boolean containsTag(Address address) {
+
+        byte[] tagBytes = address.getTag().getBytes();
+
+        Iterator<CacheBlock> iterator = this.blocks.iterator();
+
+        while(iterator.hasNext()) {
+            CacheBlock cacheBlock = iterator.next();
+            if(Arrays.equals(cacheBlock.getTag(), tagBytes)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

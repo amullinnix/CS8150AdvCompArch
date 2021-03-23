@@ -31,17 +31,16 @@ public class CacheSetTest {
     @Test
     public void tellMeWhenFull() {
         CacheBlock block1 = new CacheBlock(5, 32);
-        CacheBlock block2 = new CacheBlock(5, 32);
-        CacheBlock block3 = new CacheBlock(5, 32);
-        CacheBlock block4 = new CacheBlock(5, 32);
+        block1.setBlock("abc".getBytes());
+        block1.setTag("abc".getBytes());
 
+        //just add the same block, it doesn't matter for this test
         cacheSet.add(block1);
-        cacheSet.add(block2);
-        cacheSet.add(block3);
-        cacheSet.add(block4);
+        cacheSet.add(block1);
+        cacheSet.add(block1);
+        cacheSet.add(block1);
 
         assertTrue(cacheSet.atCapacity());
-
     }
 
     @Test
@@ -192,4 +191,29 @@ public class CacheSetTest {
         assertEquals(0, cacheSet.getBlocks().size());
     }
 
+    @Test
+    public void setContainsTag() {
+        CacheBlock block1 = new CacheBlock(5, 32);
+        block1.setTag("10001".getBytes());
+        block1.setBlock("111".getBytes());
+
+        cacheSet.add(block1);
+
+        Address address = new Address("10001", "111", "100");
+
+        assertTrue(cacheSet.containsTag(address));
+    }
+
+    @Test
+    public void setDoesNotContainTag() {
+        CacheBlock block1 = new CacheBlock(5, 32);
+        block1.setTag("10001".getBytes());
+        block1.setBlock("111".getBytes());
+
+        cacheSet.add(block1);
+
+        Address address = new Address("11111", "111", "100");
+
+        assertFalse(cacheSet.containsTag(address));
+    }
 }
