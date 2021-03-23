@@ -1,52 +1,21 @@
-package edu.uno.advcomparch.controller;
+package edu.uno.advcomparch.storage;
 
-import edu.uno.advcomparch.instruction.Instruction;
-import edu.uno.advcomparch.instruction.Message;
-import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.controller.Address;
+import edu.uno.advcomparch.controller.CacheBlock;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import static org.junit.Assert.*;
 
-public class Level1ControllerTest {
+public class Level1DataStoreTest {
 
-    private Level1Controller controller;
+    private Level1DataStore dataStore;
 
     @Before
     public void setup() {
-        Queue<String> queue = new LinkedBlockingQueue<>();
-        controller = new Level1Controller(queue);
-
-    }
-
-    @Test
-    public void processWithNoInstructions() {
-        controller.processInstruction();
-    }
-
-    @Ignore
-    @Test
-    public void doFirstRead() {
-        //TODO: This test needs to be rewritten for new logic
-        Instruction instruction = new Instruction();
-        instruction.setType(L1InMessage.CPUREAD);
-        instruction.setAddress("000000000000000001");
-
-        Message message = new Message();
-        message.setInstruction(instruction);
-//        controller.getQueue().offer(message);  //pre populate the queue w/ our first message
-        //not worrying about src/dest atm
-
-        //execute
-        controller.processInstruction();
-
-        //assert something here?
-        assertTrue(controller.getMessageList().contains("Address A found, returning someData"));
+        dataStore = new Level1DataStore();
     }
 
     @Test
@@ -55,11 +24,11 @@ public class Level1ControllerTest {
         //simulate a cache miss
         Address address = new Address("101010", "101010", "10101");
 
-        boolean isHit = controller.isDataPresentInCache(address);
+        boolean isHit = dataStore.isDataPresentInCache(address);
 
         assertFalse(isHit);
 
-        controller.printData();
+        dataStore.printData();
     }
 
     @Test
@@ -67,11 +36,11 @@ public class Level1ControllerTest {
         Address address = new Address("101010", "101010", "10101");
 
         byte b = 2;
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
-        controller.printData();
+        dataStore.printData();
 
-        boolean isHit = controller.isDataPresentInCache(address);
+        boolean isHit = dataStore.isDataPresentInCache(address);
 
         assertTrue(isHit);
     }
@@ -84,15 +53,15 @@ public class Level1ControllerTest {
         byte b1 = 2;
         byte b2 = 4;
 
-        controller.writeDataToCache(address1, b1);
-        controller.printSingleSet(42);
+        dataStore.writeDataToCache(address1, b1);
+        dataStore.printSingleSet(42);
         System.out.println("\n\nsecond write");
-        controller.writeDataToCache(address2, b2);
-        controller.printSingleSet(42);
+        dataStore.writeDataToCache(address2, b2);
+        dataStore.printSingleSet(42);
 
         //both should be present, in the same set
-        assertEquals(true, controller.isDataPresentInCache(address1));
-        assertEquals(true, controller.isDataPresentInCache(address2));
+        assertEquals(true, dataStore.isDataPresentInCache(address1));
+        assertEquals(true, dataStore.isDataPresentInCache(address2));
     }
 
     @Test
@@ -100,9 +69,9 @@ public class Level1ControllerTest {
         Address address = new Address("000111", "000100", "00101");
         byte b = 13;
 
-        controller.writeDataToCache(address, b);
-        byte fromCache = controller.getByteAtAddress(address);
-        controller.printSingleSet(4);
+        dataStore.writeDataToCache(address, b);
+        byte fromCache = dataStore.getByteAtAddress(address);
+        dataStore.printSingleSet(4);
 
         assertEquals(b, fromCache);
     }
@@ -112,22 +81,22 @@ public class Level1ControllerTest {
     public void getMultipleBytes() {
         Address address = new Address("000111", "000100", "00100");
         byte b = 13;
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
         address = new Address("000111", "000100", "00101");
         b = 14;
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
         address = new Address("000111", "000100", "00110");
         b = 15;
-        controller.writeDataToCache(address, b);
-        controller.printSingleSet(4);
+        dataStore.writeDataToCache(address, b);
+        dataStore.printSingleSet(4);
 
         //reset address offset ;)
         address.setOffset("00100");
 
         //CPURead A 3
-        byte[] fromCache = controller.getDataAtAddress(address, 3);
+        byte[] fromCache = dataStore.getDataAtAddress(address, 3);
 
         assertEquals(true, Arrays.equals(new byte[] {13, 14, 15}, fromCache));
     }
@@ -136,14 +105,14 @@ public class Level1ControllerTest {
     public void writeMultipleBytesAtOnce() {
         Address address = new Address("000111", "000100", "00100");
         byte[] bytesToWrite = new byte[] {13, 14, 15};
-        controller.writeDataToCache(address, bytesToWrite);
+        dataStore.writeDataToCache(address, bytesToWrite);
 
-        controller.printSingleSet(4);
+        dataStore.printSingleSet(4);
 
         //reset address offset ;)
         address.setOffset("00100");
 
-        byte[] fromCache = controller.getDataAtAddress(address, 3);
+        byte[] fromCache = dataStore.getDataAtAddress(address, 3);
 
         //trying out a different assert for fun
         assertEquals(Arrays.toString(new byte[] {13, 14, 15}), Arrays.toString(fromCache));
@@ -153,49 +122,49 @@ public class Level1ControllerTest {
     public void canWriteToSetWithEmptyBlocks() {
         Address address = new Address("000111", "000100", "00100");
 
-        assertEquals(true, controller.canWriteToCache(address));
+        assertEquals(true, dataStore.canWriteToCache(address));
     }
 
     @Test
     public void canWriteToFullSetWithMatchingTag() {
         Address address = new Address("000100", "000100", "00100");
         byte b = 1;
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
         address.setTag("000101");  //same set, different tag
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
         address.setTag("000110");  //same set, different tag
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
         address.setTag("000111");  //same set, different tag
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
-        controller.printSingleSet(4);
+        dataStore.printSingleSet(4);
 
-        assertEquals(true, controller.canWriteToCache(address));
+        assertEquals(true, dataStore.canWriteToCache(address));
     }
 
     @Test
     public void cannotWriteToFullSet() {
         Address address = new Address("000100", "000100", "00100");
         byte b = 1;
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
         address.setTag("000101");  //same set, different tag
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
         address.setTag("000110");  //same set, different tag
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
         address.setTag("000111");  //same set, different tag
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
-        controller.printSingleSet(4);
+        dataStore.printSingleSet(4);
 
         address.setTag("001000");  //set should be full at this point, no room for new tag
 
-        assertEquals(false, controller.canWriteToCache(address));
+        assertEquals(false, dataStore.canWriteToCache(address));
     }
 
     /**
@@ -209,9 +178,9 @@ public class Level1ControllerTest {
         byte[] b = new byte[]{13, 14, 15};
 
         //no need to fill cache up, one write will suffice
-        controller.writeDataToCache(address, b);
+        dataStore.writeDataToCache(address, b);
 
-        CacheBlock block = controller.getCacheBlock(address);
+        CacheBlock block = dataStore.getCacheBlock(address);
 
         assertEquals("000100", block.getTagString());
 
