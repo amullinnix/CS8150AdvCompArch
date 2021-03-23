@@ -18,7 +18,7 @@ public class Level2ControllerTest {
 
     @Before
     public void setup() {
-        Queue<Message> queue = new LinkedBlockingQueue<>();
+        Queue<String> queue = new LinkedBlockingQueue<>();
 
         controller = new Level2Controller(queue);
         blockToWrite = new CacheBlock(9, 32);

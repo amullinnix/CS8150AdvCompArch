@@ -1,13 +1,12 @@
 package edu.uno.advcomparch.controller;
 
-import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.model.Data;
 
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
-import javax.inject.Named;
 
 // Requirements:
 //      Unified, direct mapped, write-back, write-allocate same block size as L1 and 16KB size.
@@ -17,7 +16,7 @@ import javax.inject.Named;
 @lombok.Data
 public class Level2Controller implements CacheController {
 
-    private Queue<Message> queue;
+    private Queue<String> queue;
 
     //note: No sets in a direct mapped cache
     public static final int TAG_SIZE = 9;  //is the tag size the same?
@@ -28,7 +27,7 @@ public class Level2Controller implements CacheController {
     //not sure if this is correct
     List<CacheBlock> data;
 
-    public Level2Controller(Queue<Message> queue) {
+    public Level2Controller(Queue<String> queue) {
 
         //initialize the cache
         data = new ArrayList<>();
@@ -116,7 +115,7 @@ public class Level2Controller implements CacheController {
     }
 
     @Override
-    public void enqueueMessage(Message message) {
+    public void enqueueMessage(String message) {
         getQueue().add(message);
     }
 }

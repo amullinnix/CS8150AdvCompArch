@@ -1,7 +1,6 @@
 package edu.uno.advcomparch.repository;
 
 import edu.uno.advcomparch.AbstractCompArchTest;
-import edu.uno.advcomparch.model.Data;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +32,7 @@ public class DataRepositoryTest extends AbstractCompArchTest {
     @Test
     public void testWrite() {
         assertThatExceptionOfType(UnsupportedOperationException.class)
-                .isThrownBy(() -> dataRepository.write(new Data<>("Blargh")))
+                .isThrownBy(() -> dataRepository.write("Blargh"))
                 .withMessage("Write - Unsupported Operation");
     }
 }

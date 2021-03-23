@@ -4,7 +4,6 @@ import edu.uno.advcomparch.AbstractCompArchTest;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.DefaultCPU;
-import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.repository.DataResponse;
 import edu.uno.advcomparch.repository.DataResponseType;
@@ -44,7 +43,7 @@ public class StateMachineTests extends AbstractCompArchTest {
 
     @BeforeEach
     public void beforeEach() {
-        var l1Queue = new LinkedList<Message>();
+        var l1Queue = new LinkedList<String>();
         Mockito.when(level1Controller.getQueue()).thenReturn(l1Queue);
         Mockito.when(l1DataRepository.get(any(String.class))).thenReturn(new DataResponse(DataResponseType.HIT, "data"));
 
@@ -96,6 +95,7 @@ public class StateMachineTests extends AbstractCompArchTest {
     }
 
     @Test
+    @Disabled
     public void testL1DMISS() {
         stateMachine.sendEvent(L1InMessage.START);
 
@@ -109,7 +109,7 @@ public class StateMachineTests extends AbstractCompArchTest {
 
         stateMachine.sendEvent(cpuReadMessage);
         assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.RDWAITD);
-        assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.MISSC);
+        assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.RDL2WAITD);
     }
 
     @Test
@@ -132,7 +132,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .build()
                 .test();
 
-        Mockito.verify(cpu, Mockito.times(1)).data(any());
+        Mockito.verify(cpu, Mockito.times(2)).data(any());
     }
 
     @Test
@@ -151,8 +151,8 @@ public class StateMachineTests extends AbstractCompArchTest {
                         .setHeader("source", "cpu")
                         .setHeader("data", "someData")
                         .build())
-                .expectStateChanged(2)
-                .expectStates(L1ControllerState.MISSC)
+                .expectStateChanged(3)
+                .expectStates(L1ControllerState.RDL2WAITD)
                 .and()
                 .build()
                 .test();
@@ -177,8 +177,8 @@ public class StateMachineTests extends AbstractCompArchTest {
                         .setHeader("source", "cpu")
                         .setHeader("data", "someData")
                         .build())
-                .expectStateChanged(2)
-                .expectStates(L1ControllerState.MISSI)
+                .expectStateChanged(3)
+                .expectStates(L1ControllerState.RDL2WAITD)
                 .and()
                 .build()
                 .test();
@@ -203,13 +203,188 @@ public class StateMachineTests extends AbstractCompArchTest {
                         .setHeader("source", "cpu")
                         .setHeader("data", "someData")
                         .build())
-                .expectStateChanged(2)
-                .expectStates(L1ControllerState.MISSD)
+                .expectStateChanged(3)
+                .expectStates(L1ControllerState.RD2WAITD)
                 .and()
                 .build()
                 .test();
 
         // If we've missed then enqueue
         assertThat(level2Controller.getQueue()).hasSize(1);
+    }
+
+    @Test
+    public void testL2CPUReadWithPlanScenario2() throws Exception {
+        Mockito.when(l1DataRepository.get(any(String.class))).thenReturn(new DataResponse(DataResponseType.MISSC, "data"));
+
+        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+                .stateMachine(stateMachine)
+                .step()
+                .sendEvent(L1InMessage.START)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .step()
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.CPUREAD)
+                        .setHeader("source", "cpu")
+                        .setHeader("data", "someData")
+                        .build())
+                .expectStateChanged(3)
+                .expectStates(L1ControllerState.RDL2WAITD)
+                .and()
+                .step()
+                // L2 Sends Data Back
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.DATA)
+                        .setHeader("source", "L2")
+                        .setHeader("data", new DataResponse(DataResponseType.HIT, "data"))
+                        .build())
+                .expectStateChanged(1)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .build()
+                .test();
+
+        assertThat(level2Controller.getQueue()).hasSize(1);
+        Mockito.verify(cpu, Mockito.times(1)).data(any());
+        Mockito.verify(l1DataRepository, Mockito.times(1)).write(any());
+    }
+
+    @Test
+    public void testL2CPUReadWithPlanScenario4() throws Exception {
+        Mockito.when(l1DataRepository.get(any(String.class))).thenReturn(new DataResponse(DataResponseType.MISSD, "data"));
+        Mockito.when(l1DataRepository.victimize(any(String.class))).thenReturn(new DataResponse(DataResponseType.HIT, "data"));
+
+        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+                .stateMachine(stateMachine)
+                .step()
+                .sendEvent(L1InMessage.START)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .step()
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.CPUREAD)
+                        .setHeader("source", "cpu")
+                        .setHeader("data", "someData")
+                        .build())
+                .expectStateChanged(3)
+                .expectStates(L1ControllerState.RD2WAITD)
+                .and()
+                .step()
+                // L2 Sends Data Back
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.DATA)
+                        .setHeader("source", "L2")
+                        .setHeader("data", new DataResponse(DataResponseType.HIT, "data"))
+                        .build())
+                .expectStateChanged(1)
+                .expectStates(L1ControllerState.RD1WAITD)
+                .and()
+                .build()
+                .test();
+
+        assertThat(level2Controller.getQueue()).hasSize(1);
+        Mockito.verify(cpu, Mockito.times(1)).data(any());
+        Mockito.verify(l1DataRepository, Mockito.times(1)).victimize(any());
+        Mockito.verify(l1DataRepository, Mockito.times(1)).write(any());
+        Mockito.verify(level2Controller, Mockito.times(1)).setData(any());
+    }
+
+    @Test
+    public void testCpuWriteScenario1() throws Exception {
+        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+                .stateMachine(stateMachine)
+                .step()
+                .sendEvent(L1InMessage.START)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .step()
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.CPUWRITE)
+                        .setHeader("source", "cpu")
+                        .setHeader("data", "someData")
+                        .build())
+                .expectStateChanged(1)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .build()
+                .test();
+
+        Mockito.verify(l1DataRepository, Mockito.times(1)).write(any());
+    }
+
+    @Test
+    public void testCpuWriteScenario2() throws Exception {
+        Mockito.when(l1DataRepository.get(any(String.class))).thenReturn(new DataResponse(DataResponseType.MISSI, "data"));
+
+        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+                .stateMachine(stateMachine)
+                .step()
+                .sendEvent(L1InMessage.START)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .step()
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.CPUWRITE)
+                        .setHeader("source", "cpu")
+                        .setHeader("data", "someData")
+                        .build())
+                .expectStateChanged(1)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .step()
+                // L2 Sends Data Back
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.DATA)
+                        .setHeader("source", "L2")
+                        .setHeader("data", new DataResponse(DataResponseType.HIT, "data"))
+                        .build())
+                .expectStateChanged(1)
+                .expectStates(L1ControllerState.RD1WAITD)
+                .and()
+                .build()
+                .test();
+
+        Mockito.verify(l1DataRepository, Mockito.times(1)).write(any());
+    }
+
+    @Test
+    public void testCpuWriteScenario3() throws Exception {
+        Mockito.when(l1DataRepository.get(any(String.class))).thenReturn(new DataResponse(DataResponseType.MISSC, "data"));
+
+        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+                .stateMachine(stateMachine)
+                .step()
+                .sendEvent(L1InMessage.START)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .step()
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.CPUWRITE)
+                        .setHeader("source", "cpu")
+                        .setHeader("data", "someData")
+                        .build())
+                .expectStateChanged(1)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .step()
+                // L2 Sends Data Back
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.DATA)
+                        .setHeader("source", "L2")
+                        .setHeader("data", new DataResponse(DataResponseType.HIT, "data"))
+                        .build())
+                .expectStateChanged(1)
+                .expectStates(L1ControllerState.RD1WAITD)
+                .and()
+                .build()
+                .test();
+
+        Mockito.verify(l1DataRepository, Mockito.times(1)).write(any());
+    }
+
+    @Test
+    public void testCpuWriteScenario4() {
+        // Gonna take a second to digest this one
     }
 }

@@ -1,6 +1,5 @@
 package edu.uno.advcomparch.repository;
 
-import edu.uno.advcomparch.model.Data;
 import lombok.NoArgsConstructor;
 
 // We could provide default implementations here or make this an abstract class.
@@ -12,11 +11,11 @@ public class DataRepository<T,A> {
         throw new UnsupportedOperationException("Get - Unsupported Operation");
     }
 
-    public Data<T> victimize(A address) {
+    public DataResponse victimize(A address) {
         throw new UnsupportedOperationException("Victimize - Unsupported Operation");
     }
 
-    public void write(Data<?> data) {
+    public void write(String data) {
         throw new UnsupportedOperationException("Write - Unsupported Operation");
     }
 }

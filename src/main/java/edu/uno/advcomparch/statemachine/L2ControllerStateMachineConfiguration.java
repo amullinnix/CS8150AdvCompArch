@@ -1,11 +1,9 @@
 package edu.uno.advcomparch.statemachine;
 
 import edu.uno.advcomparch.controller.Level1Controller;
-import edu.uno.advcomparch.controller.Level2Controller;
-import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.repository.DataRepository;
-import edu.uno.advcomparch.repository.DataResponse;
 import edu.uno.advcomparch.repository.DataResponseType;
+import edu.uno.advcomparch.storage.DynamicRandomAccessMemory;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -27,19 +25,16 @@ import java.util.EnumSet;
 @EnableStateMachine
 @AllArgsConstructor
 // TODO - Manage Notion of Cycle (Possibly externally). Manage Output Message building
-public class L1ControllerStateMachineConfiguration extends StateMachineConfigurerAdapter<L1ControllerState, L1InMessage> {
+public class L2ControllerStateMachineConfiguration extends StateMachineConfigurerAdapter<L1ControllerState, L1InMessage> {
 
     @Autowired
     Level1Controller level1Controller;
 
     @Autowired
-    Level2Controller level2Controller;
+    DataRepository<String, String> l2DataRepository;
 
     @Autowired
-    CentralProcessingUnit<String> cpu;
-
-    @Autowired
-    DataRepository<String, String> l1DataRepository;
+    DynamicRandomAccessMemory<String> dynamicRandomAccessMemory;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<L1ControllerState, L1InMessage> config) throws Exception {
@@ -68,10 +63,10 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
         states.withStates()
                 .initial(L1ControllerState.START)
                 .end(L1ControllerState.END)
-                .state(L1ControllerState.RDWAITD, L1CPURead())
-                .state(L1ControllerState.MISSI, L2CCPURead())
-                .state(L1ControllerState.MISSC, L2CCPURead())
-                .state(L1ControllerState.MISSD, L2CCPURead())
+//                .state(L1ControllerState.RDWAITD, L1CPURead())
+//                .state(L1ControllerState.MISSI, L2CCPURead())
+//                .state(L1ControllerState.MISSC, L2CCPURead())
+//                .state(L1ControllerState.MISSD, L2CCPURead())
                 .states(EnumSet.allOf(L1ControllerState.class));
     }
 
@@ -79,13 +74,13 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     public void configure(StateMachineTransitionConfigurer<L1ControllerState, L1InMessage> transitions) throws Exception {
         transitions.withExternal()
                 .source(L1ControllerState.START).event(L1InMessage.START)
-                .target(L1ControllerState.HIT).action(initAction())
+                .target(L1ControllerState.HIT)//.action(initAction())
                 .and().withExternal()
                 .source(L1ControllerState.HIT).event(L1InMessage.CPUREAD)
                 .target(L1ControllerState.RDWAITD)
                 .and().withExternal()
                 .source(L1ControllerState.RDWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT).action(CPUData())
+                .target(L1ControllerState.HIT)//.action(CPUData())
                 .and().withExternal()
                 // Why is this not also a state, some form of miss if L1D is a separate component
                 .source(L1ControllerState.RDWAITD).event(L1InMessage.MISSI)
@@ -101,58 +96,58 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.RDL2WAITD)
                 .and().withExternal()
                 .source(L1ControllerState.RDL2WAITD).target(L1ControllerState.HIT)
-                .event(L1InMessage.DATA).action(L1Data()).action(CPUData())
+                .event(L1InMessage.DATA).action(L2Data())//.action(CPUData())
                 .and().withExternal()
                 .source(L1ControllerState.MISSC).event(L1InMessage.CPUREAD)
                 .target(L1ControllerState.RDL2WAITD)
                 .and().withExternal()
                 .source(L1ControllerState.MISSD).event(L1InMessage.CPUREAD)
-                .target(L1ControllerState.RD2WAITD).action(L1Victimize())
+                .target(L1ControllerState.RD2WAITD).action(L2Victimize())
                 .and().withExternal()
                 .source(L1ControllerState.RD2WAITD).event(L1InMessage.DATA)
                 .target(L1ControllerState.RD1WAITD) // no action
                 .and().withExternal()
                 .source(L1ControllerState.RD1WAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT).action(L1Data()).action(L2CData()).action(CPUData())
+                .target(L1ControllerState.HIT).action(L2Data())//.action(L2CData()).action(CPUData())
                 .and().withExternal()
                 .source(L1ControllerState.HIT).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.HIT).action(L1Data())
+                .target(L1ControllerState.HIT).action(L2Data())
                 .and().withExternal()
                 .source(L1ControllerState.MISSI).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAITD).action(L2CCPURead())
+                .target(L1ControllerState.WRWAITD)//.action(L2CCPURead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC).action(L1Data())
+                .target(L1ControllerState.WRALLOC).action(L2Data())
                 .and().withExternal()
                 .source(L1ControllerState.WRALLOC).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT).action(L1Data())
+                .target(L1ControllerState.HIT).action(L2Data())
                 .and().withExternal()
                 .source(L1ControllerState.MISSC).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAITD).action(L2CCPURead())
+                .target(L1ControllerState.WRWAITD)//.action(L2CCPURead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC).action(L1Data())
+                .target(L1ControllerState.WRALLOC).action(L2Data())
                 .and().withExternal()
                 .source(L1ControllerState.MISSD).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAIT2D).action(L1Victimize()).action(L2CCPURead())
+                .target(L1ControllerState.WRWAIT2D).action(L2Victimize())//.action(L2CCPURead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAIT2D).event(L1InMessage.DATA)
                 .target(L1ControllerState.WRWAITD1D)
                 .and().withExternal()
                 .source(L1ControllerState.WRWAITD1D).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC).action(L1Data()).action(L2CData());
+                .target(L1ControllerState.WRALLOC).action(L2Data());//.action(L2CData());
     }
 
     @Bean
     @Autowired
-    public Action<L1ControllerState, L1InMessage> L1CPURead() {
+    public Action<L1ControllerState, L1InMessage> L2CPURead() {
         return ctx -> {
             // If queue is non empty, on state transition perform one action.
             var data = ctx.getMessage().getHeaders().get("data", String.class);
 
             System.out.println("CPU to L1C: CPURead(" + data + ")");
 
-            var response = l1DataRepository.get(data);
+            var response = l2DataRepository.get(data);
             var responseType = response.getType();
 
             // if we get nothing back send miss.
@@ -173,7 +168,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 // Send Data back to CPU if included in similar step
-                cpu.data(data);
+                level1Controller.enqueueMessage(data);
 
                 ctx.getStateMachine().sendEvent(responseMessage);
             }
@@ -181,83 +176,24 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> L1Data() {
+    public Action<L1ControllerState, L1InMessage> L2Data() {
         return ctx -> {
 //            var data = ctx.getMessage().getHeaders().get("data", DataResponse.class).getData();
             var data = ctx.getMessage().getHeaders().get("data", String.class);
             System.out.println("L1C to L1D: Data(" + data + ")");
 
-            l1DataRepository.write(data);
+            l2DataRepository.write(data);
         };
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> L1Victimize() {
+    public Action<L1ControllerState, L1InMessage> L2Victimize() {
         return ctx -> {
             var data = ctx.getMessage().getHeaders().get("data", String.class);
             System.out.println("L1C to L1D: Victimize(" + data + ")");
 
-            l1DataRepository.victimize(data);
+            l2DataRepository.victimize(data);
         };
     }
 
-    @Bean
-    public Action<L1ControllerState, L1InMessage> L2CCPURead() {
-        return ctx -> {
-            var data = ctx.getMessage().getHeaders().get("data", String.class);
-            System.out.println("L1C to L2C: CpuRead(" + data + ")");
-
-            // Look at actual queueing of messages
-//            var message = ctx.getExtendedState().get("message", Message.class);
-//            System.out.println(message.toString());
-            level2Controller.enqueueMessage(data);
-
-            // To transition to RDL2WAITD
-            var transitionMessage = MessageBuilder
-                    .withPayload(L1InMessage.CPUREAD)
-                    .setHeader("source", "L1Data")
-                    .build();
-
-            ctx.getStateMachine().sendEvent(transitionMessage);
-        };
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> L2CData() {
-        return ctx -> {
-            var data = ctx.getMessage().getHeaders().get("data", String.class);
-            System.out.println("L1C to L2C: CpuRead(" + data + ")");
-
-//            var message = ctx.getExtendedState().get("message", Message.class);
-
-//            System.out.println(message.toString());
-
-            level2Controller.enqueueMessage(data);
-        };
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> CPUData() {
-        return ctx -> {
-            var data = ctx.getMessage().getHeaders().get("data", DataResponse.class).getData();
-            System.out.println(data);
-
-            cpu.data(data);
-        };
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> initAction() {
-        return ctx -> {
-            // populate message from cpu,
-            // TODO - Delete (using headers)
-//            ctx.getExtendedState().getVariables().put("message", new Message());
-            System.out.println(ctx.getTarget().getId());
-        };
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> executeAction() {
-        return ctx -> System.out.println("Do" + ctx.getTarget().getId());
-    }
 }

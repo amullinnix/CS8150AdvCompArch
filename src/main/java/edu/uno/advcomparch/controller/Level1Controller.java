@@ -1,6 +1,5 @@
 package edu.uno.advcomparch.controller;
 
-import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.model.Data;
 
 import javax.inject.Named;
@@ -27,9 +26,9 @@ public class Level1Controller implements CacheController {
 
     private List<String> messageList;
 
-    private Queue<Message> queue;
+    private Queue<String> queue;
 
-    public Level1Controller(Queue<Message> queue) {
+    public Level1Controller(Queue<String> queue) {
 
         //Initialize the cache!
         data = new ArrayList<>();
@@ -52,24 +51,24 @@ public class Level1Controller implements CacheController {
     public void processInstruction() {
         //I expect this to "put" instructions or messages on other queues, for now, using a message list
 
-        //        //Get the first message from our queue
-//        Message message = this.queue.poll();
-//
-//        if(message == null) {
-//            return; //fail fast
-//        }
-//
+        //Get the first message from our queue
+        var message = this.queue.poll();
+
+        if(message == null) {
+            return; //fail fast
+        }
+
 //        Instruction instruction = message.getInstruction();
-//
-//        //Check level 1 data for a "hit"
-//        //TODO: Needs to be an actual address
+
+        //Check level 1 data for a "hit"
+        //TODO: Needs to be an actual address
 //        String address = instruction.getAddress();
-//
-//        //If we found hit, return to "source"
-//        if( isDataPresentInCache(new Address()) ) {
-//            messageList.add("Address " + address + " found, returning " + data);
-//        }
-//        //else request from next level down
+
+        //If we found hit, return to "source"
+        if( isDataPresentInCache(new Address()) ) {
+            messageList.add("Address " + message + " found, returning " + data);
+        }
+        //else request from next level down
 
     }
 
@@ -211,7 +210,7 @@ public class Level1Controller implements CacheController {
     }
 
     @Override
-    public void enqueueMessage(Message message) {
+    public void enqueueMessage(String message) {
         getQueue().add(message);
     }
 }

@@ -35,6 +35,10 @@ A: TBD
 
 A: TBD
 
+
+#### Q: When we victimize the block do we need to return the data?
+
+A: TBD
 ---
 ## General TODO Ideas
 Instead of putting TODOs everywhere, consider putting a few in here.

@@ -1,16 +1,15 @@
 package edu.uno.advcomparch.cpu;
 
 import edu.uno.advcomparch.instruction.Instruction;
-import edu.uno.advcomparch.instruction.Message;
 
 import java.util.List;
 import java.util.Queue;
 
 public class DefaultCPU implements CentralProcessingUnit<String> {
 
-    private Queue<Message> queue;
+    private Queue<String> queue;
 
-    public DefaultCPU(Queue<Message> queue) {
+    public DefaultCPU(Queue<String> queue) {
         this.queue = queue;
     }
 

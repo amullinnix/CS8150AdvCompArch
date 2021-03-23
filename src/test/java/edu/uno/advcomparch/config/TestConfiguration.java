@@ -4,7 +4,6 @@ import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.cpu.DefaultCPU;
-import edu.uno.advcomparch.instruction.Message;
 import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.statemachine.L1ControllerStateMachineConfiguration;
 import org.mockito.Mockito;
@@ -40,13 +39,13 @@ public class TestConfiguration {
     }
 
     @Bean
-    public CentralProcessingUnit cpu(Queue<Message> queue) {
+    public CentralProcessingUnit cpu(Queue<String> queue) {
         return Mockito.mock(DefaultCPU.class, Mockito.RETURNS_DEEP_STUBS);
     }
 
     @Bean
-    // TODO - Delete
-    public Queue<Message> MessageQueue() {
+    // TODO - Delete, currently being injected into both l1 and l2
+    public Queue<String> MessageQueue() {
         return new LinkedList<>();
     }
 }

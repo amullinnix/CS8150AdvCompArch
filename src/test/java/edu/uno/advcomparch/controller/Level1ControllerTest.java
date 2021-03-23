@@ -19,7 +19,7 @@ public class Level1ControllerTest {
 
     @Before
     public void setup() {
-        Queue<Message> queue = new LinkedBlockingQueue<>();
+        Queue<String> queue = new LinkedBlockingQueue<>();
         controller = new Level1Controller(queue);
 
     }
@@ -39,7 +39,7 @@ public class Level1ControllerTest {
 
         Message message = new Message();
         message.setInstruction(instruction);
-        controller.getQueue().offer(message);  //pre populate the queue w/ our first message
+//        controller.getQueue().offer(message);  //pre populate the queue w/ our first message
         //not worrying about src/dest atm
 
         //execute

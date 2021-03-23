@@ -1,6 +1,5 @@
 package edu.uno.advcomparch.step_definitions;
 
-import edu.uno.advcomparch.model.Data;
 import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.repository.DataResponse;
 import io.cucumber.java.en.Given;
@@ -17,7 +16,7 @@ public class L1DataRepositoryStepDefinitions {
     @Given("Data is {string}")
     public void data_is(String stringData) {
         dataRepository = new DataRepository<>();
-        dataRepository.write(new Data<>(stringData));
+        dataRepository.write(stringData);
     }
 
     @When("I ask for data from address {integer}")
