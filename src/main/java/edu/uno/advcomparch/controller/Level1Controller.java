@@ -1,7 +1,9 @@
 package edu.uno.advcomparch.controller;
 
 import edu.uno.advcomparch.model.Data;
+import edu.uno.advcomparch.statemachine.L1InMessage;
 import edu.uno.advcomparch.storage.Level1DataStore;
+import org.springframework.messaging.Message;
 
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -18,7 +20,7 @@ public class Level1Controller implements CacheController {
 
     private List<String> messageList;
 
-    private Queue<String> queue;
+    private Queue<Message<L1InMessage>> queue;
 
     private Level1DataStore dataStore;
 
@@ -26,7 +28,7 @@ public class Level1Controller implements CacheController {
 
     //TODO: This class still needs a write buffer and victim buffer. Do they belong here or in the dataStore?
 
-    public Level1Controller(Queue<String> queue) {
+    public Level1Controller(Queue<Message<L1InMessage>> queue) {
 
         this.messageList = new ArrayList<>();
         this.queue = queue;
@@ -56,7 +58,7 @@ public class Level1Controller implements CacheController {
     }
 
     @Override
-    public void enqueueMessage(String message) {
+    public void enqueueMessage(Message<L1InMessage> message) {
         getQueue().add(message);
     }
 }

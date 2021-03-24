@@ -167,8 +167,8 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .setHeader("data", response)
                         .build();
 
-                // Send Data back to CPU if included in similar step
-                level1Controller.enqueueMessage(data);
+                // TODO - Send Data back to CPU if included in similar step
+                level1Controller.enqueueMessage(responseMessage);
 
                 ctx.getStateMachine().sendEvent(responseMessage);
             }

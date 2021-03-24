@@ -1,6 +1,8 @@
 package edu.uno.advcomparch.controller;
 
 import edu.uno.advcomparch.model.Data;
+import edu.uno.advcomparch.statemachine.L1InMessage;
+import org.springframework.messaging.Message;
 
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ import java.util.Queue;
 @lombok.Data
 public class Level2Controller implements CacheController {
 
-    private Queue<String> queue;
+    private Queue<Message<L1InMessage>> queue;
 
     //note: No sets in a direct mapped cache
     public static final int TAG_SIZE = 9;  //is the tag size the same?
@@ -26,7 +28,7 @@ public class Level2Controller implements CacheController {
 
     List<CacheBlock> cache;
 
-    public Level2Controller(Queue<String> queue) {
+    public Level2Controller(Queue<Message<L1InMessage>> queue) {
 
         //initialize the cache
         cache = new ArrayList<>();
@@ -91,7 +93,6 @@ public class Level2Controller implements CacheController {
         }
 
         return block;
-
     }
 
     public void printData() {
@@ -114,7 +115,7 @@ public class Level2Controller implements CacheController {
     }
 
     @Override
-    public void enqueueMessage(String message) {
+    public void enqueueMessage(Message<L1InMessage> message) {
         getQueue().add(message);
     }
 }

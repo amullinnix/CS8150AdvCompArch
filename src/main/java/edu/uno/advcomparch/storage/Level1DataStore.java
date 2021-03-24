@@ -4,11 +4,13 @@ import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.CacheSet;
 
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 //Purpose of this class to simply handle the requests from the Level 1 Controller
+@Named
 public class Level1DataStore {
 
     //TODO: Consider calculating this and extracting as well
@@ -102,6 +104,11 @@ public class Level1DataStore {
     }
 
     public boolean canWriteToCache(Address address) {
+        if (address == null) {
+            System.out.println("Cannot write null address to cache");
+            return false;
+        }
+
         CacheSet set = cache.get(address.getIndexDecimal());
 
         if(set.containsTag(address)) {

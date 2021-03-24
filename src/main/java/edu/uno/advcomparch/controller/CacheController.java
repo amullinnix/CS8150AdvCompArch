@@ -1,6 +1,8 @@
 package edu.uno.advcomparch.controller;
 
 import edu.uno.advcomparch.model.Data;
+import edu.uno.advcomparch.statemachine.L1InMessage;
+import org.springframework.messaging.Message;
 
 public interface CacheController {
 
@@ -11,6 +13,6 @@ public interface CacheController {
     void cpuWrite(Data<?> data);
 
     // place a controller message on the queue to be processed.
-    void enqueueMessage(String message);
+    void enqueueMessage(Message<L1InMessage> message);
 
 }

@@ -9,5 +9,5 @@ public interface CentralProcessingUnit<T> {
 
     void write();
     
-    void data(T data);
+    void data(byte[] data);
 }

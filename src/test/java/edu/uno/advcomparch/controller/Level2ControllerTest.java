@@ -1,8 +1,9 @@
 package edu.uno.advcomparch.controller;
 
-import edu.uno.advcomparch.instruction.Message;
+import edu.uno.advcomparch.statemachine.L1InMessage;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.messaging.Message;
 
 import java.util.Arrays;
 import java.util.Queue;
@@ -18,7 +19,7 @@ public class Level2ControllerTest {
 
     @Before
     public void setup() {
-        Queue<String> queue = new LinkedBlockingQueue<>();
+        Queue<Message<L1InMessage>> queue = new LinkedBlockingQueue<>();
 
         controller = new Level2Controller(queue);
         blockToWrite = new CacheBlock(9, 32);

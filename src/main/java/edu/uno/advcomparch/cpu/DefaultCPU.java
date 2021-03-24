@@ -2,6 +2,7 @@ package edu.uno.advcomparch.cpu;
 
 import edu.uno.advcomparch.instruction.Instruction;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 
@@ -24,8 +25,8 @@ public class DefaultCPU implements CentralProcessingUnit<String> {
     }
 
     @Override
-    public void data(String data) {
-        System.out.println("Received Data: " + data);
+    public void data(byte[] data) {
+        System.out.println("Received Data: " + Arrays.toString(data));
     }
 
     /**

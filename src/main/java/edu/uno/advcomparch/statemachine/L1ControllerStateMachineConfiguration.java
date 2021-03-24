@@ -1,11 +1,11 @@
 package edu.uno.advcomparch.statemachine;
 
+import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.repository.DataRepository;
-import edu.uno.advcomparch.repository.DataResponse;
-import edu.uno.advcomparch.repository.DataResponseType;
+import edu.uno.advcomparch.storage.Level1DataStore;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +21,7 @@ import org.springframework.statemachine.listener.StateMachineListener;
 import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 import org.springframework.statemachine.state.State;
 
+import java.util.Arrays;
 import java.util.EnumSet;
 
 @Configuration
@@ -40,6 +41,9 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
     @Autowired
     DataRepository<String, String> l1DataRepository;
+
+    @Autowired
+    Level1DataStore level1DataStore;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<L1ControllerState, L1InMessage> config) throws Exception {
@@ -97,6 +101,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .source(L1ControllerState.RDWAITD).event(L1InMessage.MISSD)
                 .target(L1ControllerState.MISSD)
                 .and().withExternal()
+                // End of newly added configuration
                 .source(L1ControllerState.MISSI).event(L1InMessage.CPUREAD)
                 .target(L1ControllerState.RDL2WAITD)
                 .and().withExternal()
@@ -148,33 +153,39 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<L1ControllerState, L1InMessage> L1CPURead() {
         return ctx -> {
             // If queue is non empty, on state transition perform one action.
-            var data = ctx.getMessage().getHeaders().get("data", String.class);
+            var address = ctx.getMessage().getHeaders().get("address", Address.class);
+            var bytes = ctx.getMessage().getHeaders().get("bytes", Integer.class);
 
-            System.out.println("CPU to L1C: CPURead(" + data + ")");
+            System.out.println("CPU to L1C: CPURead(" + address + ")");
 
-            var response = l1DataRepository.get(data);
-            var responseType = response.getType();
+            var canRead = level1DataStore.isDataPresentInCache(address);
+
+            // TODO Derive missing types, MISSC, MISSI, MISSD
+//            var responseType = response.getType();
 
             // if we get nothing back send miss.
-            if (responseType != DataResponseType.HIT) {
-
+            if (!canRead) {
                 // construct a miss
                 var missMessage = MessageBuilder
-                        .withPayload(L1InMessage.fromDataResponseType(responseType))
+//                        .withPayload(L1InMessage.fromDataResponseType(responseType))
+                        .withPayload(L1InMessage.MISSC)
                         .setHeader("source", "L1Data")
                         .build();
 
                 ctx.getStateMachine().sendEvent(missMessage);
             } else {
+                var data = level1DataStore.getDataAtAddress(address, bytes);
+
                 var responseMessage = MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L1Data")
-                        .setHeader("data", response)
+                        .setHeader("data", data)
                         .build();
 
                 // Send Data back to CPU if included in similar step
-                cpu.data(data);
+                // cpu.data(data); - or do we send this as a transition event
 
+                // Send successful message back to the controller
                 ctx.getStateMachine().sendEvent(responseMessage);
             }
         };
@@ -183,15 +194,28 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<L1ControllerState, L1InMessage> L1Data() {
         return ctx -> {
-//            var data = ctx.getMessage().getHeaders().get("data", DataResponse.class).getData();
-            var data = ctx.getMessage().getHeaders().get("data", String.class);
-            System.out.println("L1C to L1D: Data(" + data + ")");
+            var message = ctx.getMessage();
+            var address = message.getHeaders().get("address", Address.class);
+            var data = (byte[]) message.getHeaders().get("data");
+            System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
-            l1DataRepository.write(data);
+            var canWrite = level1DataStore.canWriteToCache(address);
+
+            if (canWrite) {
+                level1DataStore.writeDataToCache(address, data);
+            } else {
+                var missMessage = MessageBuilder
+                        .withPayload(L1InMessage.MISSI) // TODO - Investigate Miss Types
+                        .setHeader("source", "L1Data")
+                        .build();
+
+                ctx.getStateMachine().sendEvent(missMessage);
+            }
         };
     }
 
     @Bean
+    // TODO - need to sort out still
     public Action<L1ControllerState, L1InMessage> L1Victimize() {
         return ctx -> {
             var data = ctx.getMessage().getHeaders().get("data", String.class);
@@ -204,18 +228,20 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<L1ControllerState, L1InMessage> L2CCPURead() {
         return ctx -> {
-            var data = ctx.getMessage().getHeaders().get("data", String.class);
-            System.out.println("L1C to L2C: CpuRead(" + data + ")");
+            var message = ctx.getMessage();
+            var address = message.getHeaders().get("address", String.class);
+            var bytes = message.getHeaders().get("bytes", Integer.class);
+            System.out.println("L1C to L2C: CpuRead(" + address + ")");
 
             // Look at actual queueing of messages
-//            var message = ctx.getExtendedState().get("message", Message.class);
-//            System.out.println(message.toString());
-            level2Controller.enqueueMessage(data);
+            level2Controller.enqueueMessage(message);
 
             // To transition to RDL2WAITD
             var transitionMessage = MessageBuilder
                     .withPayload(L1InMessage.CPUREAD)
                     .setHeader("source", "L1Data")
+                    .setHeader("address", address)
+                    .setHeader("bytes", bytes)
                     .build();
 
             ctx.getStateMachine().sendEvent(transitionMessage);
@@ -225,39 +251,31 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<L1ControllerState, L1InMessage> L2CData() {
         return ctx -> {
-            var data = ctx.getMessage().getHeaders().get("data", String.class);
-            System.out.println("L1C to L2C: CpuRead(" + data + ")");
+            var message = ctx.getMessage();
+            var data = (byte[]) message.getHeaders().get("data");
+            System.out.println("L1C to L2C: Data(" + Arrays.toString(data) + ")");
 
-//            var message = ctx.getExtendedState().get("message", Message.class);
-
-//            System.out.println(message.toString());
-
-            level2Controller.enqueueMessage(data);
+            // TODO - move this to a state machine.
+            level2Controller.enqueueMessage(message);
         };
     }
 
     @Bean
     public Action<L1ControllerState, L1InMessage> CPUData() {
         return ctx -> {
-            var data = ctx.getMessage().getHeaders().get("data", DataResponse.class).getData();
-            System.out.println(data);
+            var data = (byte[]) ctx.getMessage().getHeaders().get("data");
+            System.out.println("L1C to CPU: Data(" + Arrays.toString(data) + ")");
 
+            // report back to the cpu
             cpu.data(data);
+
+            // We've already passed this two the CPU in L1Read, maybe we need to move it back out here.
+            System.out.println(data);
         };
     }
 
     @Bean
     public Action<L1ControllerState, L1InMessage> initAction() {
-        return ctx -> {
-            // populate message from cpu,
-            // TODO - Delete (using headers)
-//            ctx.getExtendedState().getVariables().put("message", new Message());
-            System.out.println(ctx.getTarget().getId());
-        };
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> executeAction() {
-        return ctx -> System.out.println("Do" + ctx.getTarget().getId());
+        return ctx -> System.out.println(ctx.getTarget().getId());
     }
 }
