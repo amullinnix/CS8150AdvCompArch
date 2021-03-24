@@ -22,7 +22,9 @@ public class Level1Controller implements CacheController {
 
     private Level1DataStore dataStore;
 
-    //this class still needs states, the controller has a state ;)
+    //TODO: this class still needs states, the controller has a state ;)
+
+    //TODO: This class still needs a write buffer and victim buffer. Do they belong here or in the dataStore?
 
     public Level1Controller(Queue<String> queue) {
 
@@ -32,7 +34,6 @@ public class Level1Controller implements CacheController {
 
     //TODO: Revamp this method for the "new" controller logic
     public void processInstruction() {
-        //I expect this to "put" instructions or messages on other queues, for now, using a message list
 
         //Get the first message from our queue
         var message = this.queue.poll();
@@ -40,18 +41,6 @@ public class Level1Controller implements CacheController {
         if(message == null) {
             return; //fail fast
         }
-
-//        Instruction instruction = message.getInstruction();
-
-        //Check level 1 data for a "hit"
-        //TODO: Needs to be an actual address
-//        String address = instruction.getAddress();
-
-        //If we found hit, return to "source"
-//        if(isDataPresentInCache(new Address()) ) {
-//            messageList.add("Address " + message + " found, returning " + data);
-//        }
-        //else request from next level down
 
     }
 

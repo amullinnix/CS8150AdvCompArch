@@ -107,9 +107,9 @@ public class Level1DataStore {
         if(set.containsTag(address)) {
             return true;                   //ok to write to full set, but same tag
         }else if(set.atCapacity()){
-            return false;
+            return false;                  //not ok, because cache is full and we have a new tag
         } else {
-            return true;
+            return true;                   //ok because there is room at the inn
         }
     }
 

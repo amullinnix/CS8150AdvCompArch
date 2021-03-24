@@ -12,7 +12,8 @@ public class CacheBlock {
     //TODO: When, precisely, do you set the dirty bit?
     private boolean dirty;
 
-    //TODO: Figure out the other bits needed for this, (valid, MISO, whatever)
+    //TODO: When, precisely, do you set the valid bit?
+    private boolean valid;
 
     public CacheBlock(int tagSize, int blockSize) {
         tag = new byte[tagSize];

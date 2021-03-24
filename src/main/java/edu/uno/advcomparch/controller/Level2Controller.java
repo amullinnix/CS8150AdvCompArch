@@ -24,15 +24,14 @@ public class Level2Controller implements CacheController {
     public static final int NUMBER_OF_SETS = 512;   // 16KB divided by 32 byte blocks = 512 Cache Blocks
     //offset is 5 bits + 9 bit tag = 14 bits?
 
-    //not sure if this is correct
-    List<CacheBlock> data;
+    List<CacheBlock> cache;
 
     public Level2Controller(Queue<String> queue) {
 
         //initialize the cache
-        data = new ArrayList<>();
+        cache = new ArrayList<>();
         for(int i = 0; i < NUMBER_OF_SETS; i++) {
-            data.add(new CacheBlock(TAG_SIZE, BLOCK_SIZE));
+            cache.add(new CacheBlock(TAG_SIZE, BLOCK_SIZE));
         }
 
         this.queue = queue;
@@ -53,7 +52,7 @@ public class Level2Controller implements CacheController {
         //get the tag
         int tag = address.getTagDecimal();
 
-        CacheBlock block = data.get(tag);
+        CacheBlock block = cache.get(tag);
 
         if(address.getTag().equals(new String(block.getTag()))) {
             return true;
@@ -68,7 +67,7 @@ public class Level2Controller implements CacheController {
         System.out.println("Tag is: " + tag);
 
         //naive approach, check if the block is empty
-        CacheBlock blockFromCache = data.get(tag);
+        CacheBlock blockFromCache = cache.get(tag);
 
         if(blockFromCache.isEmpty()) {
             System.out.println("block is empty!");
@@ -85,7 +84,7 @@ public class Level2Controller implements CacheController {
 
 
     public CacheBlock getBlockAtAddress(Address address) {
-        CacheBlock block = data.get(address.getTagDecimal());
+        CacheBlock block = cache.get(address.getTagDecimal());
 
         if(block.isEmpty()) {
             System.out.println("block is empty, just letting you know");
@@ -96,16 +95,16 @@ public class Level2Controller implements CacheController {
     }
 
     public void printData() {
-        System.out.println("Printing data of length: " + data.size());
+        System.out.println("Printing data of length: " + cache.size());
 
-        for(int i = 0; i < data.size(); i++) {
+        for(int i = 0; i < cache.size(); i++) {
             printSingleCacheBlock(i);
         }
     }
 
     public void printSingleCacheBlock(int blockToPrint) {
 
-        CacheBlock block = data.get(blockToPrint);
+        CacheBlock block = cache.get(blockToPrint);
 
         System.out.print("Block #" + blockToPrint + ": ");
         System.out.print("t: " + Arrays.toString(block.getTag()));
