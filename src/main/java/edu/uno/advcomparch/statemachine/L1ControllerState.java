@@ -28,5 +28,7 @@ public enum L1ControllerState {
     // Waiting for data from L1/L2 for write.
     WRWAIT2D,
     // Waiting for data from L1 and L2 for write.
-    WRWAITD1D
+    WRWAITD1D,
+    // Local Variable
+    WRWAITDX
 }

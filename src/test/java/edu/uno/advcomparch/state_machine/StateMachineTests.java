@@ -26,8 +26,7 @@ import java.util.LinkedList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class StateMachineTests extends AbstractCompArchTest {
 
@@ -346,9 +345,11 @@ public class StateMachineTests extends AbstractCompArchTest {
     }
 
     @Test
+    // TODO - Revisit
     public void testCpuWriteScenario2() throws Exception {
         when(level1DataStore.canWriteToCache(any(Address.class)))
-                .thenReturn(Boolean.FALSE);
+                .thenReturn(Boolean.FALSE)
+                .thenReturn(Boolean.TRUE);
 
         var data = new byte[]{10, 20, 30, 40};
 
@@ -365,8 +366,8 @@ public class StateMachineTests extends AbstractCompArchTest {
                         .setHeader("address", new Address("101", "010", "101"))
                         .setHeader("data", data)
                         .build())
-                .expectStateChanged(1)
-                .expectStates(L1ControllerState.HIT)
+                .expectStateChanged(3)
+                .expectStates(L1ControllerState.WRWAITD)
                 .and()
                 .step()
                 // L2 Sends Data Back
@@ -376,13 +377,13 @@ public class StateMachineTests extends AbstractCompArchTest {
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(1)
-                .expectStates(L1ControllerState.RD1WAITD)
+                .expectStates(L1ControllerState.HIT)
                 .and()
                 .build()
                 .test();
 
-        Mockito.verify(level1DataStore, Mockito.atMostOnce()).canWriteToCache(any(Address.class));
-        Mockito.verify(level1DataStore, Mockito.atMostOnce()).writeDataToCache(any(Address.class), any());
+        Mockito.verify(level1DataStore, times(2)).canWriteToCache(any(Address.class));
+        Mockito.verify(level1DataStore, times(2)).writeDataToCache(any(Address.class), any());
     }
 
     @Test

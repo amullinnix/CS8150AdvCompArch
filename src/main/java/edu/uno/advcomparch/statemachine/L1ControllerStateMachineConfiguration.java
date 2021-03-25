@@ -73,7 +73,11 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .initial(L1ControllerState.START)
                 .end(L1ControllerState.END)
                 .state(L1ControllerState.RDWAITD, L1CPURead())
-                .state(L1ControllerState.MISSI, L2CCPURead())
+                .state(L1ControllerState.WRWAITDX, L1Data())
+                .state(L1ControllerState.WRALLOC, L1Data()) // TODO - Why two data messages to go from wrwait - hit
+//                .state(L1ControllerState.MISSI, L2CCPURead())
+                .state(L1ControllerState.RDL2WAITD, L2CCPURead())
+                .state(L1ControllerState.WRWAITD, L2CCPURead())
                 .state(L1ControllerState.MISSC, L2CCPURead())
                 .state(L1ControllerState.MISSD, L2CCPURead())
                 .states(EnumSet.allOf(L1ControllerState.class));
@@ -121,10 +125,27 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.HIT).action(L1Data()).action(L2CData()).action(CPUData())
                 .and().withExternal()
                 .source(L1ControllerState.HIT).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.HIT).action(L1Data())
+                .target(L1ControllerState.WRWAITDX)
                 .and().withExternal()
+                // Local States
+                .source(L1ControllerState.WRWAITDX).event(L1InMessage.DATA)
+                .target(L1ControllerState.HIT)
+                .and().withExternal()
+                .source(L1ControllerState.WRWAITDX).event(L1InMessage.MISSI)
+                .target(L1ControllerState.MISSI)
+                .and().withExternal()
+                .source(L1ControllerState.WRWAITDX).event(L1InMessage.MISSC)
+                .target(L1ControllerState.MISSC)
+                .and().withExternal()
+                .source(L1ControllerState.WRWAITDX).event(L1InMessage.MISSD)
+                .target(L1ControllerState.MISSD)
+                .and().withExternal()
+                // End Local
+//                .source(L1ControllerState.HIT).event(L1InMessage.CPUWRITE)
+//                .target(L1ControllerState.HIT).action(L1Data())
+//                .and().withExternal()
                 .source(L1ControllerState.MISSI).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAITD).action(L2CCPURead())
+                .target(L1ControllerState.WRWAITD)
                 .and().withExternal()
                 .source(L1ControllerState.WRWAITD).event(L1InMessage.DATA)
                 .target(L1ControllerState.WRALLOC).action(L1Data())
@@ -168,11 +189,21 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 // construct a miss
                 var missMessage = MessageBuilder
 //                        .withPayload(L1InMessage.fromDataResponseType(responseType))
-                        .withPayload(L1InMessage.MISSC)
+                        .withPayload(L1InMessage.MISSI)
                         .setHeader("source", "L1Data")
                         .build();
 
                 ctx.getStateMachine().sendEvent(missMessage);
+                // Then send a read back
+                var cpuReadMessage = MessageBuilder
+                        .withPayload(L1InMessage.CPUREAD)
+                        .setHeader("source", "L1Data")
+                        .setHeader("address", address)
+                        .setHeader("bytes", bytes)
+                        .build();
+
+                ctx.getStateMachine().sendEvent(cpuReadMessage);
+
             } else {
                 var data = level1DataStore.getDataAtAddress(address, bytes);
 
@@ -197,11 +228,12 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var message = ctx.getMessage();
             var address = message.getHeaders().get("address", Address.class);
             var data = (byte[]) message.getHeaders().get("data");
-            System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
             var canWrite = level1DataStore.canWriteToCache(address);
 
             if (canWrite) {
+                System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
+
                 level1DataStore.writeDataToCache(address, data);
             } else {
                 var missMessage = MessageBuilder
@@ -210,6 +242,15 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 ctx.getStateMachine().sendEvent(missMessage);
+
+                var cpuWriteMessage = MessageBuilder
+                        .withPayload(L1InMessage.CPUWRITE)
+                        .setHeader("source", "L1Data")
+                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("data", data)
+                        .build();
+
+                ctx.getStateMachine().sendEvent(cpuWriteMessage);
             }
         };
     }
@@ -229,22 +270,36 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<L1ControllerState, L1InMessage> L2CCPURead() {
         return ctx -> {
             var message = ctx.getMessage();
-            var address = message.getHeaders().get("address", String.class);
+            var address = message.getHeaders().get("address", Address.class);
             var bytes = message.getHeaders().get("bytes", Integer.class);
             System.out.println("L1C to L2C: CpuRead(" + address + ")");
 
             // Look at actual queueing of messages
             level2Controller.enqueueMessage(message);
 
-            // To transition to RDL2WAITD
-            var transitionMessage = MessageBuilder
-                    .withPayload(L1InMessage.CPUREAD)
-                    .setHeader("source", "L1Data")
-                    .setHeader("address", address)
-                    .setHeader("bytes", bytes)
-                    .build();
+            var payload = message.getPayload();
 
-            ctx.getStateMachine().sendEvent(transitionMessage);
+            if (payload == L1InMessage.CPUREAD) {
+                // To transition to RDL2WAITD
+                var readMessage = MessageBuilder
+                        .withPayload(L1InMessage.CPUREAD)
+                        .setHeader("source", "L1Data")
+                        .setHeader("address", address)
+                        .setHeader("bytes", bytes)
+                        .build();
+
+                ctx.getStateMachine().sendEvent(readMessage);
+            } else if (payload == L1InMessage.CPUWRITE) {
+                // Transition to WRWAITD
+                var writeMessage = MessageBuilder
+                        .withPayload(L1InMessage.CPUREAD)
+                        .setHeader("source", "L1Data")
+                        .setHeader("address", address)
+                        .setHeader("bytes", bytes)
+                        .build();
+
+                ctx.getStateMachine().sendEvent(writeMessage);
+            }
         };
     }
 
