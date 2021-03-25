@@ -39,6 +39,10 @@ A: TBD
 #### Q: When we victimize the block do we need to return the data?
 
 A: TBD
+
+#### Q: What are the subsequent requests for data to L1D for in the 2nd/3rd write scenario for?
+
+A: TBD
 ---
 ## General TODO Ideas
 Instead of putting TODOs everywhere, consider putting a few in here.

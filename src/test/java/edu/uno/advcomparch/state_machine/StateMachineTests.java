@@ -320,6 +320,7 @@ public class StateMachineTests extends AbstractCompArchTest {
 
     @Test
     public void testCpuWriteScenario1() throws Exception {
+        when(level1DataStore.canWriteToCache(any(Address.class))).thenReturn(Boolean.TRUE);
         Mockito.doNothing().when(level1DataStore).writeDataToCache(any(Address.class), any());
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
@@ -332,9 +333,10 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
+                        .setHeader("address", new Address("101", "010", "101"))
                         .setHeader("data", new byte[]{10, 20, 30, 40})
                         .build())
-                .expectStateChanged(1)
+                .expectStateChanged(2)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .build()
@@ -347,11 +349,12 @@ public class StateMachineTests extends AbstractCompArchTest {
     @Test
     // TODO - Revisit
     public void testCpuWriteScenario2() throws Exception {
+        var data = new byte[]{10, 20, 30, 40};
+        when(level1DataStore.getDataAtAddress(any(Address.class), anyInt())).thenReturn(data);
+
         when(level1DataStore.canWriteToCache(any(Address.class)))
                 .thenReturn(Boolean.FALSE)
                 .thenReturn(Boolean.TRUE);
-
-        var data = new byte[]{10, 20, 30, 40};
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(stateMachine)
@@ -374,22 +377,27 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
+                        .setHeader("address", new Address("101", "010", "101"))
                         .setHeader("data", data)
                         .build())
-                .expectStateChanged(1)
+                .expectStateChanged(2)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .build()
                 .test();
 
-        Mockito.verify(level1DataStore, times(2)).canWriteToCache(any(Address.class));
-        Mockito.verify(level1DataStore, times(2)).writeDataToCache(any(Address.class), any());
+        Mockito.verify(level1DataStore, Mockito.times(3)).canWriteToCache(any(Address.class));
+        Mockito.verify(level1DataStore, Mockito.times(2)).writeDataToCache(any(), any());
     }
 
     @Test
     public void testCpuWriteScenario3() throws Exception {
         var data = new byte[]{10, 20, 30, 40};
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt())).thenReturn(data);
+
+        when(level1DataStore.canWriteToCache(any(Address.class)))
+                .thenReturn(Boolean.FALSE)
+                .thenReturn(Boolean.TRUE);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(stateMachine)
@@ -401,26 +409,28 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("data", "someData")
+                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("data", data)
                         .build())
-                .expectStateChanged(1)
-                .expectStates(L1ControllerState.HIT)
+                .expectStateChanged(3)
+                .expectStates(L1ControllerState.WRWAITD)
                 .and()
                 .step()
                 // L2 Sends Data Back
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
+                        .setHeader("address", new Address("101", "010", "101"))
                         .setHeader("data", data)
                         .build())
-                .expectStateChanged(1)
-                .expectStates(L1ControllerState.RD1WAITD)
+                .expectStateChanged(2)
+                .expectStates(L1ControllerState.HIT)
                 .and()
                 .build()
                 .test();
 
-        Mockito.verify(level1DataStore, Mockito.times(1)).canWriteToCache(any(Address.class));
-        Mockito.verify(level1DataStore, Mockito.times(1)).writeDataToCache(any(), any());
+        Mockito.verify(level1DataStore, Mockito.times(3)).canWriteToCache(any(Address.class));
+        Mockito.verify(level1DataStore, Mockito.times(2)).writeDataToCache(any(), any());
     }
 
     @Test

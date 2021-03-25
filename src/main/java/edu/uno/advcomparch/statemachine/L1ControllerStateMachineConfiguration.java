@@ -148,7 +148,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.WRWAITD)
                 .and().withExternal()
                 .source(L1ControllerState.WRWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC).action(L1Data())
+                .target(L1ControllerState.WRALLOC)
                 .and().withExternal()
                 .source(L1ControllerState.WRALLOC).event(L1InMessage.DATA)
                 .target(L1ControllerState.HIT).action(L1Data())
@@ -235,6 +235,16 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
                 level1DataStore.writeDataToCache(address, data);
+
+                var responseMessage = MessageBuilder
+                        .withPayload(L1InMessage.DATA)
+                        .setHeader("source", "L1Data")
+                        .setHeader("data", data)
+                        .build();
+
+                // Send successful message back to the controller
+                ctx.getStateMachine().sendEvent(responseMessage);
+
             } else {
                 var missMessage = MessageBuilder
                         .withPayload(L1InMessage.MISSI) // TODO - Investigate Miss Types
