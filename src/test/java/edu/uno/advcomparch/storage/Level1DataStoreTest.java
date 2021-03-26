@@ -26,9 +26,9 @@ public class Level1DataStoreTest {
         //simulate a cache miss
         Address address = new Address("101010", "101010", "10101");
 
-        boolean isHit = dataStore.isDataPresentInCache(address);
+        var isHit = dataStore.isDataPresentInCache(address);
 
-        assertFalse(isHit);
+        assertNotSame(isHit, ControllerState.HIT);
 
         dataStore.printData();
     }
@@ -42,9 +42,9 @@ public class Level1DataStoreTest {
 
         dataStore.printData();
 
-        boolean isHit = dataStore.isDataPresentInCache(address);
+        var isHit = dataStore.isDataPresentInCache(address);
 
-        assertTrue(isHit);
+        assertSame(isHit, ControllerState.HIT);
     }
 
     @Test

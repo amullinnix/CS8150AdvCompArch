@@ -2,6 +2,7 @@ package edu.uno.advcomparch.state_machine;
 
 import edu.uno.advcomparch.AbstractCompArchTest;
 import edu.uno.advcomparch.controller.Address;
+import edu.uno.advcomparch.controller.ControllerState;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.DefaultCPU;
@@ -51,9 +52,9 @@ public class StateMachineTests extends AbstractCompArchTest {
         when(level1Controller.getQueue()).thenReturn(l1Queue);
 
         when(level1DataStore.canWriteToCache(any(Address.class)))
-                .thenReturn(Boolean.TRUE);
+                .thenReturn(ControllerState.HIT);
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(Boolean.TRUE);
+                .thenReturn(ControllerState.HIT);
         var data = new byte[]{10, 20, 30, 40};
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt()))
                 .thenReturn(data);
@@ -111,7 +112,7 @@ public class StateMachineTests extends AbstractCompArchTest {
         stateMachine.sendEvent(L1InMessage.START);
 
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(Boolean.TRUE);
+                .thenReturn(ControllerState.MISSD);
 
         Message<L1InMessage> cpuReadMessage = MessageBuilder
                 .withPayload(L1InMessage.CPUREAD)
@@ -125,7 +126,7 @@ public class StateMachineTests extends AbstractCompArchTest {
     }
 
     @Test
-    public void testL1HitWithPlan() throws Exception {
+    public void testL1Hit() throws Exception {
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(stateMachine)
                 .step()
@@ -151,9 +152,9 @@ public class StateMachineTests extends AbstractCompArchTest {
     }
 
     @Test
-    public void testL1MissCWithPlan() throws Exception {
+    public void testL1MissC() throws Exception {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(Boolean.FALSE);
+                .thenReturn(ControllerState.MISSC);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(stateMachine)
@@ -179,10 +180,9 @@ public class StateMachineTests extends AbstractCompArchTest {
     }
 
     @Test
-    @Disabled // Can only have the one MISS type until resolved
-    public void testL1MissIWithPlan() throws Exception {
+    public void testL1MissI() throws Exception {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(Boolean.FALSE);
+                .thenReturn(ControllerState.MISSI);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(stateMachine)
@@ -208,10 +208,9 @@ public class StateMachineTests extends AbstractCompArchTest {
     }
 
     @Test
-    @Disabled // Can only have the one missed type until resolved
-    public void testL1MissDWithPlan() throws Exception {
+    public void testL1MissD() throws Exception {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(Boolean.FALSE);
+                .thenReturn(ControllerState.MISSD);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(stateMachine)
@@ -232,15 +231,15 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .build()
                 .test();
 
-        // If we've missed then enqueue
+        // TODO - IS MISSD behavior different?
         assertThat(level2Controller.getQueue()).hasSize(1);
     }
 
     @Test
-    public void testL2CPUReadWithPlanScenario2() throws Exception {
+    public void testL2CPUReadScenario2() throws Exception {
         var data = new byte[]{10, 20, 30, 40};
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(Boolean.FALSE);
+                .thenReturn(ControllerState.MISSI);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(stateMachine)
@@ -279,7 +278,7 @@ public class StateMachineTests extends AbstractCompArchTest {
 
     @Test
     @Disabled
-    public void testL2CPUReadWithPlanScenario4() throws Exception {
+    public void testL2CPUReadScenario4() throws Exception {
 //        Mockito.when(l1DataRepository.get(any(String.class))).thenReturn(new DataResponse(DataResponseType.MISSD, "data"));
 //        Mockito.when(l1DataRepository.victimize(any(String.class))).thenReturn(new DataResponse(DataResponseType.HIT, "data"));
 
@@ -320,7 +319,7 @@ public class StateMachineTests extends AbstractCompArchTest {
 
     @Test
     public void testCpuWriteScenario1() throws Exception {
-        when(level1DataStore.canWriteToCache(any(Address.class))).thenReturn(Boolean.TRUE);
+        when(level1DataStore.canWriteToCache(any(Address.class))).thenReturn(ControllerState.HIT);
         Mockito.doNothing().when(level1DataStore).writeDataToCache(any(Address.class), any());
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
@@ -353,8 +352,8 @@ public class StateMachineTests extends AbstractCompArchTest {
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt())).thenReturn(data);
 
         when(level1DataStore.canWriteToCache(any(Address.class)))
-                .thenReturn(Boolean.FALSE)
-                .thenReturn(Boolean.TRUE);
+                .thenReturn(ControllerState.MISSI)
+                .thenReturn(ControllerState.HIT);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(stateMachine)
@@ -396,8 +395,8 @@ public class StateMachineTests extends AbstractCompArchTest {
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt())).thenReturn(data);
 
         when(level1DataStore.canWriteToCache(any(Address.class)))
-                .thenReturn(Boolean.FALSE)
-                .thenReturn(Boolean.TRUE);
+                .thenReturn(ControllerState.MISSC)
+                .thenReturn(ControllerState.HIT);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(stateMachine)

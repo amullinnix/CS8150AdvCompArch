@@ -155,7 +155,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 // construct a miss
                 var missMessage = MessageBuilder
-                        .withPayload(L1InMessage.fromDataResponseType(responseType))
+                        .withPayload(L1InMessage.MISSC)
                         .setHeader("source", "L1Data")
                         .build();
 

@@ -36,7 +36,7 @@ public class Level1DataStore {
     }
 
     //TODO: maybe this should be more tag focused?
-    public boolean isDataPresentInCache(Address address) {
+    public ControllerState isDataPresentInCache(Address address) {
 
         //fetch the set
         CacheSet set = cache.get(address.getIndexDecimal());
@@ -44,9 +44,9 @@ public class Level1DataStore {
         CacheBlock block = set.getBlock(address);
 
         if(block.isEmpty()) {
-            return false;
+            return null;
         } else {
-            return true;
+            return null;
         }
     }
 
@@ -66,7 +66,7 @@ public class Level1DataStore {
         //fetch the set (with the 4 cache blocks)
         CacheSet set = cache.get(address.getIndexDecimal());
 
-        if(isDataPresentInCache(address)) {
+        if(isDataPresentInCache(address) == ControllerState.HIT) {
             //then we are updating it, kind of
             CacheBlock block = set.getBlock(address);
 

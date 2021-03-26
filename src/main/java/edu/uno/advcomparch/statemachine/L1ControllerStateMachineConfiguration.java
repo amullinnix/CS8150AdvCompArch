@@ -1,6 +1,7 @@
 package edu.uno.advcomparch.statemachine;
 
 import edu.uno.advcomparch.controller.Address;
+import edu.uno.advcomparch.controller.ControllerState;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
@@ -185,11 +186,11 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 //            var responseType = response.getType();
 
             // if we get nothing back send miss.
-            if (!canRead) {
+            if (canRead != ControllerState.HIT) {
                 // construct a miss
                 var missMessage = MessageBuilder
 //                        .withPayload(L1InMessage.fromDataResponseType(responseType))
-                        .withPayload(L1InMessage.MISSI)
+                        .withPayload(L1InMessage.fromControllerState(canRead))
                         .setHeader("source", "L1Data")
                         .build();
 
@@ -231,7 +232,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
             var canWrite = level1DataStore.canWriteToCache(address);
 
-            if (canWrite) {
+            if (canWrite == ControllerState.HIT) {
                 System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
                 level1DataStore.writeDataToCache(address, data);
@@ -247,7 +248,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
             } else {
                 var missMessage = MessageBuilder
-                        .withPayload(L1InMessage.MISSI) // TODO - Investigate Miss Types
+                        .withPayload(L1InMessage.fromControllerState(canWrite)) // TODO - Investigate Miss Types
                         .setHeader("source", "L1Data")
                         .build();
 
