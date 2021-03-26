@@ -56,8 +56,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public StateMachineListener<L1ControllerState, L1InMessage> listener() {
         return new StateMachineListenerAdapter<>() {
-
-            // can use on parent state machine to iterate clock
             @Override
             public void stateChanged(State<L1ControllerState, L1InMessage> from, State<L1ControllerState, L1InMessage> to) {
                 System.out.println("State change to " + to.getId());
@@ -74,11 +72,10 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .initial(L1ControllerState.START)
                 .end(L1ControllerState.END)
                 .state(L1ControllerState.RDWAITD, L1CPURead())
-                .state(L1ControllerState.WRWAITDX, L1Data())
-                .state(L1ControllerState.WRALLOC, L1Data()) // TODO - Why two data messages to go from wrwait - hit
-//                .state(L1ControllerState.MISSI, L2CCPURead())
                 .state(L1ControllerState.RDL2WAITD, L2CCPURead())
                 .state(L1ControllerState.RD1WAITD, propagateData())
+                .state(L1ControllerState.WRWAITDX, L1Data())
+                .state(L1ControllerState.WRALLOC, L1Data())
                 .state(L1ControllerState.WRWAIT1D, propagateData())
                 .state(L1ControllerState.WRWAITD, L2CCPURead())
                 .state(L1ControllerState.MISSC, L2CCPURead())
@@ -144,9 +141,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.MISSD)
                 .and().withExternal()
                 // End Local
-//                .source(L1ControllerState.HIT).event(L1InMessage.CPUWRITE)
-//                .target(L1ControllerState.HIT).action(L1Data())
-//                .and().withExternal()
                 .source(L1ControllerState.MISSI).event(L1InMessage.CPUWRITE)
                 .target(L1ControllerState.WRWAITD)
                 .and().withExternal()
@@ -154,13 +148,13 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.WRALLOC)
                 .and().withExternal()
                 .source(L1ControllerState.WRALLOC).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT)//.action(L1Data())
+                .target(L1ControllerState.HIT)
                 .and().withExternal()
                 .source(L1ControllerState.MISSC).event(L1InMessage.CPUWRITE)
                 .target(L1ControllerState.WRWAITD).action(L2CCPURead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC)//.action(L1Data())
+                .target(L1ControllerState.WRALLOC)
                 .and().withExternal()
                 .source(L1ControllerState.MISSD).event(L1InMessage.CPUWRITE)
                 .target(L1ControllerState.WRWAIT2D).action(L1Victimize()).action(L2CCPURead())
@@ -177,21 +171,32 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<L1ControllerState, L1InMessage> L1CPURead() {
         return ctx -> {
             // If queue is non empty, on state transition perform one action.
-            var address = ctx.getMessage().getHeaders().get("address", Address.class);
-            var bytes = ctx.getMessage().getHeaders().get("bytes", Integer.class);
+            var message = ctx.getMessage();
+            var address = message.getHeaders().get("address", String.class);
+            var bytes = message.getHeaders().get("bytes", Integer.class);
 
             System.out.println("CPU to L1C: CPURead(" + address + ")");
 
-            var canRead = level1DataStore.isDataPresentInCache(address);
+            var partitionedAddress = new Address(address);
+            var canRead = level1DataStore.isDataPresentInCache(partitionedAddress);
 
-            // TODO Derive missing types, MISSC, MISSI, MISSD
-//            var responseType = response.getType();
+            // If we get nothing back send miss.
+            if (canRead == ControllerState.HIT) {
+                var data = level1DataStore.getDataAtAddress(partitionedAddress, bytes);
 
-            // if we get nothing back send miss.
-            if (canRead != ControllerState.HIT) {
-                // construct a miss
+                var responseMessage = MessageBuilder
+                        .withPayload(L1InMessage.DATA)
+                        .setHeader("source", "L1Data")
+                        .setHeader("address", partitionedAddress)
+                        .setHeader("data", data)
+                        .build();
+
+                // Send successful message back to the controller
+                ctx.getStateMachine().sendEvent(responseMessage);
+
+            } else {
+                // Construct a miss
                 var missMessage = MessageBuilder
-//                        .withPayload(L1InMessage.fromDataResponseType(responseType))
                         .withPayload(L1InMessage.fromControllerState(canRead))
                         .setHeader("source", "L1Data")
                         .build();
@@ -201,27 +206,11 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 var cpuReadMessage = MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "L1Data")
-                        .setHeader("address", address)
+                        .setHeader("address", partitionedAddress)
                         .setHeader("bytes", bytes)
                         .build();
 
                 ctx.getStateMachine().sendEvent(cpuReadMessage);
-
-            } else {
-                var data = level1DataStore.getDataAtAddress(address, bytes);
-
-                var responseMessage = MessageBuilder
-                        .withPayload(L1InMessage.DATA)
-                        .setHeader("source", "L1Data")
-                        .setHeader("address", address)
-                        .setHeader("data", data)
-                        .build();
-
-                // Send Data back to CPU if included in similar step
-                // cpu.data(data); - or do we send this as a transition event
-
-                // Send successful message back to the controller
-                ctx.getStateMachine().sendEvent(responseMessage);
             }
         };
     }
@@ -230,26 +219,26 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<L1ControllerState, L1InMessage> L1Data() {
         return ctx -> {
             var message = ctx.getMessage();
-            var address = message.getHeaders().get("address", Address.class);
+            var address = message.getHeaders().get("address", String.class);
             var data = (byte[]) message.getHeaders().get("data");
 
-            var canWrite = level1DataStore.canWriteToCache(address);
+            var l1Address = new Address(address);
+            var canWrite = level1DataStore.canWriteToCache(l1Address);
 
             if (canWrite == ControllerState.HIT) {
                 System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
-                level1DataStore.writeDataToCache(address, data);
+                level1DataStore.writeDataToCache(l1Address, data);
 
                 var responseMessage = MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L1Data")
-                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("address", l1Address)
                         .setHeader("data", data)
                         .build();
 
                 // Send successful message back to the controller
                 ctx.getStateMachine().sendEvent(responseMessage);
-
             } else {
                 var missMessage = MessageBuilder
                         .withPayload(L1InMessage.fromControllerState(canWrite)) // TODO - Investigate Miss Types
@@ -261,7 +250,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 var cpuWriteMessage = MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "L1Data")
-                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("address", l1Address)
                         .setHeader("data", data)
                         .build();
 
@@ -271,7 +260,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    // TODO - need to sort out still
+    // TODO - Missing L1DataStoreInterface
     public Action<L1ControllerState, L1InMessage> L1Victimize() {
         return ctx -> {
             var address = ctx.getMessage().getHeaders().get("address", Address.class);
@@ -352,7 +341,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             ctx.getStateMachine().sendEvent(message);
         };
     }
-
 
     @Bean
     public Action<L1ControllerState, L1InMessage> initAction() {

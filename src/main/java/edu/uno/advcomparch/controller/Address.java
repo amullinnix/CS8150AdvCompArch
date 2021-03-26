@@ -1,9 +1,7 @@
 package edu.uno.advcomparch.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.ObjectUtils;
 
 import java.nio.channels.UnsupportedAddressTypeException;
 import java.util.Objects;
@@ -23,6 +21,11 @@ public class Address {
         this.tag = tag;
         this.index = index;
         this.offset = offset;
+    }
+
+    public Address(String address) {
+        this.address = address;
+        // Could invoke build components in address based constructor
     }
 
     public String getAddress() {

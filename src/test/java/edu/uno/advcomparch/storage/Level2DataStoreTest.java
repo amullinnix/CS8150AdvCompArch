@@ -2,6 +2,7 @@ package edu.uno.advcomparch.storage;
 
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
+import edu.uno.advcomparch.controller.ControllerState;
 import edu.uno.advcomparch.statemachine.L1InMessage;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +36,9 @@ public class Level2DataStoreTest {
     public void dataNotInEmptyCache() {
         Address address = new Address("101010101", "", "00010");
 
-        boolean isHit = dataStore.isDataPresentInCache(address);
+        var isHit = dataStore.isDataPresentInCache(address);
 
-        assertFalse(isHit);
+        assertNotSame(isHit, ControllerState.HIT);
 
         dataStore.printData();
     }
@@ -50,9 +51,9 @@ public class Level2DataStoreTest {
 
         dataStore.printSingleCacheBlock(341);
 
-        boolean isHit = dataStore.isDataPresentInCache(address);
+        var isHit = dataStore.isDataPresentInCache(address);
 
-        assertTrue(isHit);
+        assertSame(isHit, ControllerState.HIT);
     }
 
     @Test

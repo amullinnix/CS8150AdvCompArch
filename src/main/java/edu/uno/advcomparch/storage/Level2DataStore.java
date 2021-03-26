@@ -2,6 +2,7 @@ package edu.uno.advcomparch.storage;
 
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
+import edu.uno.advcomparch.controller.ControllerState;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,7 +29,7 @@ public class Level2DataStore {
         }
     }
 
-    public boolean isDataPresentInCache(Address address) {
+    public ControllerState isDataPresentInCache(Address address) {
 
         //get the tag
         int tag = address.getTagDecimal();
@@ -36,10 +37,10 @@ public class Level2DataStore {
         CacheBlock block = cache.get(tag);
 
         if(address.getTag().equals(new String(block.getTag()))) {
-            return true;
+            return null;
         }
 
-        return false;
+        return null;
     }
 
     public void writeDataToCache(Address address, CacheBlock blockToWrite) {
@@ -93,4 +94,9 @@ public class Level2DataStore {
 
     }
 
+    public ControllerState canWriteToCache(Address address) {
+        return null;
+    }
+
+    public void writeDataToCache(Address address, byte[] blockToWrite) { }
 }

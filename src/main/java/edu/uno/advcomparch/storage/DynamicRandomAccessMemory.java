@@ -1,5 +1,6 @@
 package edu.uno.advcomparch.storage;
 
+import edu.uno.advcomparch.controller.Address;
 import lombok.Data;
 
 import javax.inject.Named;
@@ -24,5 +25,9 @@ public class DynamicRandomAccessMemory<T> {
 
     // List for array indexing, could probably initialize to size for 128Kb requirement
     private List<T> dram = new ArrayList<>();
+
+    public T getMemoryAtAddress(Address address) {
+        return null;
+    }
 
 }

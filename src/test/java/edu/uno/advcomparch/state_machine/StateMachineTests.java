@@ -25,8 +25,7 @@ import java.util.LinkedList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.atMostOnce;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class StateMachineTests extends AbstractCompArchTest {
 
@@ -57,6 +56,9 @@ public class StateMachineTests extends AbstractCompArchTest {
         var data = new byte[]{10, 20, 30, 40};
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt()))
                 .thenReturn(data);
+
+        // Mock out queue based processing
+        doNothing().when(level1Controller).processInstruction();
 
         level2Controller.getQueue().clear();
 
@@ -137,7 +139,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101","010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(2)
@@ -147,7 +149,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .test();
 
         Mockito.verify(cpu, Mockito.atMostOnce()).data(any());
-        Mockito.verify(level1DataStore, Mockito.times(1)).isDataPresentInCache(any());
+        Mockito.verify(level1DataStore, Mockito.atMostOnce()).isDataPresentInCache(any());
         Mockito.verify(level1DataStore, Mockito.atMostOnce()).getDataAtAddress(any(Address.class), anyInt());
     }
 
@@ -166,7 +168,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101","010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
@@ -194,7 +196,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101","010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
@@ -222,7 +224,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101","010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
@@ -251,7 +253,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101","010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
@@ -262,7 +264,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", new Address("101","010", "101"))
+                        .setHeader("address","1010101010")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(1)
@@ -294,7 +296,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101","010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(3)
@@ -305,7 +307,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", new Address("101","010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(2)
@@ -337,7 +339,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("data", new byte[]{10, 20, 30, 40})
                         .build())
                 .expectStateChanged(2)
@@ -368,7 +370,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(3)
@@ -379,7 +381,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(2)
@@ -410,7 +412,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(3)
@@ -421,7 +423,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("address", "101010101010")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(2)
@@ -437,6 +439,7 @@ public class StateMachineTests extends AbstractCompArchTest {
     @Test
     public void testCpuWriteScenario4() throws Exception {
         var data = new byte[]{10, 20, 30, 40};
+
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt())).thenReturn(data);
         when(level1DataStore.canWriteToCache(any(Address.class)))
                 .thenReturn(ControllerState.MISSD)
@@ -452,7 +455,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(3)
@@ -463,7 +466,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", new Address("101", "010", "101"))
+                        .setHeader("address", "1010101010")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(3)
@@ -472,7 +475,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .build()
                 .test();
 
-        Mockito.verify(level1DataStore, Mockito.times(2)).canWriteToCache(any(Address.class));
+        Mockito.verify(level1DataStore, Mockito.times( 2)).canWriteToCache(any(Address.class));
         Mockito.verify(level1DataStore, Mockito.times(1)).writeDataToCache(any(), any());
     }
 }
