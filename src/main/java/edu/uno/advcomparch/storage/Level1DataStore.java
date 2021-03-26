@@ -50,6 +50,23 @@ public class Level1DataStore {
         }
     }
 
+    public void writeDataToCacheTriggeredByRead(Address address, byte[] bytesToWrite) {
+
+        for(int i = 0; i < bytesToWrite.length; i++) {
+            this.writeDataToCacheTriggeredByRead(address, bytesToWrite[i]);
+
+            //must increment the offset by one to write the next byte in the correct location
+            address.incrementOffset();
+        }
+    }
+
+    public void writeDataToCacheTriggeredByRead(Address address, byte b) {
+        writeDataToCache(address, b);
+
+        //easy way of doing this ;)
+        this.getCacheBlock(address).setDirty(false);
+    }
+
     public void writeDataToCache(Address address, byte[] bytesToWrite) {
 
         for(int i = 0; i < bytesToWrite.length; i++) {

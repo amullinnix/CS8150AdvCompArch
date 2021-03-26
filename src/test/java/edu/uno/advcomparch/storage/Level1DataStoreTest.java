@@ -269,5 +269,30 @@ public class Level1DataStoreTest {
         byte b = 1;
 
         dataStore.writeDataToCache(address, b);
+        fail("Need to finish this test");
+    }
+
+    @Test
+    public void readTriggeredWriteToCacheHasCleanState() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+
+        dataStore.writeDataToCacheTriggeredByRead(address, b);
+
+        CacheBlock cacheBlock = dataStore.getCacheBlock(address);
+
+        assertEquals(false, cacheBlock.isDirty());
+    }
+
+    @Test
+    public void readTriggeredWriteToCacheHasCleanStateByteArray() {
+        Address address = new Address("000100", "000100", "00100");
+        byte[] bytesToWrite = new byte[] {13, 14, 15};
+
+        dataStore.writeDataToCacheTriggeredByRead(address, bytesToWrite);
+
+        CacheBlock cacheBlock = dataStore.getCacheBlock(address);
+
+        assertEquals(false, cacheBlock.isDirty());
     }
 }
