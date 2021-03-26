@@ -3,6 +3,7 @@ package edu.uno.advcomparch.storage;
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.CacheSet;
+import edu.uno.advcomparch.controller.ControllerState;
 
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class Level1DataStore {
             return true;
         }
     }
+
     public void writeDataToCache(Address address, byte[] bytesToWrite) {
 
         for(int i = 0; i < bytesToWrite.length; i++) {
@@ -76,6 +78,8 @@ public class Level1DataStore {
 
             block.setTag(address.getTag().getBytes());
             block.getBlock()[address.getOffsetDecimal()] = b;
+            block.setDirty(true);
+            block.setValid(true);
 
             set.add(block);
         }
@@ -103,20 +107,23 @@ public class Level1DataStore {
         return Arrays.copyOfRange(block.getBlock(), decimalOffset, decimalOffset + bytesToRead);
     }
 
-    public boolean canWriteToCache(Address address) {
+
+    //return HIT, or one of the miss types
+    //TODO: Just do it - make it right
+    public ControllerState canWriteToCache(Address address) {
         if (address == null) {
             System.out.println("Cannot write null address to cache");
-            return false;
+            return null;
         }
 
         CacheSet set = cache.get(address.getIndexDecimal());
 
         if(set.containsTag(address)) {
-            return true;                   //ok to write to full set, but same tag
+            return null;                   //ok to write to full set, but same tag
         }else if(set.atCapacity()){
-            return false;                  //not ok, because cache is full and we have a new tag
+            return null;                  //not ok, because cache is full and we have a new tag
         } else {
-            return true;                   //ok because there is room at the inn
+            return null;                   //ok because there is room at the inn
         }
     }
 
@@ -147,5 +154,12 @@ public class Level1DataStore {
             System.out.print("b: " + Arrays.toString(block.getBlock()));
             System.out.println();
         }
+    }
+
+    public CacheSet getCacheSet(Address address) {
+
+        CacheSet cacheSet = cache.get(address.getIndexDecimal());
+
+        return cacheSet;
     }
 }

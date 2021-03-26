@@ -2,6 +2,8 @@ package edu.uno.advcomparch.storage;
 
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
+import edu.uno.advcomparch.controller.CacheSet;
+import edu.uno.advcomparch.controller.ControllerState;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -122,7 +124,8 @@ public class Level1DataStoreTest {
     public void canWriteToSetWithEmptyBlocks() {
         Address address = new Address("000111", "000100", "00100");
 
-        assertEquals(true, dataStore.canWriteToCache(address));
+        //TODO: fix this test
+        assertEquals(ControllerState.MISSC, dataStore.canWriteToCache(address));
     }
 
     @Test
@@ -142,7 +145,8 @@ public class Level1DataStoreTest {
 
         dataStore.printSingleSet(4);
 
-        assertEquals(true, dataStore.canWriteToCache(address));
+        //TODO: fix this test
+        assertEquals(ControllerState.MISSI, dataStore.canWriteToCache(address));
     }
 
     @Test
@@ -164,7 +168,8 @@ public class Level1DataStoreTest {
 
         address.setTag("001000");  //set should be full at this point, no room for new tag
 
-        assertEquals(false, dataStore.canWriteToCache(address));
+        //TODO: fix this test
+        assertEquals(ControllerState.MISSC, dataStore.canWriteToCache(address));
     }
 
     /**
@@ -187,5 +192,82 @@ public class Level1DataStoreTest {
         byte[] expected = new byte[]{0,0,0,0,13,14,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
         assertEquals(Arrays.toString(expected), Arrays.toString(block.getBlock()));
 
+    }
+
+    @Test
+    public void dirtyBitIsSetOnWrite() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+        dataStore.writeDataToCache(address, b);
+
+        CacheBlock cacheBlock = dataStore.getCacheBlock(address);
+
+        assertTrue(cacheBlock.isDirty());
+    }
+
+    @Test
+    public void dirtyBitSetOnReWrite() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+        dataStore.writeDataToCache(address, b);
+
+        address.setOffset("00011");
+        b = 2;
+        dataStore.writeDataToCache(address, b);
+
+        dataStore.printSingleSet(4);
+
+        CacheBlock cacheBlock = dataStore.getCacheBlock(address);
+
+        assertTrue(cacheBlock.isDirty());
+    }
+
+    @Test
+    public void getCacheSet() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+        dataStore.writeDataToCache(address, b);
+
+        CacheSet set = dataStore.getCacheSet(address);
+
+        assertTrue(set.containsTag(address));
+    }
+
+    @Test
+    public void whatHappensWhenWeWriteAfterRemovingBlock() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+        dataStore.writeDataToCache(address, b);
+
+        CacheSet cacheSet = dataStore.getCacheSet(address);
+        dataStore.printSingleSet(4);
+        cacheSet.removeBlock(address);
+        dataStore.printSingleSet(4);
+
+        address.setOffset("00010");
+        b = 3;
+        dataStore.writeDataToCache(address, b);
+        dataStore.printSingleSet(4);
+
+    }
+
+    @Test
+    public void validBitTrueAfterWriting() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+
+        dataStore.writeDataToCache(address, b);
+
+        CacheBlock cacheBlock = dataStore.getCacheBlock(address);
+
+        assertTrue(cacheBlock.isValid());
+    }
+
+    @Test
+    public void determineMissType() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+
+        dataStore.writeDataToCache(address, b);
     }
 }

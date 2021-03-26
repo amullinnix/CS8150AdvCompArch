@@ -10,6 +10,10 @@ public class CacheBlock {
     private byte[] block;
 
     //TODO: When, precisely, do you set the dirty bit?
+        //For starters, it's always set on write
+    //TODO: So, then, when do you reset the dirty bit?
+        //I'm thinking that it might be on eviction
+        //Also, clearly set to clean when block is created
     private boolean dirty;
 
     //TODO: When, precisely, do you set the valid bit?
@@ -19,6 +23,7 @@ public class CacheBlock {
         tag = new byte[tagSize];
         block = new byte[blockSize];
         dirty = false;
+        valid = false;
     }
 
     //Define isEmpty as both tag and block are empty
@@ -51,4 +56,16 @@ public class CacheBlock {
         return ! this.dirty;
     }
 
+
+    /**
+     * A note on Dirty Bits:
+     *
+     * The dirty bit is supposed to be
+     *      * true(dirty) if the data in the cache block has been modified
+     *      * false(clean) if the data has not been modified
+     *
+     * If clean, then there is no need to write it into the memory
+     *
+     * I think, therefore, that I am missing the distinction between CPU read and CPU write
+     */
 }

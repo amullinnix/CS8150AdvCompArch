@@ -57,3 +57,4 @@ can easily be created.
 * I also want to consider validation, i.e. cannot have 10 bit index for 8KB cache
 
 
+* So, I'm just not getting how the write buffer works.

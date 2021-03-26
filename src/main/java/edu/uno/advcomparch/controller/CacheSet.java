@@ -73,6 +73,7 @@ public class CacheSet {
         return blockFound;
     }
 
+    //TODO: Yikes! What was I thinking? Do we like this? Feels weird, but seems to work. (see the whatHappens test)
     public boolean removeBlock(Address address) {
 
         boolean removed = false;
