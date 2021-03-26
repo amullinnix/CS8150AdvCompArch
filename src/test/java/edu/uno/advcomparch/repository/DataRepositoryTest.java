@@ -1,6 +1,7 @@
 package edu.uno.advcomparch.repository;
 
 import edu.uno.advcomparch.AbstractCompArchTest;
+import edu.uno.advcomparch.controller.Address;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,7 @@ public class DataRepositoryTest extends AbstractCompArchTest {
     @Test
     public void testVictimize() {
         assertThatExceptionOfType(UnsupportedOperationException.class)
-                .isThrownBy(() -> dataRepository.victimize(1))
+                .isThrownBy(() -> dataRepository.victimize(new Address()))
                 .withMessage("Victimize - Unsupported Operation");
     }
 

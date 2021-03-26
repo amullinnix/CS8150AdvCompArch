@@ -55,7 +55,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
     @Bean
     public StateMachineListener<L1ControllerState, L1InMessage> listener() {
-        return new StateMachineListenerAdapter<L1ControllerState, L1InMessage>() {
+        return new StateMachineListenerAdapter<>() {
 
             // can use on parent state machine to iterate clock
             @Override
@@ -78,6 +78,8 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .state(L1ControllerState.WRALLOC, L1Data()) // TODO - Why two data messages to go from wrwait - hit
 //                .state(L1ControllerState.MISSI, L2CCPURead())
                 .state(L1ControllerState.RDL2WAITD, L2CCPURead())
+                .state(L1ControllerState.RD1WAITD, propagateData())
+                .state(L1ControllerState.WRWAIT1D, propagateData())
                 .state(L1ControllerState.WRWAITD, L2CCPURead())
                 .state(L1ControllerState.MISSC, L2CCPURead())
                 .state(L1ControllerState.MISSD, L2CCPURead())
@@ -152,22 +154,22 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.WRALLOC)
                 .and().withExternal()
                 .source(L1ControllerState.WRALLOC).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT).action(L1Data())
+                .target(L1ControllerState.HIT)//.action(L1Data())
                 .and().withExternal()
                 .source(L1ControllerState.MISSC).event(L1InMessage.CPUWRITE)
                 .target(L1ControllerState.WRWAITD).action(L2CCPURead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC).action(L1Data())
+                .target(L1ControllerState.WRALLOC)//.action(L1Data())
                 .and().withExternal()
                 .source(L1ControllerState.MISSD).event(L1InMessage.CPUWRITE)
                 .target(L1ControllerState.WRWAIT2D).action(L1Victimize()).action(L2CCPURead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAIT2D).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRWAITD1D)
+                .target(L1ControllerState.WRWAIT1D)
                 .and().withExternal()
-                .source(L1ControllerState.WRWAITD1D).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC).action(L1Data()).action(L2CData());
+                .source(L1ControllerState.WRWAIT1D).event(L1InMessage.DATA)
+                .target(L1ControllerState.WRALLOC).action(L2CData());
     }
 
     @Bean
@@ -211,6 +213,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 var responseMessage = MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L1Data")
+                        .setHeader("address", address)
                         .setHeader("data", data)
                         .build();
 
@@ -240,6 +243,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 var responseMessage = MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L1Data")
+                        .setHeader("address", new Address("101", "010", "101"))
                         .setHeader("data", data)
                         .build();
 
@@ -270,10 +274,10 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     // TODO - need to sort out still
     public Action<L1ControllerState, L1InMessage> L1Victimize() {
         return ctx -> {
-            var data = ctx.getMessage().getHeaders().get("data", String.class);
-            System.out.println("L1C to L1D: Victimize(" + data + ")");
+            var address = ctx.getMessage().getHeaders().get("address", Address.class);
+            System.out.println("L1C to L1D: Victimize(" + address + ")");
 
-            l1DataRepository.victimize(data);
+            l1DataRepository.victimize(address);
         };
     }
 
@@ -339,6 +343,16 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             System.out.println(data);
         };
     }
+
+    @Bean
+    public Action<L1ControllerState, L1InMessage> propagateData() {
+        return ctx -> {
+            // Propagate RD2WAITD Data --> RD1WaitD
+            var message = ctx.getMessage();
+            ctx.getStateMachine().sendEvent(message);
+        };
+    }
+
 
     @Bean
     public Action<L1ControllerState, L1InMessage> initAction() {

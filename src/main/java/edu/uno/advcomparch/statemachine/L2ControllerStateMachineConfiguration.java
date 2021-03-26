@@ -1,5 +1,6 @@
 package edu.uno.advcomparch.statemachine;
 
+import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.repository.DataResponseType;
@@ -132,9 +133,9 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.WRWAIT2D).action(L2Victimize())//.action(L2CCPURead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAIT2D).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRWAITD1D)
+                .target(L1ControllerState.WRWAIT1D)
                 .and().withExternal()
-                .source(L1ControllerState.WRWAITD1D).event(L1InMessage.DATA)
+                .source(L1ControllerState.WRWAIT1D).event(L1InMessage.DATA)
                 .target(L1ControllerState.WRALLOC).action(L2Data());//.action(L2CData());
     }
 
@@ -189,10 +190,10 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<L1ControllerState, L1InMessage> L2Victimize() {
         return ctx -> {
-            var data = ctx.getMessage().getHeaders().get("data", String.class);
-            System.out.println("L1C to L1D: Victimize(" + data + ")");
+            var address = ctx.getMessage().getHeaders().get("data", Address.class);
+            System.out.println("L1C to L1D: Victimize(" + address + ")");
 
-            l2DataRepository.victimize(data);
+            l2DataRepository.victimize(address);
         };
     }
 
