@@ -62,8 +62,8 @@ public class Level1DataStoreTest {
         dataStore.printSingleSet(42);
 
         //both should be present, in the same set
-        assertEquals(true, dataStore.isDataPresentInCache(address1));
-        assertEquals(true, dataStore.isDataPresentInCache(address2));
+        assertEquals(ControllerState.HIT, dataStore.isDataPresentInCache(address1));
+        assertEquals(ControllerState.HIT, dataStore.isDataPresentInCache(address2));
     }
 
     @Test
@@ -124,8 +124,7 @@ public class Level1DataStoreTest {
     public void canWriteToSetWithEmptyBlocks() {
         Address address = new Address("000111", "000100", "00100");
 
-        //TODO: fix this test
-        assertEquals(ControllerState.MISSC, dataStore.canWriteToCache(address));
+        assertEquals(ControllerState.MISSI, dataStore.canWriteToCache(address));
     }
 
     @Test
@@ -145,8 +144,7 @@ public class Level1DataStoreTest {
 
         dataStore.printSingleSet(4);
 
-        //TODO: fix this test
-        assertEquals(ControllerState.MISSI, dataStore.canWriteToCache(address));
+        assertEquals(ControllerState.HIT, dataStore.canWriteToCache(address));
     }
 
     @Test
@@ -168,8 +166,7 @@ public class Level1DataStoreTest {
 
         address.setTag("001000");  //set should be full at this point, no room for new tag
 
-        //TODO: fix this test
-        assertEquals(ControllerState.MISSC, dataStore.canWriteToCache(address));
+        assertEquals(ControllerState.MISSD, dataStore.canWriteToCache(address));
     }
 
     /**
@@ -264,15 +261,6 @@ public class Level1DataStoreTest {
     }
 
     @Test
-    public void determineMissType() {
-        Address address = new Address("000100", "000100", "00100");
-        byte b = 1;
-
-        dataStore.writeDataToCache(address, b);
-        fail("Need to finish this test");
-    }
-
-    @Test
     public void readTriggeredWriteToCacheHasCleanState() {
         Address address = new Address("000100", "000100", "00100");
         byte b = 1;
@@ -294,5 +282,81 @@ public class Level1DataStoreTest {
         CacheBlock cacheBlock = dataStore.getCacheBlock(address);
 
         assertEquals(false, cacheBlock.isDirty());
+    }
+
+    @Test
+    public void missiScenario() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+
+        //MISS I  --> it's not there, but there is room to write
+        ControllerState controllerState = dataStore.canWriteToCache(address);
+        assertEquals(ControllerState.MISSI, controllerState);
+    }
+
+    @Test
+    public void hitScenario() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+
+        dataStore.writeDataToCache(address, b); //Must do this to have block clean
+
+        //HIT --> tag is there, so we can just "update" it
+        ControllerState controllerState = dataStore.canWriteToCache(address);
+
+        assertEquals(ControllerState.HIT, controllerState);
+    }
+
+    @Test
+    public void misscScenario() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+
+        dataStore.writeDataToCacheTriggeredByRead(address, b); //Must do this to have block clean
+
+        address.setTag("000101");
+        dataStore.writeDataToCache(address, b);
+
+        address.setTag("000110");
+        dataStore.writeDataToCache(address, b);
+
+        address.setTag("000111");
+        dataStore.writeDataToCache(address, b);
+
+        address.setTag("001000");
+
+        //MISS C --> cache full, the evicted block is clean
+        ControllerState controllerState = dataStore.canWriteToCache(address);
+
+        assertEquals(ControllerState.MISSC, controllerState);
+    }
+
+    @Test
+    public void missdScenario() {
+        Address address = new Address("000100", "000100", "00100");
+        byte b = 1;
+
+        dataStore.writeDataToCache(address, b); //Must do this to have block clean
+
+        address.setTag("000101");
+        dataStore.writeDataToCache(address, b);
+
+        address.setTag("000110");
+        dataStore.writeDataToCache(address, b);
+
+        address.setTag("000111");
+        dataStore.writeDataToCache(address, b);
+
+        address.setTag("000100");
+        address.setOffset("00110");
+        dataStore.writeDataToCache(address, b);
+        dataStore.printSingleSet(4);
+
+        address.setTag("001000");
+
+        //MISS D --> cache full, the evicted block is dirty
+        ControllerState controllerState = dataStore.canWriteToCache(address);
+
+        assertEquals(ControllerState.MISSD, controllerState);
     }
 }

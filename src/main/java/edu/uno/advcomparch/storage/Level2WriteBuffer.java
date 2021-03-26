@@ -1,9 +1,11 @@
 package edu.uno.advcomparch.storage;
 
 import edu.uno.advcomparch.controller.CacheBlock;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class Level2WriteBuffer {
 
     //Purpose of write buffer is to store cache blocks being written from cache to the next level in the hierarchy

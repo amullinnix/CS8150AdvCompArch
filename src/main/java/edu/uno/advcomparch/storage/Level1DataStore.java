@@ -43,11 +43,12 @@ public class Level1DataStore {
 
         CacheBlock block = set.getBlock(address);
 
-        if(block.isEmpty()) {
-            return null;
-        } else {
-            return null;
-        }
+        return this.canWriteToCache(address);
+//        if(block.isEmpty()) {
+//            return null;
+//        } else {
+//            return null;
+//        }
     }
 
     public void writeDataToCacheTriggeredByRead(Address address, byte[] bytesToWrite) {
@@ -78,7 +79,9 @@ public class Level1DataStore {
     }
 
     //This method might be starting to violate single responsibility principle.
-    public void writeDataToCache(Address address, byte b) {
+    public CacheBlock writeDataToCache(Address address, byte b) {
+
+        CacheBlock evicted = null;
 
         //fetch the set (with the 4 cache blocks)
         CacheSet set = cache.get(address.getIndexDecimal());
@@ -98,8 +101,10 @@ public class Level1DataStore {
             block.setDirty(true);
             block.setValid(true);
 
-            set.add(block);
+            evicted = set.add(block); //this returns the evicted block if there is one  //TODO: ugly :(
         }
+
+        return evicted;
     }
 
     public byte getByteAtAddress(Address address) {
@@ -125,8 +130,7 @@ public class Level1DataStore {
     }
 
 
-    //return HIT, or one of the miss types
-    //TODO: Just do it - make it right
+    //TODO: OMG! So many freaking returns. Sonar is having a fit right now.
     public ControllerState canWriteToCache(Address address) {
         if (address == null) {
             System.out.println("Cannot write null address to cache");
@@ -138,9 +142,14 @@ public class Level1DataStore {
         if(set.containsTag(address)) {
             return ControllerState.HIT;                   //ok to write to full set, but same tag
         }else if(set.atCapacity()){
-            return null;                  //not ok, because cache is full and we have a new tag
+            CacheBlock leastRecentlyUsedBlock = set.getLeastRecentlyUsedBlock();
+            if(leastRecentlyUsedBlock.isDirty()) {
+                return ControllerState.MISSD;
+            } else {
+                return ControllerState.MISSC;                  //not ok, because cache is full and we have a new tag
+            }
         } else {
-            return null;                   //ok because there is room at the inn
+            return ControllerState.MISSI;                   //ok because there is room at the inn
         }
     }
 
@@ -167,7 +176,9 @@ public class Level1DataStore {
 
         List<CacheBlock> blocks = set.getBlocks();
         for(CacheBlock block : blocks) {
-            System.out.print("t: " + Arrays.toString(block.getTag()));
+            System.out.print("t: \"" + new String(block.getTag()) + "\" ");
+            System.out.print("d: " + block.isDirty() + " ");
+            System.out.print("v: " + block.isValid() + " ");
             System.out.print("b: " + Arrays.toString(block.getBlock()));
             System.out.println();
         }

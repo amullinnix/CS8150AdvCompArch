@@ -3,6 +3,7 @@ package edu.uno.advcomparch.controller;
 import edu.uno.advcomparch.model.Data;
 import edu.uno.advcomparch.statemachine.L1InMessage;
 import edu.uno.advcomparch.storage.Level1DataStore;
+import edu.uno.advcomparch.storage.VictimCache;
 import org.springframework.messaging.Message;
 
 import javax.inject.Named;
@@ -24,6 +25,8 @@ public class Level1Controller implements CacheController {
 
     private Level1DataStore dataStore;
 
+    private VictimCache victimCache;
+
     //TODO: this class still needs states, the controller has a state ;)
 
     //TODO: This class still needs a write buffer and victim buffer. Do they belong here or in the dataStore?
@@ -32,6 +35,8 @@ public class Level1Controller implements CacheController {
 
         this.messageList = new ArrayList<>();
         this.queue = queue;
+        this.dataStore = new Level1DataStore();
+        this.victimCache = new VictimCache();
     }
 
     //TODO: Revamp this method for the "new" controller logic
@@ -60,5 +65,16 @@ public class Level1Controller implements CacheController {
     @Override
     public void enqueueMessage(Message<L1InMessage> message) {
         getQueue().add(message);
+    }
+
+    //TODO: Not sure what do with this method, but it shows a simple victimization scenario
+    public void write(Address address, byte b) {
+        ControllerState controllerState = this.dataStore.canWriteToCache(address);
+
+        CacheBlock evictedBlock = this.dataStore.writeDataToCache(address, b);
+
+        if(evictedBlock != null) {
+            this.victimCache.getCache().add(evictedBlock);
+        }
     }
 }

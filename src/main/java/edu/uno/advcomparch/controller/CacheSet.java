@@ -52,6 +52,12 @@ public class CacheSet {
         return firstBlock;
     }
 
+    public CacheBlock getLeastRecentlyUsedBlock() {
+        CacheBlock lastBlock = blocks.getLast();
+
+        return  lastBlock;
+    }
+
     //TODO: I wonder if this should take just a tag, you know?
     public CacheBlock getBlock(Address address) {
 
@@ -107,4 +113,6 @@ public class CacheSet {
 
         return false;
     }
+
+
 }

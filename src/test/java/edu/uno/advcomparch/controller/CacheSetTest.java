@@ -213,4 +213,24 @@ public class CacheSetTest {
 
         assertFalse(cacheSet.containsTag(address));
     }
+
+    @Test
+    public void seeTheLeastRecentlyUsedBlock() {
+        cacheSet.setCapacity(2); //arbitrarily set capacity at 2
+
+        CacheBlock block1 = new CacheBlock(5, 32);
+        block1.setTag("1000".getBytes());
+        block1.setBlock("111".getBytes());
+
+        CacheBlock block2 = new CacheBlock(5, 32);
+        block2.setTag("1001".getBytes());
+        block2.setBlock("101".getBytes());
+
+        cacheSet.add(block1);  //add first, it becomes head
+        cacheSet.add(block2);  //write second, it becomes head
+
+        CacheBlock lruBlock = cacheSet.getLeastRecentlyUsedBlock();
+
+        assertEquals("1000", new String(lruBlock.getTag()));
+    }
 }
