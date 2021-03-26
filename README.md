@@ -29,11 +29,11 @@ A: Pretty sure yes, let's find out.
 
 #### Q: Does the tag size change between L1 and L2 cache? Yes, right?
 
-A: TBD
+A: Of course it does.
 
 #### Q: Can the L1C and L1D be combined or do they need to be separate?
 
-A: TBD
+A: They need to be separate, per the project doc.
 
 
 #### Q: When we victimize the block do we need to return the data?
@@ -43,6 +43,20 @@ A: TBD
 #### Q: What are the subsequent requests for data to L1D for in the 2nd/3rd write scenario for?
 
 A: TBD
+
+#### Q: How does the instantaneous miss scenario work?
+
+A: ??
+
+#### Q: How do we map the miss states to L1 cache. Tag can be anywhere?
+
+A: ??
+
+#### Q: What's the significance of consecutive writes to L1? (writing on step 4, 5)
+
+A: ??
+
+
 ---
 ## General TODO Ideas
 Instead of putting TODOs everywhere, consider putting a few in here.

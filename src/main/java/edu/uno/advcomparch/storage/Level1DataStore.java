@@ -119,7 +119,7 @@ public class Level1DataStore {
         CacheSet set = cache.get(address.getIndexDecimal());
 
         if(set.containsTag(address)) {
-            return null;                   //ok to write to full set, but same tag
+            return ControllerState.HIT;                   //ok to write to full set, but same tag
         }else if(set.atCapacity()){
             return null;                  //not ok, because cache is full and we have a new tag
         } else {
