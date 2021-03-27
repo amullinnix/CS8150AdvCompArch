@@ -336,7 +336,7 @@ public class Level1DataStoreTest {
         Address address = new Address("000100", "000100", "00100");
         byte b = 1;
 
-        dataStore.writeDataToCache(address, b); //Must do this to have block clean
+        dataStore.writeDataToCache(address, b);
 
         address.setTag("000101");
         dataStore.writeDataToCache(address, b);
@@ -346,11 +346,6 @@ public class Level1DataStoreTest {
 
         address.setTag("000111");
         dataStore.writeDataToCache(address, b);
-
-        address.setTag("000100");
-        address.setOffset("00110");
-        dataStore.writeDataToCache(address, b);
-        dataStore.printSingleSet(4);
 
         address.setTag("001000");
 

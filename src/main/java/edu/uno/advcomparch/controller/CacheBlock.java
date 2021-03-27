@@ -17,6 +17,8 @@ public class CacheBlock {
     private boolean dirty;
 
     //TODO: When, precisely, do you set the valid bit?
+        //Valid bit is false upon initialization
+        //When valid data is put in there, then it's set to true, it's that easy!
     private boolean valid;
 
     public CacheBlock(int tagSize, int blockSize) {

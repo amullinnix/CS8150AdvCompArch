@@ -46,12 +46,14 @@ public class CacheSet {
         return nonEmptyBlocks.size() >= capacity;
     }
 
+    //NOTE: this is like a peek, it doesn't adjust the LRU values
     public CacheBlock getMostRecentlyUsedBlock() {
         CacheBlock firstBlock = blocks.getFirst();
 
         return firstBlock;
     }
 
+    //NOTE: this is like a peek, it doesn't adjust the LRU values
     public CacheBlock getLeastRecentlyUsedBlock() {
         CacheBlock lastBlock = blocks.getLast();
 

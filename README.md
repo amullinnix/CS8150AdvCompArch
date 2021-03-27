@@ -61,14 +61,11 @@ A: ??
 ## General TODO Ideas
 Instead of putting TODOs everywhere, consider putting a few in here.
 
-* Need to start thinking about generalizing cache so that L2 cache
-can easily be created.
-  
-* Dirty bit needs to be done
 * Write buffer needs to be implemented
-* Victim Cache needs to be implemented
 * Improve the "full cache block" strategy
 * I also want to consider validation, i.e. cannot have 10 bit index for 8KB cache
 
 
 * So, I'm just not getting how the write buffer works.
+
+* What does Drew think of the writeDataTriggeredByRead methods? 
