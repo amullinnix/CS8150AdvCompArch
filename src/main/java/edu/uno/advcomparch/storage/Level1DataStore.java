@@ -53,6 +53,7 @@ public class Level1DataStore {
 //        }
     }
 
+    //TODO: How the eff is eviction supposed to work here?
     public void writeDataToCacheTriggeredByRead(Address address, byte[] bytesToWrite) {
 
         for(int i = 0; i < bytesToWrite.length; i++) {
@@ -63,13 +64,17 @@ public class Level1DataStore {
         }
     }
 
-    public void writeDataToCacheTriggeredByRead(Address address, byte b) {
-        writeDataToCache(address, b);
+    public CacheBlock writeDataToCacheTriggeredByRead(Address address, byte b) {
+
+        CacheBlock evicted = writeDataToCache(address, b);
 
         //easy way of doing this ;)
         this.getCacheBlock(address).setDirty(false);
+
+        return evicted;
     }
 
+    //TODO: How the eff is eviction supposed to work here?
     public void writeDataToCache(Address address, byte[] bytesToWrite) {
 
         for(int i = 0; i < bytesToWrite.length; i++) {

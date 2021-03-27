@@ -69,3 +69,5 @@ Instead of putting TODOs everywhere, consider putting a few in here.
 * So, I'm just not getting how the write buffer works.
 
 * What does Drew think of the writeDataTriggeredByRead methods? 
+
+* BUG alert! CacheBlock has tag, and not full address! WTF was I thinking?

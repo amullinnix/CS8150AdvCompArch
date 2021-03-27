@@ -285,6 +285,18 @@ public class Level1DataStoreTest {
     }
 
     @Test
+    public void proveEvictionWorksForReadTriggeredWrite() {
+        Address address = new Address("001000", "000100", "00100");
+        byte b = 1;
+
+        fillCacheToCapacity(dataStore);
+
+        CacheBlock evicted = dataStore.writeDataToCacheTriggeredByRead(address, b);
+
+        assertEquals("000100", new String(evicted.getTag()));
+    }
+
+    @Test
     public void missiScenario() {
         Address address = new Address("000100", "000100", "00100");
         byte b = 1;
@@ -309,21 +321,12 @@ public class Level1DataStoreTest {
 
     @Test
     public void misscScenario() {
-        Address address = new Address("000100", "000100", "00100");
-        byte b = 1;
+        Address address = new Address("001000", "000100", "00100");
 
-        dataStore.writeDataToCacheTriggeredByRead(address, b); //Must do this to have block clean
+        fillCacheToCapacity(dataStore);
 
-        address.setTag("000101");
-        dataStore.writeDataToCache(address, b);
-
-        address.setTag("000110");
-        dataStore.writeDataToCache(address, b);
-
-        address.setTag("000111");
-        dataStore.writeDataToCache(address, b);
-
-        address.setTag("001000");
+        //Need LRU block to be clean, so "cheat" to set it (would not do this normally)
+        dataStore.getCacheSet(address).getLeastRecentlyUsedBlock().setDirty(false);
 
         //MISS C --> cache full, the evicted block is clean
         DataResponseType dataResponseType = dataStore.canWriteToCache(address);
@@ -333,6 +336,17 @@ public class Level1DataStoreTest {
 
     @Test
     public void missdScenario() {
+        Address address = new Address("001000", "000100", "00100");
+
+        fillCacheToCapacity(dataStore);
+
+        //MISS D --> cache full, the evicted block is dirty
+        DataResponseType dataResponseType = dataStore.canWriteToCache(address);
+
+        assertEquals(DataResponseType.MISSD, dataResponseType);
+    }
+
+    private void fillCacheToCapacity(Level1DataStore dataStore) {
         Address address = new Address("000100", "000100", "00100");
         byte b = 1;
 
@@ -346,12 +360,5 @@ public class Level1DataStoreTest {
 
         address.setTag("000111");
         dataStore.writeDataToCache(address, b);
-
-        address.setTag("001000");
-
-        //MISS D --> cache full, the evicted block is dirty
-        DataResponseType dataResponseType = dataStore.canWriteToCache(address);
-
-        assertEquals(DataResponseType.MISSD, dataResponseType);
     }
 }
