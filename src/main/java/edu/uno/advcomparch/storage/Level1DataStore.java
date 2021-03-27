@@ -3,7 +3,8 @@ package edu.uno.advcomparch.storage;
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.CacheSet;
-import edu.uno.advcomparch.controller.ControllerState;
+import edu.uno.advcomparch.controller.DataResponseType;
+import lombok.Getter;
 
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.List;
 
 //Purpose of this class to simply handle the requests from the Level 1 Controller
 @Named
+@Getter
 public class Level1DataStore {
 
     //TODO: Consider calculating this and extracting as well
@@ -36,7 +38,7 @@ public class Level1DataStore {
     }
 
     //TODO: maybe this should be more tag focused?
-    public ControllerState isDataPresentInCache(Address address) {
+    public DataResponseType isDataPresentInCache(Address address) {
 
         //fetch the set
         CacheSet set = cache.get(address.getIndexDecimal());
@@ -86,7 +88,7 @@ public class Level1DataStore {
         //fetch the set (with the 4 cache blocks)
         CacheSet set = cache.get(address.getIndexDecimal());
 
-        if(isDataPresentInCache(address) == ControllerState.HIT) {
+        if(isDataPresentInCache(address) == DataResponseType.HIT) {
             //then we are updating it, kind of
             CacheBlock block = set.getBlock(address);
 
@@ -131,7 +133,7 @@ public class Level1DataStore {
 
 
     //TODO: OMG! So many freaking returns. Sonar is having a fit right now.
-    public ControllerState canWriteToCache(Address address) {
+    public DataResponseType canWriteToCache(Address address) {
         if (address == null) {
             System.out.println("Cannot write null address to cache");
             return null;
@@ -140,16 +142,16 @@ public class Level1DataStore {
         CacheSet set = cache.get(address.getIndexDecimal());
 
         if(set.containsTag(address)) {
-            return ControllerState.HIT;                   //ok to write to full set, but same tag
+            return DataResponseType.HIT;                   //ok to write to full set, but same tag
         }else if(set.atCapacity()){
             CacheBlock leastRecentlyUsedBlock = set.getLeastRecentlyUsedBlock();
             if(leastRecentlyUsedBlock.isDirty()) {
-                return ControllerState.MISSD;
+                return DataResponseType.MISSD;
             } else {
-                return ControllerState.MISSC;                  //not ok, because cache is full and we have a new tag
+                return DataResponseType.MISSC;                  //not ok, because cache is full and we have a new tag
             }
         } else {
-            return ControllerState.MISSI;                   //ok because there is room at the inn
+            return DataResponseType.MISSI;                   //ok because there is room at the inn
         }
     }
 

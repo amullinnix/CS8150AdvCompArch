@@ -1,10 +1,6 @@
 package edu.uno.advcomparch.statemachine;
 
 public enum L1ControllerState {
-    // L1Controller State Machine Start State -> Not actual L1Controller State
-    START,
-    // L1Controller State Machine End State -> Not actual L1 Controller State
-    END,
     // The requested line is hit in L1.
     HIT,
     // The requested line is a miss in L1 and the line present in the slot is in clean state.

@@ -2,7 +2,7 @@ package edu.uno.advcomparch.storage;
 
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
-import edu.uno.advcomparch.controller.ControllerState;
+import edu.uno.advcomparch.controller.DataResponseType;
 import edu.uno.advcomparch.statemachine.L1InMessage;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class Level2DataStoreTest {
 
         var isHit = dataStore.isDataPresentInCache(address);
 
-        assertNotSame(isHit, ControllerState.HIT);
+        assertNotSame(isHit, DataResponseType.HIT);
 
         dataStore.printData();
     }
@@ -53,7 +53,7 @@ public class Level2DataStoreTest {
 
         var isHit = dataStore.isDataPresentInCache(address);
 
-        assertSame(isHit, ControllerState.HIT);
+        assertSame(isHit, DataResponseType.HIT);
     }
 
     @Test

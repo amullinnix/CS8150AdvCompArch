@@ -1,7 +1,7 @@
 package edu.uno.advcomparch.statemachine;
 
 import edu.uno.advcomparch.controller.Address;
-import edu.uno.advcomparch.controller.ControllerState;
+import edu.uno.advcomparch.controller.DataResponseType;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.storage.DynamicRandomAccessMemory;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 
 @Configuration
-@EnableStateMachine
+@EnableStateMachine(name = "l2ControllerStateMachine")
 @AllArgsConstructor
 public class L2ControllerStateMachineConfiguration extends StateMachineConfigurerAdapter<L1ControllerState, L1InMessage> {
 
@@ -45,18 +45,18 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     public void configure(StateMachineConfigurationConfigurer<L1ControllerState, L1InMessage> config) throws Exception {
         config.withConfiguration()
                 .autoStartup(false)
-                .listener(listener());
+                .listener(l2listener());
     }
 
     @Bean
-    public StateMachineListener<L1ControllerState, L1InMessage> listener() {
+    public StateMachineListener<L1ControllerState, L1InMessage> l2listener() {
         return new StateMachineListenerAdapter<>() {
             @Override
             public void stateChanged(State<L1ControllerState, L1InMessage> from, State<L1ControllerState, L1InMessage> to) {
                 System.out.println("State change to " + to.getId());
 
                 // After each stage in the process instruction
-                level1Controller.processInstruction();
+                level1Controller.processMessage();
             }
         };
     }
@@ -64,14 +64,14 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     @Override
     public void configure(StateMachineStateConfigurer<L1ControllerState, L1InMessage> states) throws Exception {
         states.withStates()
-                .initial(L1ControllerState.START)
-                .end(L1ControllerState.END)
+                .initial(L1ControllerState.HIT)
+                .end(L1ControllerState.HIT)
                 .state(L1ControllerState.RDWAITD, L2CPURead())
                 .state(L1ControllerState.RDL2WAITD, L2CMemRead())
-                .state(L1ControllerState.RD1WAITD, propagateData())
+                .state(L1ControllerState.RD1WAITD, propagateL2Data())
                 .state(L1ControllerState.WRWAITDX, L2Data())
                 .state(L1ControllerState.WRALLOC, L2Data())
-                .state(L1ControllerState.WRWAIT1D, propagateData())
+                .state(L1ControllerState.WRWAIT1D, propagateL2Data())
                 .state(L1ControllerState.WRWAITD, L2CMemRead())
                 .state(L1ControllerState.MISSC, L2CMemRead())
                 .state(L1ControllerState.MISSD, L2CMemRead())
@@ -81,14 +81,11 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     @Override
     public void configure(StateMachineTransitionConfigurer<L1ControllerState, L1InMessage> transitions) throws Exception {
         transitions.withExternal()
-                .source(L1ControllerState.START).event(L1InMessage.START)
-                .target(L1ControllerState.HIT).action(initAction())
-                .and().withExternal()
                 .source(L1ControllerState.HIT).event(L1InMessage.CPUREAD)
                 .target(L1ControllerState.RDWAITD)
                 .and().withExternal()
                 .source(L1ControllerState.RDWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT).action(L1Data())
+                .target(L1ControllerState.HIT).action(L2toL1Data())
                 .and().withExternal()
                 // Why is this not also a state, some form of miss if L1D is a separate component
                 .source(L1ControllerState.RDWAITD).event(L1InMessage.MISSI)
@@ -105,19 +102,19 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.RDL2WAITD)
                 .and().withExternal()
                 .source(L1ControllerState.RDL2WAITD).target(L1ControllerState.HIT)
-                .event(L1InMessage.DATA).action(L2Data()).action(L1Data())
+                .event(L1InMessage.DATA).action(L2Data()).action(L2toL1Data())
                 .and().withExternal()
                 .source(L1ControllerState.MISSC).event(L1InMessage.CPUREAD)
                 .target(L1ControllerState.RDL2WAITD)
                 .and().withExternal()
                 .source(L1ControllerState.MISSD).event(L1InMessage.CPUREAD)
-                .target(L1ControllerState.RD2WAITD).action(L1Victimize())
+                .target(L1ControllerState.RD2WAITD).action(L2Victimize())
                 .and().withExternal()
                 .source(L1ControllerState.RD2WAITD).event(L1InMessage.DATA)
                 .target(L1ControllerState.RD1WAITD) // no action
                 .and().withExternal()
                 .source(L1ControllerState.RD1WAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT).action(L2Data()).action(MemData()).action(L1Data())
+                .target(L1ControllerState.HIT).action(L2Data()).action(MemData()).action(L2toL1Data())
                 .and().withExternal()
                 .source(L1ControllerState.HIT).event(L1InMessage.CPUWRITE)
                 .target(L1ControllerState.WRWAITDX)
@@ -152,7 +149,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.WRALLOC)
                 .and().withExternal()
                 .source(L1ControllerState.MISSD).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAIT2D).action(L1Victimize()).action(L2CMemRead())
+                .target(L1ControllerState.WRWAIT2D).action(L2Victimize()).action(L2CMemRead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAIT2D).event(L1InMessage.DATA)
                 .target(L1ControllerState.WRWAIT1D)
@@ -166,20 +163,22 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<L1ControllerState, L1InMessage> L2CPURead() {
         return ctx -> {
             // If queue is non empty, on state transition perform one action.
-            var address = ctx.getMessage().getHeaders().get("address", Address.class);
+            var address = ctx.getMessage().getHeaders().get("address", String.class);
             var bytes = ctx.getMessage().getHeaders().get("bytes", Integer.class);
 
             System.out.println("CPU to L1C: CPURead(" + address + ")");
 
-            var canRead = level2DataStore.isDataPresentInCache(address);
+
+            var partitionedAddress = new Address(address);
+            var canRead = level2DataStore.isDataPresentInCache(partitionedAddress);
 
             // If we get nothing back send miss.
-            if (canRead == ControllerState.HIT) {
-                var data = level2DataStore.getBlockAtAddress(address);
+            if (canRead == DataResponseType.HIT) {
+                var data = level2DataStore.getBlockAtAddress(partitionedAddress);
 
                 var responseMessage = MessageBuilder
                         .withPayload(L1InMessage.DATA)
-                        .setHeader("source", "L1Data")
+                        .setHeader("source", "L2Data")
                         .setHeader("address", address)
                         .setHeader("data", data)
                         .build();
@@ -217,7 +216,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
 
             var canWrite = level2DataStore.canWriteToCache(address);
 
-            if (canWrite == ControllerState.HIT) {
+            if (canWrite == DataResponseType.HIT) {
                 System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
                 level2DataStore.writeDataToCache(address, data);
@@ -252,8 +251,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    // TODO - Missing L1DataStoreInterface
-    public Action<L1ControllerState, L1InMessage> L1Victimize() {
+    public Action<L1ControllerState, L1InMessage> L2Victimize() {
         return ctx -> {
             var address = ctx.getMessage().getHeaders().get("address", Address.class);
             System.out.println("L1C to L1D: Victimize(" + address + ")");
@@ -312,7 +310,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> L1Data() {
+    public Action<L1ControllerState, L1InMessage> L2toL1Data() {
         return ctx -> {
             var message = ctx.getMessage();
             var data = (byte[]) ctx.getMessage().getHeaders().get("data");
@@ -327,7 +325,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> propagateData() {
+    public Action<L1ControllerState, L1InMessage> propagateL2Data() {
         return ctx -> {
             // Propagate RD2WAITD Data --> RD1WaitD
             var message = ctx.getMessage();
@@ -336,7 +334,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> initAction() {
+    public Action<L1ControllerState, L1InMessage> l2InitAction() {
         return ctx -> System.out.println(ctx.getTarget().getId());
     }
 }

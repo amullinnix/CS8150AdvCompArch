@@ -1,10 +1,8 @@
 package edu.uno.advcomparch.statemachine;
 
-import edu.uno.advcomparch.controller.ControllerState;
+import edu.uno.advcomparch.controller.DataResponseType;
 
 public enum L1InMessage {
-    START,
-    END,
     CPUREAD,
     DATA,
     CPUWRITE,
@@ -13,9 +11,9 @@ public enum L1InMessage {
     MISSC,
     MISSD;
 
-    public static L1InMessage fromControllerState(ControllerState controllerState) {
+    public static L1InMessage fromControllerState(DataResponseType dataResponseType) {
         try {
-            return L1InMessage.valueOf(controllerState.toString());
+            return L1InMessage.valueOf(dataResponseType.toString());
         } catch (IllegalArgumentException exception) {
             System.out.println("Failed to Translate DataResponse to L1InMessage");
             return null;

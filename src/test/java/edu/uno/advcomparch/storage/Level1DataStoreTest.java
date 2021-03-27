@@ -3,7 +3,7 @@ package edu.uno.advcomparch.storage;
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.CacheSet;
-import edu.uno.advcomparch.controller.ControllerState;
+import edu.uno.advcomparch.controller.DataResponseType;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +28,7 @@ public class Level1DataStoreTest {
 
         var isHit = dataStore.isDataPresentInCache(address);
 
-        assertNotSame(isHit, ControllerState.HIT);
+        assertNotSame(isHit, DataResponseType.HIT);
 
         dataStore.printData();
     }
@@ -44,7 +44,7 @@ public class Level1DataStoreTest {
 
         var isHit = dataStore.isDataPresentInCache(address);
 
-        assertSame(isHit, ControllerState.HIT);
+        assertSame(isHit, DataResponseType.HIT);
     }
 
     @Test
@@ -62,8 +62,8 @@ public class Level1DataStoreTest {
         dataStore.printSingleSet(42);
 
         //both should be present, in the same set
-        assertEquals(ControllerState.HIT, dataStore.isDataPresentInCache(address1));
-        assertEquals(ControllerState.HIT, dataStore.isDataPresentInCache(address2));
+        assertEquals(DataResponseType.HIT, dataStore.isDataPresentInCache(address1));
+        assertEquals(DataResponseType.HIT, dataStore.isDataPresentInCache(address2));
     }
 
     @Test
@@ -124,7 +124,7 @@ public class Level1DataStoreTest {
     public void canWriteToSetWithEmptyBlocks() {
         Address address = new Address("000111", "000100", "00100");
 
-        assertEquals(ControllerState.MISSI, dataStore.canWriteToCache(address));
+        assertEquals(DataResponseType.MISSI, dataStore.canWriteToCache(address));
     }
 
     @Test
@@ -144,7 +144,7 @@ public class Level1DataStoreTest {
 
         dataStore.printSingleSet(4);
 
-        assertEquals(ControllerState.HIT, dataStore.canWriteToCache(address));
+        assertEquals(DataResponseType.HIT, dataStore.canWriteToCache(address));
     }
 
     @Test
@@ -166,7 +166,7 @@ public class Level1DataStoreTest {
 
         address.setTag("001000");  //set should be full at this point, no room for new tag
 
-        assertEquals(ControllerState.MISSD, dataStore.canWriteToCache(address));
+        assertEquals(DataResponseType.MISSD, dataStore.canWriteToCache(address));
     }
 
     /**
@@ -290,8 +290,8 @@ public class Level1DataStoreTest {
         byte b = 1;
 
         //MISS I  --> it's not there, but there is room to write
-        ControllerState controllerState = dataStore.canWriteToCache(address);
-        assertEquals(ControllerState.MISSI, controllerState);
+        DataResponseType dataResponseType = dataStore.canWriteToCache(address);
+        assertEquals(DataResponseType.MISSI, dataResponseType);
     }
 
     @Test
@@ -302,9 +302,9 @@ public class Level1DataStoreTest {
         dataStore.writeDataToCache(address, b); //Must do this to have block clean
 
         //HIT --> tag is there, so we can just "update" it
-        ControllerState controllerState = dataStore.canWriteToCache(address);
+        DataResponseType dataResponseType = dataStore.canWriteToCache(address);
 
-        assertEquals(ControllerState.HIT, controllerState);
+        assertEquals(DataResponseType.HIT, dataResponseType);
     }
 
     @Test
@@ -326,9 +326,9 @@ public class Level1DataStoreTest {
         address.setTag("001000");
 
         //MISS C --> cache full, the evicted block is clean
-        ControllerState controllerState = dataStore.canWriteToCache(address);
+        DataResponseType dataResponseType = dataStore.canWriteToCache(address);
 
-        assertEquals(ControllerState.MISSC, controllerState);
+        assertEquals(DataResponseType.MISSC, dataResponseType);
     }
 
     @Test
@@ -350,8 +350,8 @@ public class Level1DataStoreTest {
         address.setTag("001000");
 
         //MISS D --> cache full, the evicted block is dirty
-        ControllerState controllerState = dataStore.canWriteToCache(address);
+        DataResponseType dataResponseType = dataStore.canWriteToCache(address);
 
-        assertEquals(ControllerState.MISSD, controllerState);
+        assertEquals(DataResponseType.MISSD, dataResponseType);
     }
 }

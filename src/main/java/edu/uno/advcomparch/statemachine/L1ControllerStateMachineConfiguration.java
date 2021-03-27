@@ -1,11 +1,10 @@
 package edu.uno.advcomparch.statemachine;
 
 import edu.uno.advcomparch.controller.Address;
-import edu.uno.advcomparch.controller.ControllerState;
+import edu.uno.advcomparch.controller.DataResponseType;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
-import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.storage.Level1DataStore;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +25,13 @@ import java.util.Arrays;
 import java.util.EnumSet;
 
 @Configuration
-@EnableStateMachine
+@EnableStateMachine(name = "l1ControllerStateMachine")
 @AllArgsConstructor
-// TODO - Manage Notion of Cycle (Possibly externally). Manage Output Message building
 public class L1ControllerStateMachineConfiguration extends StateMachineConfigurerAdapter<L1ControllerState, L1InMessage> {
+
+    private static final int L1_TAG_SIZE = 1;
+    private static final int L1_INDEX_SIZE = 1;
+    private static final int L1_OFFSET_SIZE = 1;
 
     @Autowired
     Level1Controller level1Controller;
@@ -41,27 +43,24 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     CentralProcessingUnit<String> cpu;
 
     @Autowired
-    DataRepository<String, String> l1DataRepository;
-
-    @Autowired
     Level1DataStore level1DataStore;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<L1ControllerState, L1InMessage> config) throws Exception {
         config.withConfiguration()
                 .autoStartup(false)
-                .listener(listener());
+                .listener(l1listener());
     }
 
     @Bean
-    public StateMachineListener<L1ControllerState, L1InMessage> listener() {
+    public StateMachineListener<L1ControllerState, L1InMessage> l1listener() {
         return new StateMachineListenerAdapter<>() {
             @Override
             public void stateChanged(State<L1ControllerState, L1InMessage> from, State<L1ControllerState, L1InMessage> to) {
                 System.out.println("State change to " + to.getId());
 
                 // After each stage in the process instruction
-                level1Controller.processInstruction();
+                level1Controller.processMessage();
             }
         };
     }
@@ -69,14 +68,12 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Override
     public void configure(StateMachineStateConfigurer<L1ControllerState, L1InMessage> states) throws Exception {
         states.withStates()
-                .initial(L1ControllerState.START)
-                .end(L1ControllerState.END)
+                .initial(L1ControllerState.HIT)
+                .end(L1ControllerState.HIT)
                 .state(L1ControllerState.RDWAITD, L1CPURead())
                 .state(L1ControllerState.RDL2WAITD, L2CCPURead())
-                .state(L1ControllerState.RD1WAITD, propagateData())
                 .state(L1ControllerState.WRWAITDX, L1Data())
                 .state(L1ControllerState.WRALLOC, L1Data())
-                .state(L1ControllerState.WRWAIT1D, propagateData())
                 .state(L1ControllerState.WRWAITD, L2CCPURead())
                 .state(L1ControllerState.MISSC, L2CCPURead())
                 .state(L1ControllerState.MISSD, L2CCPURead())
@@ -86,9 +83,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Override
     public void configure(StateMachineTransitionConfigurer<L1ControllerState, L1InMessage> transitions) throws Exception {
         transitions.withExternal()
-                .source(L1ControllerState.START).event(L1InMessage.START)
-                .target(L1ControllerState.HIT).action(initAction())
-                .and().withExternal()
                 .source(L1ControllerState.HIT).event(L1InMessage.CPUREAD)
                 .target(L1ControllerState.RDWAITD)
                 .and().withExternal()
@@ -178,11 +172,13 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             System.out.println("CPU to L1C: CPURead(" + address + ")");
 
             var partitionedAddress = new Address(address);
+            partitionedAddress.componentize(L1_TAG_SIZE, L1_INDEX_SIZE, L1_OFFSET_SIZE);
+
             var canRead = level1DataStore.isDataPresentInCache(partitionedAddress);
+            var data = level1DataStore.getDataAtAddress(partitionedAddress, bytes);
 
             // If we get nothing back send miss.
-            if (canRead == ControllerState.HIT) {
-                var data = level1DataStore.getDataAtAddress(partitionedAddress, bytes);
+            if (canRead == DataResponseType.HIT) {
 
                 var responseMessage = MessageBuilder
                         .withPayload(L1InMessage.DATA)
@@ -195,13 +191,15 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 ctx.getStateMachine().sendEvent(responseMessage);
 
             } else {
-                // Construct a miss
+                // Else we have a MISSI or MISSC
+                // Send a miss to transition to miss state
                 var missMessage = MessageBuilder
                         .withPayload(L1InMessage.fromControllerState(canRead))
                         .setHeader("source", "L1Data")
                         .build();
 
                 ctx.getStateMachine().sendEvent(missMessage);
+
                 // Then send a read back
                 var cpuReadMessage = MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
@@ -211,6 +209,26 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 ctx.getStateMachine().sendEvent(cpuReadMessage);
+
+                // TODO - what? If MISSD, we need to send the evicted block back to
+                if (canRead == DataResponseType.MISSD) {
+//                    CacheBlock evictedBlock;
+//
+//                    if(evictedBlock != null) {
+//                        this.level1DataStore.get(evictedBlock);
+//                    }
+
+                    System.out.println("L1C to L1D: Victimize(" + address + ")");
+
+                    var victimizeResponseMessage = MessageBuilder
+                            .withPayload(L1InMessage.DATA)
+                            .setHeader("source", "L1Data")
+                            .setHeader("address", address)
+                            .setHeader("data", data)
+                            .build();
+
+                    ctx.getStateMachine().sendEvent(victimizeResponseMessage);
+                }
             }
         };
     }
@@ -223,12 +241,27 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var data = (byte[]) message.getHeaders().get("data");
 
             var l1Address = new Address(address);
+            l1Address.componentize(L1_TAG_SIZE, L1_INDEX_SIZE, L1_OFFSET_SIZE);
             var canWrite = level1DataStore.canWriteToCache(l1Address);
 
-            if (canWrite == ControllerState.HIT) {
+            // TODO why single byte write?
+//            var evictedBlock = level1DataStore.writeDataToCache(l1Address, data);
+
+            if (canWrite == DataResponseType.HIT) {
                 System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
                 level1DataStore.writeDataToCache(l1Address, data);
+
+                // Need to identify resolvable states;
+//                var state = ctx.getStateMachine().getState().getId();
+//
+//                if (state == L1ControllerState.RDL2WAITD) {
+//                    level1DataStore.writeDataToCacheTriggeredByRead(l1Address, data);
+//                } else if (state == L1ControllerState.WRWAIT2D) {
+//                    level1DataStore.writeDataToCache(l1Address, data);
+//                } else {
+//                    throw new UnsupportedOperationException("L1D Write Operation received from unrecognized message type.");
+//                }
 
                 var responseMessage = MessageBuilder
                         .withPayload(L1InMessage.DATA)
@@ -255,6 +288,28 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 ctx.getStateMachine().sendEvent(cpuWriteMessage);
+
+                // TODO - what? If MISSD, we need to send the evicted block back to
+                if (canWrite == DataResponseType.MISSD) {
+
+                    System.out.println("Victimize L1C to L1D (" + address + ")");
+//                    CacheBlock evictedBlock;
+
+//                     Why even bother breaking this out.
+//                    if(evictedBlock != null) {
+//                        this.level1DataStore.get(evictedBlock);
+//                    }
+                    // Send Data Request Back to L1D with Victimized Data to be replicated to L2C
+                    var victimizeResponseMessage = MessageBuilder
+                            .withPayload(L1InMessage.DATA)
+                            .setHeader("source", "L1Data")
+                            .setHeader("address", l1Address)
+                            .setHeader("data", data)
+                            .build();
+
+                    ctx.getStateMachine().sendEvent(victimizeResponseMessage);
+
+                }
             }
         };
     }
@@ -266,7 +321,12 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var address = ctx.getMessage().getHeaders().get("address", Address.class);
             System.out.println("L1C to L1D: Victimize(" + address + ")");
 
-            l1DataRepository.victimize(address);
+            // Why not victimize a specific method
+//            CacheBlock evictedBlock = level1DataStore.writeDataToCache(address, b);
+//
+//            if(evictedBlock != null) {
+//                level1DataStore.victimCache.getCache().add(evictedBlock);
+//            }
         };
     }
 
@@ -278,8 +338,10 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var bytes = message.getHeaders().get("bytes", Integer.class);
             System.out.println("L1C to L2C: CpuRead(" + address + ")");
 
-            // Look at actual queueing of messages
+            // TODO - Look at actual queueing of messages
             level2Controller.enqueueMessage(message);
+            // Or send the message -> might have to build an overarching machine
+//            l2ControllerStateMachine.sendEvent(message);
 
             var payload = message.getPayload();
 
@@ -314,8 +376,10 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var data = (byte[]) message.getHeaders().get("data");
             System.out.println("L1C to L2C: Data(" + Arrays.toString(data) + ")");
 
-            // TODO - move this to a state machine.
+            // TODO - Look at actual queueing of messages
             level2Controller.enqueueMessage(message);
+            // Or send the message
+            // l2ControllerStateMachine.sendEvent(message);
         };
     }
 
@@ -331,19 +395,5 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             // We've already passed this two the CPU in L1Read, maybe we need to move it back out here.
             System.out.println(data);
         };
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> propagateData() {
-        return ctx -> {
-            // Propagate RD2WAITD Data --> RD1WaitD
-            var message = ctx.getMessage();
-            ctx.getStateMachine().sendEvent(message);
-        };
-    }
-
-    @Bean
-    public Action<L1ControllerState, L1InMessage> initAction() {
-        return ctx -> System.out.println(ctx.getTarget().getId());
     }
 }

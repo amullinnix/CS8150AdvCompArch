@@ -2,7 +2,7 @@ package edu.uno.advcomparch.storage;
 
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
-import edu.uno.advcomparch.controller.ControllerState;
+import edu.uno.advcomparch.controller.DataResponseType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +29,7 @@ public class Level2DataStore {
         }
     }
 
-    public ControllerState isDataPresentInCache(Address address) {
+    public DataResponseType isDataPresentInCache(Address address) {
 
         //get the tag
         int tag = address.getTagDecimal();
@@ -94,7 +94,7 @@ public class Level2DataStore {
 
     }
 
-    public ControllerState canWriteToCache(Address address) {
+    public DataResponseType canWriteToCache(Address address) {
         return null;
     }
 

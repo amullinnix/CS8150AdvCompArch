@@ -1,8 +1,9 @@
 package edu.uno.advcomparch.state_machine;
 
 import edu.uno.advcomparch.AbstractCompArchTest;
+import edu.uno.advcomparch.config.L1StateMachineTestConfiguration;
 import edu.uno.advcomparch.controller.Address;
-import edu.uno.advcomparch.controller.ControllerState;
+import edu.uno.advcomparch.controller.DataResponseType;
 import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.DefaultCPU;
@@ -11,7 +12,6 @@ import edu.uno.advcomparch.statemachine.L1InMessage;
 import edu.uno.advcomparch.storage.Level1DataStore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.test.StateMachineTestPlanBuilder;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.LinkedList;
 
@@ -27,7 +28,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
-public class StateMachineTests extends AbstractCompArchTest {
+@ContextConfiguration(classes = L1StateMachineTestConfiguration.class)
+public class L1StateMachineTests extends AbstractCompArchTest {
 
     @Autowired
     private Level1Controller level1Controller;
@@ -42,7 +44,7 @@ public class StateMachineTests extends AbstractCompArchTest {
     DefaultCPU cpu;
 
     @Autowired
-    private StateMachine<L1ControllerState, L1InMessage> stateMachine;
+    private StateMachine<L1ControllerState, L1InMessage> l1ControllerStateMachine;
 
     @BeforeEach
     public void beforeEach() {
@@ -50,96 +52,52 @@ public class StateMachineTests extends AbstractCompArchTest {
         when(level1Controller.getQueue()).thenReturn(l1Queue);
 
         when(level1DataStore.canWriteToCache(any(Address.class)))
-                .thenReturn(ControllerState.HIT);
+                .thenReturn(DataResponseType.HIT);
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(ControllerState.HIT);
+                .thenReturn(DataResponseType.HIT);
         var data = new byte[]{10, 20, 30, 40};
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt()))
                 .thenReturn(data);
 
         // Mock out queue based processing
-        doNothing().when(level1Controller).processInstruction();
+        doNothing().when(level1Controller).processMessage();
 
         level2Controller.getQueue().clear();
 
-        stateMachine.start();
+        l1ControllerStateMachine.start();
     }
 
     @AfterEach
     public void afterEach() {
-        stateMachine.stop();
+        l1ControllerStateMachine.stop();
         Mockito.reset();
     }
 
     @Test
-    public void testStartState() {
-        assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.START);
-    }
-
-    @Test
     public void testStartEvent() {
-        stateMachine.sendEvent(L1InMessage.START);
-        assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.HIT);
+        assertThat(l1ControllerStateMachine.getState().getId()).isEqualTo(L1ControllerState.HIT);
     }
 
     @Test
     public void testExtendedStateMessage() {
-        stateMachine.getExtendedState().getVariables().put("data", "blargh");
-        stateMachine.sendEvent(L1InMessage.START);
-        assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.HIT);
-        stateMachine.sendEvent(L1InMessage.CPUREAD);
-        assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.RDWAITD);
-    }
-
-    @Test
-    @Disabled
-    public void testL1DHit() {
-        stateMachine.sendEvent(L1InMessage.START);
-
-        Message<L1InMessage> cpuReadMessage = MessageBuilder
-                .withPayload(L1InMessage.CPUREAD)
-                .setHeader("source", "cpu")
-                .setHeader("data", "data")
-                .build();
-
-        stateMachine.sendEvent(cpuReadMessage);
-        assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.HIT);
-
-        Mockito.verify(cpu, Mockito.times(1)).data(any());
-    }
-
-    @Test
-    @Disabled
-    public void testL1DMISS() {
-        stateMachine.sendEvent(L1InMessage.START);
-
-        when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(ControllerState.MISSD);
-
-        Message<L1InMessage> cpuReadMessage = MessageBuilder
-                .withPayload(L1InMessage.CPUREAD)
-                .setHeader("source", "cpu")
-                .setHeader("data", "data")
-                .build();
-
-        stateMachine.sendEvent(cpuReadMessage);
-        assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.RDWAITD);
-        assertThat(stateMachine.getState().getId()).isEqualTo(L1ControllerState.RDL2WAITD);
+        l1ControllerStateMachine.getExtendedState().getVariables().put("data", "blargh");
+        assertThat(l1ControllerStateMachine.getState().getId()).isEqualTo(L1ControllerState.HIT);
+        l1ControllerStateMachine.sendEvent(L1InMessage.CPUREAD);
+        assertThat(l1ControllerStateMachine.getState().getId()).isEqualTo(L1ControllerState.RDWAITD);
     }
 
     @Test
     public void testL1HitCPUReadScenario1() throws Exception {
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
+                .stateMachine(l1ControllerStateMachine)
                 .step()
-                .sendEvent(L1InMessage.START)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(2)
@@ -156,19 +114,18 @@ public class StateMachineTests extends AbstractCompArchTest {
     @Test
     public void testL1MissCCpuReadScenario2() throws Exception {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(ControllerState.MISSC);
+                .thenReturn(DataResponseType.MISSC);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
+                .stateMachine(l1ControllerStateMachine)
                 .step()
-                .sendEvent(L1InMessage.START)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
@@ -184,19 +141,18 @@ public class StateMachineTests extends AbstractCompArchTest {
     @Test
     public void testL1MissICpuReadScenario3() throws Exception {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(ControllerState.MISSI);
+                .thenReturn(DataResponseType.MISSI);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
+                .stateMachine(l1ControllerStateMachine)
                 .step()
-                .sendEvent(L1InMessage.START)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
@@ -212,19 +168,18 @@ public class StateMachineTests extends AbstractCompArchTest {
     @Test
     public void testL1MissD() throws Exception {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(ControllerState.MISSD);
+                .thenReturn(DataResponseType.MISSD);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
+                .stateMachine(l1ControllerStateMachine)
                 .step()
-                .sendEvent(L1InMessage.START)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
@@ -232,28 +187,24 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .and()
                 .build()
                 .test();
-
-        // TODO - IS MISSD behavior different?
-//        assertThat(level2Controller.getQueue()).hasSize(1);
     }
 
     @Test
     public void testL2CPUReadScenario2() throws Exception {
         var data = new byte[]{10, 20, 30, 40};
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(ControllerState.MISSI);
+                .thenReturn(DataResponseType.MISSI);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
+                .stateMachine(l1ControllerStateMachine)
                 .step()
-                .sendEvent(L1InMessage.START)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
@@ -264,7 +215,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address","1010101010")
+                        .setHeader("address","101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(1)
@@ -284,33 +235,32 @@ public class StateMachineTests extends AbstractCompArchTest {
         var data = new byte[]{10, 20, 30, 40};
 
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
-                .thenReturn(ControllerState.MISSD);
+                .thenReturn(DataResponseType.MISSD);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
+                .stateMachine(l1ControllerStateMachine)
                 .step()
-                .sendEvent(L1InMessage.START)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
-                        .setHeader("data", data)
+                        .setHeader("address", "101")
+                        .setHeader("bytes", 4)
                         .build())
-                .expectStateChanged(3)
-                .expectStates(L1ControllerState.RD2WAITD)
+                .expectStateChanged(4)
+                .expectStates(L1ControllerState.RD1WAITD)
                 .and()
                 .step()
                 // L2 Sends Data Back
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("data", data)
                         .build())
-                .expectStateChanged(2)
+                .expectStateChanged(1)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .build()
@@ -326,20 +276,19 @@ public class StateMachineTests extends AbstractCompArchTest {
 
     @Test
     public void testCpuWriteScenario1() throws Exception {
-        when(level1DataStore.canWriteToCache(any(Address.class))).thenReturn(ControllerState.HIT);
+        when(level1DataStore.canWriteToCache(any(Address.class))).thenReturn(DataResponseType.HIT);
         Mockito.doNothing().when(level1DataStore).writeDataToCache(any(Address.class), any());
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
+                .stateMachine(l1ControllerStateMachine)
                 .step()
-                .sendEvent(L1InMessage.START)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("data", new byte[]{10, 20, 30, 40})
                         .build())
                 .expectStateChanged(2)
@@ -357,20 +306,19 @@ public class StateMachineTests extends AbstractCompArchTest {
         var data = new byte[]{10, 20, 30, 40};
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt())).thenReturn(data);
         when(level1DataStore.canWriteToCache(any(Address.class)))
-                .thenReturn(ControllerState.MISSI)
-                .thenReturn(ControllerState.HIT);
+                .thenReturn(DataResponseType.MISSI)
+                .thenReturn(DataResponseType.HIT);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
+                .stateMachine(l1ControllerStateMachine)
                 .step()
-                .sendEvent(L1InMessage.START)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(3)
@@ -381,7 +329,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(2)
@@ -399,20 +347,19 @@ public class StateMachineTests extends AbstractCompArchTest {
         var data = new byte[]{10, 20, 30, 40};
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt())).thenReturn(data);
         when(level1DataStore.canWriteToCache(any(Address.class)))
-                .thenReturn(ControllerState.MISSC)
-                .thenReturn(ControllerState.HIT);
+                .thenReturn(DataResponseType.MISSC)
+                .thenReturn(DataResponseType.HIT);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
+                .stateMachine(l1ControllerStateMachine)
                 .step()
-                .sendEvent(L1InMessage.START)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(3)
@@ -423,7 +370,7 @@ public class StateMachineTests extends AbstractCompArchTest {
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", "101010101010")
+                        .setHeader("address", "101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(2)
@@ -442,34 +389,30 @@ public class StateMachineTests extends AbstractCompArchTest {
 
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt())).thenReturn(data);
         when(level1DataStore.canWriteToCache(any(Address.class)))
-                .thenReturn(ControllerState.MISSD)
-                .thenReturn(ControllerState.HIT);
+                .thenReturn(DataResponseType.MISSD)
+                .thenReturn(DataResponseType.HIT);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
-                .stateMachine(stateMachine)
-                .step()
-                .sendEvent(L1InMessage.START)
-                .expectStates(L1ControllerState.HIT)
-                .and()
+                .stateMachine(l1ControllerStateMachine)
                 .step()
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("data", data)
                         .build())
-                .expectStateChanged(3)
-                .expectStates(L1ControllerState.WRWAIT2D)
+                .expectStateChanged(4)
+                .expectStates(L1ControllerState.WRWAIT1D)
                 .and()
                 .step()
                 // L2 Sends Data Back
                 .sendEvent(MessageBuilder
                         .withPayload(L1InMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", "1010101010")
+                        .setHeader("address", "101")
                         .setHeader("data", data)
                         .build())
-                .expectStateChanged(3)
+                .expectStateChanged(2)
                 .expectStates(L1ControllerState.HIT)
                 .and()
                 .build()

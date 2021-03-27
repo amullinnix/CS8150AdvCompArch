@@ -40,7 +40,7 @@ public class Level1Controller implements CacheController {
     }
 
     //TODO: Revamp this method for the "new" controller logic
-    public void processInstruction() {
+    public void processMessage() {
 
         //Get the first message from our queue
         var message = this.queue.poll();
@@ -69,7 +69,7 @@ public class Level1Controller implements CacheController {
 
     //TODO: Not sure what do with this method, but it shows a simple victimization scenario
     public void write(Address address, byte b) {
-        ControllerState controllerState = this.dataStore.canWriteToCache(address);
+        DataResponseType dataResponseType = this.dataStore.canWriteToCache(address);
 
         CacheBlock evictedBlock = this.dataStore.writeDataToCache(address, b);
 
