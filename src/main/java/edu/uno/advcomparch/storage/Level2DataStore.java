@@ -37,7 +37,7 @@ public class Level2DataStore {
         CacheBlock block = cache.get(tag);
 
         if(address.getTag().equals(new String(block.getTag()))) {
-            return null;
+            return DataResponseType.HIT;
         }
 
         return null;
@@ -61,6 +61,14 @@ public class Level2DataStore {
         } else {
             System.out.println("block is NOT empty!");
             //is this where we need to do an eviction?
+            //TODO: I'm not sure eviction is valid for Level 2. By mutual inclusion, L1 will never send a conflict block.
+            //      Only see this happening for DRAM response, which is fine.
+            blockFromCache.setAddress(address);
+
+            byte[] cacheBlock = blockFromCache.getBlock();
+            byte[] bytesToWrite = blockToWrite.getBlock();
+            System.arraycopy(bytesToWrite, 0, cacheBlock, 0, bytesToWrite.length);
+
         }
     }
 
