@@ -53,7 +53,7 @@ public class Level2DataStore {
 
         if(blockFromCache.isEmpty()) {
             System.out.println("block is empty!");
-            blockFromCache.setTag(address.getTag().getBytes());
+            blockFromCache.setAddress(address);
 
             byte[] cacheBlock = blockFromCache.getBlock();
             byte[] bytesToWrite = blockToWrite.getBlock();

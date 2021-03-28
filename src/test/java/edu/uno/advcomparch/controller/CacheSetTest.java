@@ -11,10 +11,12 @@ public class CacheSetTest {
 
     private CacheSet cacheSet;
 
+    private Address address;
+
     @Before
     public void setup() {
         cacheSet = new CacheSet(4);
-
+        address = new Address("101010", "101010", "00010");
     }
 
     @Test
@@ -27,9 +29,11 @@ public class CacheSetTest {
 
     @Test
     public void tellMeWhenFull() {
+        address.setTag("abc");
+
         CacheBlock block1 = new CacheBlock(5, 32);
         block1.setBlock("abc".getBytes());
-        block1.setTag("abc".getBytes());
+        block1.setAddress(address);
 
         //just add the same block, it doesn't matter for this test
         cacheSet.add(block1);
@@ -43,8 +47,10 @@ public class CacheSetTest {
     @Test
     public void firstAddIsHead() {
         //Essentially, every time we write something, it needs to be become the "first" because it's a recently used
+        address.setTag("1010");
+
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag(new byte[] {1,2,3,4,5});
+        block1.setAddress(address);
         cacheSet.add(block1);
 
         CacheBlock block = cacheSet.getMostRecentlyUsedBlock();
@@ -55,15 +61,21 @@ public class CacheSetTest {
     @Test
     public void secondAddIsHead() {
         //Essentially, every time we write something, it needs to be become the "first" because it's a recently used
+        address.setTag("1111");
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag(new byte[] {1,2,3,4,5});
+        block1.setAddress(address);
+        block1.setBlock("123".getBytes());
 
 
+        address.setTag("0000");
         CacheBlock block2 = new CacheBlock(5, 32);
-        block2.setTag(new byte[] {6,7,8,9,0});
+        block2.setAddress(address);
+        block2.setBlock("456".getBytes());
 
         cacheSet.add(block1);
+        cacheSet.getBlocks().stream().forEach(System.out::println);
         cacheSet.add(block2);
+        cacheSet.getBlocks().stream().forEach(System.out::println);
 
         CacheBlock block = cacheSet.getMostRecentlyUsedBlock();
 
@@ -73,8 +85,10 @@ public class CacheSetTest {
 
     @Test
     public void findBlock() {
+        address.setTag("1010");
+
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag("1010".getBytes());
+        block1.setAddress(address);
         block1.setBlock("111".getBytes());
 
         cacheSet.add(block1);
@@ -88,12 +102,14 @@ public class CacheSetTest {
 
     @Test
     public void accessResetsHead() {
+        address.setTag("1010");
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag("1010".getBytes());
         block1.setBlock("111".getBytes());
+        block1.setAddress(address);
 
+        address.setTag("1111");
         CacheBlock block2 = new CacheBlock(5, 32);
-        block2.setTag(new byte[] {6,7,8,9,0});
+        block2.setAddress(address);
 
         cacheSet.add(block1);  //add first, it becomes head
         cacheSet.add(block2);  //write second, it becomes head
@@ -107,7 +123,7 @@ public class CacheSetTest {
         assertEquals(block1, block);
         assertEquals(2, cacheSet.getBlocks().size());
 
-        System.out.println(cacheSet);
+        cacheSet.getBlocks().stream().forEach(System.out::println);
 
     }
 
@@ -115,24 +131,27 @@ public class CacheSetTest {
     public void addingWhenAtCapacityBumpsOutLru() {
         cacheSet.setCapacity(2); //arbitrarily set capacity at 2
 
+        address.setTag("1000");
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag("1000".getBytes());
+        block1.setAddress(address);
         block1.setBlock("111".getBytes());
 
+        address.setTag("1001");
         CacheBlock block2 = new CacheBlock(5, 32);
-        block2.setTag("1001".getBytes());
+        block2.setAddress(address);
         block2.setBlock("101".getBytes());
 
+        address.setTag("1010");
         CacheBlock block3 = new CacheBlock(5, 32);
-        block3.setTag("1010".getBytes());
+        block3.setAddress(address);
         block3.setBlock("100".getBytes());
 
         cacheSet.add(block1);  //add first, it becomes head
         cacheSet.add(block2);  //write second, it becomes head
         cacheSet.add(block3);  //block three should be head, block 1 should get bumped
 
-        System.out.println(cacheSet);
 
+        cacheSet.getBlocks().stream().forEach(System.out::println);
         //should only be two elements
         assertEquals(2, cacheSet.getBlocks().size());
 
@@ -149,16 +168,19 @@ public class CacheSetTest {
     public void addingWhenAtCapacityReturnsLru() {
         cacheSet.setCapacity(2); //arbitrarily set capacity at 2
 
+        address.setTag("1000");
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag("1000".getBytes());
+        block1.setAddress(address);
         block1.setBlock("111".getBytes());
 
+        address.setTag("1001");
         CacheBlock block2 = new CacheBlock(5, 32);
-        block2.setTag("1001".getBytes());
+        block2.setAddress(address);
         block2.setBlock("101".getBytes());
 
+        address.setTag("1010");
         CacheBlock block3 = new CacheBlock(5, 32);
-        block3.setTag("1010".getBytes());
+        block3.setAddress(address);
         block3.setBlock("100".getBytes());
 
         cacheSet.add(block1);  //add first, it becomes head
@@ -174,8 +196,9 @@ public class CacheSetTest {
     public void removeBlock() {
         //Creating this test just in case we have the need to remove a specific block for some reason.
 
+        address.setTag("1000");
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag("1000".getBytes());
+        block1.setAddress(address);
         block1.setBlock("111".getBytes());
 
         cacheSet.add(block1);
@@ -190,8 +213,9 @@ public class CacheSetTest {
 
     @Test
     public void setContainsTag() {
+        address.setTag("10001");
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag("10001".getBytes());
+        block1.setAddress(address);
         block1.setBlock("111".getBytes());
 
         cacheSet.add(block1);
@@ -203,8 +227,9 @@ public class CacheSetTest {
 
     @Test
     public void setDoesNotContainTag() {
+        address.setTag("10001");
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag("10001".getBytes());
+        block1.setAddress(address);
         block1.setBlock("111".getBytes());
 
         cacheSet.add(block1);
@@ -218,12 +243,14 @@ public class CacheSetTest {
     public void seeTheLeastRecentlyUsedBlock() {
         cacheSet.setCapacity(2); //arbitrarily set capacity at 2
 
+        address.setTag("1000");
         CacheBlock block1 = new CacheBlock(5, 32);
-        block1.setTag("1000".getBytes());
+        block1.setAddress(address);
         block1.setBlock("111".getBytes());
 
+        address.setTag("1001");
         CacheBlock block2 = new CacheBlock(5, 32);
-        block2.setTag("1001".getBytes());
+        block2.setAddress(address);
         block2.setBlock("101".getBytes());
 
         cacheSet.add(block1);  //add first, it becomes head

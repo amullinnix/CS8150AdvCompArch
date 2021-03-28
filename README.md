@@ -71,3 +71,5 @@ Instead of putting TODOs everywhere, consider putting a few in here.
 * What does Drew think of the writeDataTriggeredByRead methods? 
 
 * BUG alert! CacheBlock has tag, and not full address! WTF was I thinking?
+
+* Umm, in all examples, cache block only has tag. So, how does it get translated to L2? Ssshh

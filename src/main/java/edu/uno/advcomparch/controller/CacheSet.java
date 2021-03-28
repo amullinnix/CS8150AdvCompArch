@@ -27,8 +27,14 @@ public class CacheSet {
     public CacheBlock add(CacheBlock block) {
         CacheBlock evicted = null;
 
-        if(this.blocks.size() >= this.capacity) {
-            evicted = this.blocks.removeLast();
+        CacheBlock lru = this.getLeastRecentlyUsedBlock();
+
+        //what the hell is even going on here
+        if( lru != null && lru.isEmpty()){
+            this.blocks.remove(lru);
+        } else if (atCapacity()) {
+            evicted = lru;
+            this.blocks.remove(lru);
         }
 
         blocks.addFirst(block);
@@ -55,9 +61,12 @@ public class CacheSet {
 
     //NOTE: this is like a peek, it doesn't adjust the LRU values
     public CacheBlock getLeastRecentlyUsedBlock() {
-        CacheBlock lastBlock = blocks.getLast();
 
-        return  lastBlock;
+        if(blocks.size() > 0) {
+            return this.blocks.getLast();
+        } else {
+            return null;
+        }
     }
 
     //TODO: I wonder if this should take just a tag, you know?
