@@ -189,14 +189,14 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             } else {
 
                 // Check to see if we can pull from Victim Cache before forwarding
-                var victimData = l1VictimCache.getData(partitionedAddress);
+                var victimCacheBlock = l1VictimCache.getData(partitionedAddress);
 
-                if (victimData != null) {
+                if (victimCacheBlock != null) {
                     var victimCacheMessage = MessageBuilder
                             .withPayload(L1InMessage.DATA)
                             .setHeader("source", "L1Data")
-                            .setHeader("address", partitionedAddress)
-                            .setHeader("data", victimData)
+                            .setHeader("address", victimCacheBlock.getAddress())
+                            .setHeader("data", victimCacheBlock.getBlock())
                             .build();
 
                     // Send successful message back to the controller

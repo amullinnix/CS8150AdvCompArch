@@ -32,13 +32,12 @@ public class VictimCache {
         return Arrays.copyOfRange(block.getBlock(), decimalOffset, decimalOffset + bytesToRead);
     }
 
-    public byte[] getData(Address address) {
-        CacheBlock cacheBlock = cache.get(address.getIndexDecimal());
-
-        if (cacheBlock != null) {
-            return cacheBlock.getBlock();
-        }
-
-        return null;
+    public CacheBlock getData(Address address) {
+        return cache.stream()
+                .filter(cacheBlock ->
+                        cacheBlock.getAddress()
+                        .getAddress().equals(address.getAddress()))
+                .findFirst()
+                .orElse(null);
     }
 }

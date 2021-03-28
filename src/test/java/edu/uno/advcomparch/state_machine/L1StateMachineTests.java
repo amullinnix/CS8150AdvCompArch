@@ -3,6 +3,7 @@ package edu.uno.advcomparch.state_machine;
 import edu.uno.advcomparch.AbstractCompArchTest;
 import edu.uno.advcomparch.config.L1StateMachineTestConfiguration;
 import edu.uno.advcomparch.controller.Address;
+import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.DataResponseType;
 import edu.uno.advcomparch.cpu.DefaultCPU;
 import edu.uno.advcomparch.statemachine.L1ControllerState;
@@ -137,7 +138,11 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .thenReturn(DataResponseType.MISSC);
 
         var data = new byte[]{10, 20, 30, 40};
-        when(victimCache.getData(any(Address.class))).thenReturn(data);
+        var victimCacheBlock = new CacheBlock(4,4);
+        victimCacheBlock.setBlock(data);
+        victimCacheBlock.setAddress(new Address("101"));
+
+        when(victimCache.getData(any(Address.class))).thenReturn(victimCacheBlock);
 
         StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
