@@ -35,8 +35,8 @@ public class Level1Controller implements CacheController {
 
         this.messageList = new ArrayList<>();
         this.queue = queue;
-        this.dataStore = new Level1DataStore();
         this.victimCache = new VictimCache();
+        this.dataStore = new Level1DataStore(victimCache);
     }
 
     //TODO: Revamp this method for the "new" controller logic
@@ -69,12 +69,9 @@ public class Level1Controller implements CacheController {
 
     //TODO: Not sure what do with this method, but it shows a simple victimization scenario
     public void write(Address address, byte b) {
-        DataResponseType dataResponseType = this.dataStore.canWriteToCache(address);
+        DataResponseType dataResponseType = dataStore.canWriteToCache(address);
 
-        CacheBlock evictedBlock = this.dataStore.writeDataToCache(address, b);
-
-        if(evictedBlock != null) {
-            this.victimCache.getCache().add(evictedBlock);
-        }
+        // Write Populates the Victim Cache
+        dataStore.writeDataToCache(address, b);
     }
 }

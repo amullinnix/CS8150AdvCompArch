@@ -6,6 +6,7 @@ import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.storage.Level1DataStore;
+import edu.uno.advcomparch.storage.VictimCache;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -44,6 +45,9 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
     @Autowired
     Level1DataStore level1DataStore;
+
+    @Autowired
+    VictimCache l1VictimCache;
 
     @Override
     public void configure(StateMachineConfigurationConfigurer<L1ControllerState, L1InMessage> config) throws Exception {
@@ -191,6 +195,25 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 ctx.getStateMachine().sendEvent(responseMessage);
 
             } else {
+
+                // Check to see if we can pull from Victim Cache before forwarding
+                var victimData = l1VictimCache.getData(partitionedAddress, bytes);
+
+                if (victimData != null) {
+                    var victimCacheMessage = MessageBuilder
+                            .withPayload(L1InMessage.DATA)
+                            .setHeader("source", "L1Data")
+                            .setHeader("address", partitionedAddress)
+                            .setHeader("data", victimData)
+                            .build();
+
+                    // Send successful message back to the controller
+                    ctx.getStateMachine().sendEvent(victimCacheMessage);
+
+                    // Fail out of further error behavior;
+                    return;
+                }
+
                 // Else we have a MISSI or MISSC
                 // Send a miss to transition to miss state
                 var missMessage = MessageBuilder

@@ -10,6 +10,7 @@ import edu.uno.advcomparch.cpu.DefaultCPU;
 import edu.uno.advcomparch.statemachine.L1ControllerState;
 import edu.uno.advcomparch.statemachine.L1InMessage;
 import edu.uno.advcomparch.storage.Level1DataStore;
+import edu.uno.advcomparch.storage.VictimCache;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,9 @@ public class L1StateMachineTests extends AbstractCompArchTest {
     DefaultCPU cpu;
 
     @Autowired
+    VictimCache victimCache;
+
+    @Autowired
     private StateMachine<L1ControllerState, L1InMessage> l1ControllerStateMachine;
 
     @BeforeEach
@@ -55,9 +59,12 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .thenReturn(DataResponseType.HIT);
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
                 .thenReturn(DataResponseType.HIT);
+
         var data = new byte[]{10, 20, 30, 40};
         when(level1DataStore.getDataAtAddress(any(Address.class), anyInt()))
                 .thenReturn(data);
+
+        when(victimCache.getData(any(Address.class), anyInt())).thenReturn(null);
 
         // Mock out queue based processing
         doNothing().when(level1Controller).processMessage();
@@ -136,6 +143,36 @@ public class L1StateMachineTests extends AbstractCompArchTest {
 
         // If we've missed then enqueue
         assertThat(level2Controller.getQueue()).hasSize(1);
+    }
+
+    @Test
+    public void testL1MissCCpuReadScenario2WithVictimCache() throws Exception {
+        when(level1DataStore.isDataPresentInCache(any(Address.class)))
+                .thenReturn(DataResponseType.MISSC);
+
+        var data = new byte[]{10, 20, 30, 40};
+        when(victimCache.getData(any(Address.class), anyInt())).thenReturn(data);
+
+        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+                .stateMachine(l1ControllerStateMachine)
+                .step()
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .step()
+                .sendEvent(MessageBuilder
+                        .withPayload(L1InMessage.CPUREAD)
+                        .setHeader("source", "cpu")
+                        .setHeader("address", "101")
+                        .setHeader("bytes", 4)
+                        .build())
+                .expectStateChanged(2)
+                .expectStates(L1ControllerState.HIT)
+                .and()
+                .build()
+                .test();
+
+        // Make sure we haven't queued the next instruction.
+        assertThat(level2Controller.getQueue()).hasSize(0);
     }
 
     @Test

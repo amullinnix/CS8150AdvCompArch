@@ -7,6 +7,7 @@ import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.statemachine.L1ControllerState;
 import edu.uno.advcomparch.statemachine.L1ControllerStateMachineConfiguration;
 import edu.uno.advcomparch.storage.Level1DataStore;
+import edu.uno.advcomparch.storage.VictimCache;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,6 +43,11 @@ public class L1StateMachineTestConfiguration {
     @Bean
     public DefaultCPU cpu() {
         return Mockito.mock(DefaultCPU.class, Mockito.RETURNS_DEEP_STUBS);
+    }
+
+    @Bean
+    public VictimCache l1VictimCache() {
+        return Mockito.mock(VictimCache.class);
     }
 
     @Bean

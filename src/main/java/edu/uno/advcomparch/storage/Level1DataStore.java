@@ -6,14 +6,15 @@ import edu.uno.advcomparch.controller.CacheSet;
 import edu.uno.advcomparch.controller.DataResponseType;
 import lombok.Getter;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 //Purpose of this class to simply handle the requests from the Level 1 Controller
-@Named
 @Getter
+@Named
 public class Level1DataStore {
 
     //TODO: Consider calculating this and extracting as well
@@ -23,8 +24,11 @@ public class Level1DataStore {
     public static final int BLOCK_SIZE = 32;
 
     private List<CacheSet> cache;
+    private final VictimCache victimCache;
 
-    public Level1DataStore() {
+    @Inject
+    public Level1DataStore(VictimCache l1VictimCache) {
+        this.victimCache = l1VictimCache;
         //Initialize the cache! (data store)
         cache = new ArrayList<>();
         for(int i = 0; i < NUMBER_OF_SETS; i++) {
@@ -64,14 +68,11 @@ public class Level1DataStore {
         }
     }
 
-    public CacheBlock writeDataToCacheTriggeredByRead(Address address, byte b) {
-
-        CacheBlock evicted = writeDataToCache(address, b);
+    public void writeDataToCacheTriggeredByRead(Address address, byte b) {
+        writeDataToCache(address, b);
 
         //easy way of doing this ;)
         this.getCacheBlock(address).setDirty(false);
-
-        return evicted;
     }
 
     //TODO: How the eff is eviction supposed to work here?
@@ -86,7 +87,7 @@ public class Level1DataStore {
     }
 
     //This method might be starting to violate single responsibility principle.
-    public CacheBlock writeDataToCache(Address address, byte b) {
+    public void writeDataToCache(Address address, byte b) {
 
         CacheBlock evicted = null;
 
@@ -111,7 +112,9 @@ public class Level1DataStore {
             evicted = set.add(block); //this returns the evicted block if there is one  //TODO: ugly :(
         }
 
-        return evicted;
+        if (evicted != null) {
+            victimCache.getCache().add(evicted);
+        }
     }
 
     public byte getByteAtAddress(Address address) {

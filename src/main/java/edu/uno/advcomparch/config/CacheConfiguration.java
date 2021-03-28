@@ -3,11 +3,11 @@ package edu.uno.advcomparch.config;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.cpu.DefaultCPU;
 import edu.uno.advcomparch.repository.DataRepository;
+import edu.uno.advcomparch.storage.VictimCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.LinkedList;
-import java.util.Queue;
 
 @Configuration
 public class CacheConfiguration {
@@ -23,13 +23,12 @@ public class CacheConfiguration {
     }
 
     @Bean
-    public CentralProcessingUnit cpu(Queue<String> queue) {
-        return new DefaultCPU(queue);
+    public CentralProcessingUnit cpu() {
+        return new DefaultCPU(new LinkedList<>());
     }
 
     @Bean
-    // TODO - Delete
-    public Queue<String> MessageQueue() {
-        return new LinkedList<>();
+    public VictimCache l1VictimCache() {
+        return new VictimCache();
     }
 }

@@ -1,23 +1,32 @@
 package edu.uno.advcomparch.storage;
 
+import edu.uno.advcomparch.AbstractCompArchTest;
+import edu.uno.advcomparch.config.SimpleTestConfiguration;
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.CacheSet;
 import edu.uno.advcomparch.controller.DataResponseType;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-public class Level1DataStoreTest {
+@ContextConfiguration(classes = SimpleTestConfiguration.class)
+public class Level1DataStoreTest extends AbstractCompArchTest {
+
+    @Autowired
+    public VictimCache l1VictimCache;
 
     private Level1DataStore dataStore;
 
-    @Before
+    @BeforeEach
     public void setup() {
-        dataStore = new Level1DataStore();
+        l1VictimCache.getCache().clear();
+        dataStore = new Level1DataStore(l1VictimCache);
     }
 
     @Test
@@ -291,9 +300,12 @@ public class Level1DataStoreTest {
 
         fillCacheToCapacity(dataStore);
 
-        CacheBlock evicted = dataStore.writeDataToCacheTriggeredByRead(address, b);
+        dataStore.writeDataToCacheTriggeredByRead(address, b);
 
-        assertEquals("000100", new String(evicted.getTag()));
+        var cache = l1VictimCache.getCache();
+        assertEquals(cache.size(), 5);
+
+        assertEquals("000100", new String(cache.get(cache.size() - 1).getTag()));
     }
 
     @Test
