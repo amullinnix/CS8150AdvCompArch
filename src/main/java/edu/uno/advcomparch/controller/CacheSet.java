@@ -126,4 +126,10 @@ public class CacheSet {
     }
 
 
+    public void print() {
+
+        for(CacheBlock block : this.blocks) {
+            System.out.println(block);
+        }
+    }
 }

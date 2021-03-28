@@ -21,12 +21,15 @@ public class Level1DataStoreTest extends AbstractCompArchTest {
     @Autowired
     public VictimCache l1VictimCache;
 
+    @Autowired
+    public Level1WriteBuffer writeBuffer;
+
     private Level1DataStore dataStore;
 
     @BeforeEach
     public void setup() {
         l1VictimCache.getCache().clear();
-        dataStore = new Level1DataStore(l1VictimCache);
+        dataStore = new Level1DataStore(l1VictimCache, writeBuffer);
     }
 
     @Test
