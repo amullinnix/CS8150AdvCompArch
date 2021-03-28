@@ -250,8 +250,9 @@ public class L1StateMachineTests extends AbstractCompArchTest {
 
         verify(stateMachineMessageBus, atMostOnce()).enqueueL2Message(any());
         Mockito.verify(cpu, Mockito.times(1)).data(any());
-        Mockito.verify(level1DataStore, Mockito.times(1)).isDataPresentInCache(any());
-        Mockito.verify(level1DataStore, Mockito.times(1)).getDataAtAddress(any(Address.class), anyInt());
+        Mockito.verify(level1DataStore, atMostOnce()).isDataPresentInCache(any());
+        Mockito.verify(level1DataStore, atMostOnce()).getDataAtAddress(any(Address.class), anyInt());
+        Mockito.verify(level1DataStore, atMostOnce()).writeDataToCacheTriggeredByRead(any(Address.class), any());
     }
 
     @Test
@@ -293,9 +294,7 @@ public class L1StateMachineTests extends AbstractCompArchTest {
         verify(stateMachineMessageBus, atMostOnce()).enqueueL2Message(any());
         verify(cpu, atMostOnce()).data(any());
         verify(level1DataStore, atMostOnce()).writeDataToCache(any(Address.class), any());
-// Add additional test once functionality has been established
-//        Mockito.verify(l1DataRepository, Mockito.times(1)).victimize(any());
-//        Mockito.verify(level2Controller, Mockito.times(1)).setData(any());
+        Mockito.verify(level1DataStore, atMostOnce()).writeDataToCacheTriggeredByRead(any(Address.class), any());
     }
 
     @Test

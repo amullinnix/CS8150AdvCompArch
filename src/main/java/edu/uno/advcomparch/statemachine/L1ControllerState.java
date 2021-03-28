@@ -1,5 +1,7 @@
 package edu.uno.advcomparch.statemachine;
 
+import java.util.EnumSet;
+
 public enum L1ControllerState {
     // The requested line is hit in L1.
     HIT,
@@ -26,5 +28,9 @@ public enum L1ControllerState {
     // Waiting for data from L1 and L2 for write.
     WRWAIT1D,
     // Psuedo State to hang out for
-    WRWAITDX
+    WRWAITDX;
+
+    public static final EnumSet<L1ControllerState> READ_STATES = EnumSet.of(RDWAITD, RDL2WAITD, RD2WAITD, RD1WAITD);
+
+    public static final EnumSet<L1ControllerState> WRITE_STATES = EnumSet.of(WRWAITD, WRALLOC, WRWAIT1D, WRWAIT2D, WRWAITDX);
 }

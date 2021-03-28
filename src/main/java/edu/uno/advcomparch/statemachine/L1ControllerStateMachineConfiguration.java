@@ -227,11 +227,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 // TODO - what? If MISSD, we need to send the evicted block back to
                 if (canRead == DataResponseType.MISSD) {
-//                    CacheBlock evictedBlock;
-//
-//                    if(evictedBlock != null) {
-//                        this.level1DataStore.get(evictedBlock);
-//                    }
 
                     System.out.println("L1C to L1D: Victimize(" + address + ")");
 
@@ -265,18 +260,16 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             if (canWrite == DataResponseType.HIT) {
                 System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
-                level1DataStore.writeDataToCache(l1Address, data);
-
                 // Need to identify resolvable states;
-//                var state = ctx.getStateMachine().getState().getId();
+                var state = ctx.getStateMachine().getState().getId();
 //
-//                if (state == L1ControllerState.RDL2WAITD) {
-//                    level1DataStore.writeDataToCacheTriggeredByRead(l1Address, data);
-//                } else if (state == L1ControllerState.WRWAIT2D) {
-//                    level1DataStore.writeDataToCache(l1Address, data);
-//                } else {
-//                    throw new UnsupportedOperationException("L1D Write Operation received from unrecognized message type.");
-//                }
+                if (L1ControllerState.READ_STATES.contains(state)) {
+                    level1DataStore.writeDataToCacheTriggeredByRead(l1Address, data);
+                } else if (L1ControllerState.WRITE_STATES.contains(state)) {
+                    level1DataStore.writeDataToCache(l1Address, data);
+                } else {
+                    throw new UnsupportedOperationException("L1D Write Operation received from unrecognized state." + state.toString());
+                }
 
                 var responseMessage = MessageBuilder
                         .withPayload(L1InMessage.DATA)
