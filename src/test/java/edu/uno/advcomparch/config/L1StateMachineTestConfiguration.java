@@ -1,11 +1,10 @@
 package edu.uno.advcomparch.config;
 
-import edu.uno.advcomparch.controller.Level1Controller;
-import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.DefaultCPU;
 import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.statemachine.L1ControllerState;
 import edu.uno.advcomparch.statemachine.L1ControllerStateMachineConfiguration;
+import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
 import edu.uno.advcomparch.storage.Level1DataStore;
 import edu.uno.advcomparch.storage.VictimCache;
 import org.mockito.Mockito;
@@ -14,8 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.statemachine.StateMachine;
 
-import java.util.LinkedList;
-
 @Import(L1ControllerStateMachineConfiguration.class)
 @Configuration
 public class L1StateMachineTestConfiguration {
@@ -23,16 +20,6 @@ public class L1StateMachineTestConfiguration {
     @Bean
     public DataRepository<String, String> l1DataRepository() {
         return Mockito.mock(DataRepository.class);
-    }
-
-    @Bean
-    public Level1Controller level1Controller() {
-        return Mockito.mock(Level1Controller.class, Mockito.RETURNS_DEEP_STUBS);
-    }
-
-    @Bean
-    public Level2Controller level2Controller() {
-        return new Level2Controller(new LinkedList<>());
     }
 
     @Bean
@@ -53,6 +40,11 @@ public class L1StateMachineTestConfiguration {
     @Bean
     public StateMachine<L1ControllerState, L1ControllerState> l2ControllerStateMachine() {
         return Mockito.mock(StateMachine.class);
+    }
+
+    @Bean
+    public StateMachineMessageBus messageBus() {
+        return Mockito.mock(StateMachineMessageBus.class);
     }
 
 }

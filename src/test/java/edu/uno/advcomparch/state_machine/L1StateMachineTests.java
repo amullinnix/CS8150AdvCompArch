@@ -4,11 +4,10 @@ import edu.uno.advcomparch.AbstractCompArchTest;
 import edu.uno.advcomparch.config.L1StateMachineTestConfiguration;
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.DataResponseType;
-import edu.uno.advcomparch.controller.Level1Controller;
-import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.DefaultCPU;
 import edu.uno.advcomparch.statemachine.L1ControllerState;
 import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
 import edu.uno.advcomparch.storage.Level1DataStore;
 import edu.uno.advcomparch.storage.VictimCache;
 import org.junit.jupiter.api.AfterEach;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.test.StateMachineTestPlanBuilder;
@@ -33,12 +31,6 @@ import static org.mockito.Mockito.*;
 public class L1StateMachineTests extends AbstractCompArchTest {
 
     @Autowired
-    private Level1Controller level1Controller;
-
-    @Autowired
-    private Level2Controller level2Controller;
-
-    @Autowired
     Level1DataStore level1DataStore;
 
     @Autowired
@@ -48,28 +40,23 @@ public class L1StateMachineTests extends AbstractCompArchTest {
     VictimCache victimCache;
 
     @Autowired
+    StateMachineMessageBus stateMachineMessageBus;
+
+    @Autowired
     private StateMachine<L1ControllerState, L1InMessage> l1ControllerStateMachine;
 
     @BeforeEach
     public void beforeEach() {
-        var l1Queue = new LinkedList<Message<L1InMessage>>();
-        when(level1Controller.getQueue()).thenReturn(l1Queue);
-
+        var data = new byte[]{10, 20, 30, 40};
+        when(level1DataStore.getDataAtAddress(any(Address.class), anyInt()))
+                .thenReturn(data);
         when(level1DataStore.canWriteToCache(any(Address.class)))
                 .thenReturn(DataResponseType.HIT);
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
                 .thenReturn(DataResponseType.HIT);
 
-        var data = new byte[]{10, 20, 30, 40};
-        when(level1DataStore.getDataAtAddress(any(Address.class), anyInt()))
-                .thenReturn(data);
-
         when(victimCache.getData(any(Address.class), anyInt())).thenReturn(null);
-
-        // Mock out queue based processing
-        doNothing().when(level1Controller).processMessage();
-
-        level2Controller.getQueue().clear();
+        when(stateMachineMessageBus.getL1MessageQueue()).thenReturn(new LinkedList<>());
 
         l1ControllerStateMachine.start();
     }
@@ -77,7 +64,7 @@ public class L1StateMachineTests extends AbstractCompArchTest {
     @AfterEach
     public void afterEach() {
         l1ControllerStateMachine.stop();
-        Mockito.reset();
+        Mockito.reset(cpu, level1DataStore, stateMachineMessageBus);
     }
 
     @Test
@@ -142,7 +129,7 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .test();
 
         // If we've missed then enqueue
-        assertThat(level2Controller.getQueue()).hasSize(1);
+        verify(stateMachineMessageBus, atMostOnce()).enqueueL2Message(any());
     }
 
     @Test
@@ -172,7 +159,7 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .test();
 
         // Make sure we haven't queued the next instruction.
-        assertThat(level2Controller.getQueue()).hasSize(0);
+        verify(stateMachineMessageBus, never()).enqueueL2Message(any());
     }
 
     @Test
@@ -199,7 +186,7 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .test();
 
         // If we've missed then enqueue
-        assertThat(level2Controller.getQueue()).hasSize(1);
+        verify(stateMachineMessageBus, atMostOnce()).enqueueL2Message(any());
     }
 
     @Test
@@ -261,10 +248,10 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .build()
                 .test();
 
-        assertThat(level2Controller.getQueue()).hasSize(1);
+        verify(stateMachineMessageBus, atMostOnce()).enqueueL2Message(any());
         Mockito.verify(cpu, Mockito.times(1)).data(any());
         Mockito.verify(level1DataStore, Mockito.times(1)).isDataPresentInCache(any());
-        Mockito.verify(level1DataStore, Mockito.never()).getDataAtAddress(any(Address.class), anyInt());
+        Mockito.verify(level1DataStore, Mockito.times(1)).getDataAtAddress(any(Address.class), anyInt());
     }
 
     @Test
@@ -303,9 +290,9 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .build()
                 .test();
 
-        assertThat(level2Controller.getQueue()).hasSize(1);
-        Mockito.verify(cpu, atMostOnce()).data(any());
-        Mockito.verify(level1DataStore, atMostOnce()).writeDataToCache(any(Address.class), any());
+        verify(stateMachineMessageBus, atMostOnce()).enqueueL2Message(any());
+        verify(cpu, atMostOnce()).data(any());
+        verify(level1DataStore, atMostOnce()).writeDataToCache(any(Address.class), any());
 // Add additional test once functionality has been established
 //        Mockito.verify(l1DataRepository, Mockito.times(1)).victimize(any());
 //        Mockito.verify(level2Controller, Mockito.times(1)).setData(any());

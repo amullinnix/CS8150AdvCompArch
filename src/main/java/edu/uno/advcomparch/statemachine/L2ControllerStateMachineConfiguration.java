@@ -2,7 +2,6 @@ package edu.uno.advcomparch.statemachine;
 
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.DataResponseType;
-import edu.uno.advcomparch.controller.Level1Controller;
 import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.storage.DynamicRandomAccessMemory;
 import edu.uno.advcomparch.storage.Level2DataStore;
@@ -30,7 +29,7 @@ import java.util.EnumSet;
 public class L2ControllerStateMachineConfiguration extends StateMachineConfigurerAdapter<L1ControllerState, L1InMessage> {
 
     @Autowired
-    Level1Controller level1Controller;
+    StateMachineMessageBus messageBus;
 
     @Autowired
     DynamicRandomAccessMemory<String> memory;
@@ -54,9 +53,6 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             @Override
             public void stateChanged(State<L1ControllerState, L1InMessage> from, State<L1ControllerState, L1InMessage> to) {
                 System.out.println("State change to " + to.getId());
-
-                // After each stage in the process instruction
-                level1Controller.processMessage();
             }
         };
     }
@@ -66,12 +62,11 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
         states.withStates()
                 .initial(L1ControllerState.HIT)
                 .end(L1ControllerState.HIT)
+                .state(L1ControllerState.HIT, processL2Message())
                 .state(L1ControllerState.RDWAITD, L2CPURead())
                 .state(L1ControllerState.RDL2WAITD, L2CMemRead())
-                .state(L1ControllerState.RD1WAITD, propagateL2Data())
                 .state(L1ControllerState.WRWAITDX, L2Data())
                 .state(L1ControllerState.WRALLOC, L2Data())
-                .state(L1ControllerState.WRWAIT1D, propagateL2Data())
                 .state(L1ControllerState.WRWAITD, L2CMemRead())
                 .state(L1ControllerState.MISSC, L2CMemRead())
                 .state(L1ControllerState.MISSD, L2CMemRead())
@@ -317,24 +312,21 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             System.out.println("L2C to CPU: Data(" + Arrays.toString(data) + ")");
 
             // report back to the L1 Controller
-            level1Controller.enqueueMessage(message);
-
-            // We've already passed this two the CPU in L1Read, maybe we need to move it back out here.
-            System.out.println(data);
+            messageBus.enqueueL1Message(message);
         };
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> propagateL2Data() {
+    public Action<L1ControllerState, L1InMessage> processL2Message() {
         return ctx -> {
-            // Propagate RD2WAITD Data --> RD1WaitD
-            var message = ctx.getMessage();
-            ctx.getStateMachine().sendEvent(message);
-        };
-    }
+            var message = messageBus.getL2MessageQueue().poll();
+            var stateMachine = ctx.getStateMachine();
+            var currentState = stateMachine.getState().getId();
 
-    @Bean
-    public Action<L1ControllerState, L1InMessage> l2InitAction() {
-        return ctx -> System.out.println(ctx.getTarget().getId());
+            // If we have a message, start processing
+            if (message != null && currentState == L1ControllerState.HIT) {
+                stateMachine.sendEvent(message);
+            }
+        };
     }
 }

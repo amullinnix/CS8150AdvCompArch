@@ -2,8 +2,6 @@ package edu.uno.advcomparch.statemachine;
 
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.DataResponseType;
-import edu.uno.advcomparch.controller.Level1Controller;
-import edu.uno.advcomparch.controller.Level2Controller;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.storage.Level1DataStore;
 import edu.uno.advcomparch.storage.VictimCache;
@@ -35,10 +33,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     private static final int L1_OFFSET_SIZE = 1;
 
     @Autowired
-    Level1Controller level1Controller;
-
-    @Autowired
-    Level2Controller level2Controller;
+    StateMachineMessageBus messageBus;
 
     @Autowired
     CentralProcessingUnit<String> cpu;
@@ -62,9 +57,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             @Override
             public void stateChanged(State<L1ControllerState, L1InMessage> from, State<L1ControllerState, L1InMessage> to) {
                 System.out.println("State change to " + to.getId());
-
-                // After each stage in the process instruction
-                level1Controller.processMessage();
             }
         };
     }
@@ -74,6 +66,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
         states.withStates()
                 .initial(L1ControllerState.HIT)
                 .end(L1ControllerState.HIT)
+                .state(L1ControllerState.HIT, processL1Message())
                 .state(L1ControllerState.RDWAITD, L1CPURead())
                 .state(L1ControllerState.RDL2WAITD, L2CCPURead())
                 .state(L1ControllerState.WRWAITDX, L1Data())
@@ -165,7 +158,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    @Autowired
     public Action<L1ControllerState, L1InMessage> L1CPURead() {
         return ctx -> {
             // If queue is non empty, on state transition perform one action.
@@ -361,10 +353,8 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var bytes = message.getHeaders().get("bytes", Integer.class);
             System.out.println("L1C to L2C: CpuRead(" + address + ")");
 
-            // TODO - Look at actual queueing of messages
-            level2Controller.enqueueMessage(message);
-            // Or send the message -> might have to build an overarching machine
-//            l2ControllerStateMachine.sendEvent(message);
+            // Place on the L2 Message Queue
+            messageBus.enqueueL2Message(message);
 
             var payload = message.getPayload();
 
@@ -399,10 +389,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var data = (byte[]) message.getHeaders().get("data");
             System.out.println("L1C to L2C: Data(" + Arrays.toString(data) + ")");
 
-            // TODO - Look at actual queueing of messages
-            level2Controller.enqueueMessage(message);
-            // Or send the message
-            // l2ControllerStateMachine.sendEvent(message);
+            messageBus.enqueueL2Message(message);
         };
     }
 
@@ -414,9 +401,20 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
             // report back to the cpu
             cpu.data(data);
+        };
+    }
 
-            // We've already passed this two the CPU in L1Read, maybe we need to move it back out here.
-            System.out.println(data);
+    @Bean
+    public Action<L1ControllerState, L1InMessage> processL1Message() {
+        return ctx -> {
+            var message = messageBus.getL1MessageQueue().poll();
+            var stateMachine = ctx.getStateMachine();
+            var currentState = stateMachine.getState().getId();
+
+            // If we have a message, start processing
+            if (message != null && currentState == L1ControllerState.HIT) {
+                stateMachine.sendEvent(message);
+            }
         };
     }
 }

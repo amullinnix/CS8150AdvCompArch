@@ -1,34 +1,36 @@
 package edu.uno.advcomparch;
 
-import edu.uno.advcomparch.instruction.Instruction;
+import edu.uno.advcomparch.statemachine.L1ControllerState;
+import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
+import edu.uno.advcomparch.utility.MessageReaderUtility;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.statemachine.StateMachine;
 import org.springframework.stereotype.Controller;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.io.FileNotFoundException;
 
 @Controller
 public class CacheController {
 
-    Queue<Instruction> queue;
+    @Autowired
+    StateMachine<L1ControllerState, L1InMessage> l1StateMachine;
 
-    {
-        queue = new LinkedList<>();
-    }
+    @Autowired
+    StateMachine<L1ControllerState, L1InMessage> l2StateMachine;
 
-    public boolean stubMethod() {
-        return true;
-    }
+    @Autowired
+    StateMachineMessageBus messageBus;
 
+    public void runCache(String file) throws FileNotFoundException {
+        var messages = MessageReaderUtility.readMessages(file);
 
-    public Queue<Instruction> getQueue() {
+        // Enqueue L1 Messages
+        messages.forEach(message -> {
+            messageBus.enqueueL1Message(message);
+        });
 
-        return this.queue;
-    }
-
-    public void processMessage() {
-        //Get instruction from queue
-        Instruction instruction = this.queue.poll();
-
-        //ostensibly do something with it ;)
+        l1StateMachine.start();
+        l2StateMachine.start();
     }
 }
