@@ -24,11 +24,16 @@ public class Level1DataStore {
     public static final int BLOCK_SIZE = 32;
 
     private List<CacheSet> cache;
+
     private final VictimCache victimCache;
+    private final Level1WriteBuffer writeBuffer;
 
     @Inject
-    public Level1DataStore(VictimCache l1VictimCache) {
+    public Level1DataStore(VictimCache l1VictimCache, Level1WriteBuffer writeBuffer) {
+
         this.victimCache = l1VictimCache;
+        this.writeBuffer = writeBuffer;
+
         //Initialize the cache! (data store)
         cache = new ArrayList<>();
         for(int i = 0; i < NUMBER_OF_SETS; i++) {
@@ -111,7 +116,11 @@ public class Level1DataStore {
         }
 
         if (evicted != null) {
-            victimCache.getCache().add(evicted);
+            if(evicted.isDirty()) {
+                writeBuffer.add(evicted);
+            } else {
+                victimCache.getCache().add(evicted);
+            }
         }
 
     }

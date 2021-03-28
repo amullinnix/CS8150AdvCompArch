@@ -21,12 +21,15 @@ public class Level1DataStoreTest extends AbstractCompArchTest {
     @Autowired
     public VictimCache l1VictimCache;
 
+    @Autowired
+    public Level1WriteBuffer writeBuffer;
+
     private Level1DataStore dataStore;
 
     @BeforeEach
     public void setup() {
         l1VictimCache.getCache().clear();
-        dataStore = new Level1DataStore(l1VictimCache);
+        dataStore = new Level1DataStore(l1VictimCache, writeBuffer);
     }
 
     @Test
@@ -302,7 +305,7 @@ public class Level1DataStoreTest extends AbstractCompArchTest {
 
         dataStore.writeDataToCacheTriggeredByRead(address, b);
 
-        var cache = l1VictimCache.getCache();
+        var cache = writeBuffer.getBuffer();
         assertEquals(1, cache.size());
 
         assertEquals("000100", new String(cache.get(cache.size() - 1).getTag()));
