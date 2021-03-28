@@ -107,7 +107,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.RDL2WAITD)
                 .and().withExternal()
                 .source(L1ControllerState.MISSD).event(L1InMessage.CPUREAD)
-                .target(L1ControllerState.RD2WAITD).action(L1Victimize())
+                .target(L1ControllerState.RD2WAITD)
                 .and().withExternal()
                 .source(L1ControllerState.RD2WAITD).event(L1InMessage.DATA)
                 .target(L1ControllerState.RD1WAITD) // no action
@@ -142,13 +142,13 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(L1ControllerState.HIT)
                 .and().withExternal()
                 .source(L1ControllerState.MISSC).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAITD).action(L2CCPURead())
+                .target(L1ControllerState.WRWAITD)//.action(L2CCPURead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAITD).event(L1InMessage.DATA)
                 .target(L1ControllerState.WRALLOC)
                 .and().withExternal()
                 .source(L1ControllerState.MISSD).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAIT2D).action(L1Victimize()).action(L2CCPURead())
+                .target(L1ControllerState.WRWAIT2D)//.action(L1Victimize()).action(L2CCPURead())
                 .and().withExternal()
                 .source(L1ControllerState.WRWAIT2D).event(L1InMessage.DATA)
                 .target(L1ControllerState.WRWAIT1D)
@@ -189,7 +189,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             } else {
 
                 // Check to see if we can pull from Victim Cache before forwarding
-                var victimData = l1VictimCache.getData(partitionedAddress, bytes);
+                var victimData = l1VictimCache.getData(partitionedAddress);
 
                 if (victimData != null) {
                     var victimCacheMessage = MessageBuilder
@@ -252,17 +252,13 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
             var l1Address = new Address(address);
             l1Address.componentize(L1_TAG_SIZE, L1_INDEX_SIZE, L1_OFFSET_SIZE);
-            var canWrite = level1DataStore.canWriteToCache(l1Address);
 
-            // TODO why single byte write?
-//            var evictedBlock = level1DataStore.writeDataToCache(l1Address, data);
+            var canWrite = level1DataStore.canWriteToCache(l1Address);
 
             if (canWrite == DataResponseType.HIT) {
                 System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
-                // Need to identify resolvable states;
                 var state = ctx.getStateMachine().getState().getId();
-//
                 if (L1ControllerState.READ_STATES.contains(state)) {
                     level1DataStore.writeDataToCacheTriggeredByRead(l1Address, data);
                 } else if (L1ControllerState.WRITE_STATES.contains(state)) {
@@ -301,40 +297,20 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 if (canWrite == DataResponseType.MISSD) {
 
                     System.out.println("Victimize L1C to L1D (" + address + ")");
-//                    CacheBlock evictedBlock;
 
-//                     Why even bother breaking this out.
-//                    if(evictedBlock != null) {
-//                        this.level1DataStore.get(evictedBlock);
-//                    }
-                    // Send Data Request Back to L1D with Victimized Data to be replicated to L2C
+                    var victimBlock = l1VictimCache.getData(l1Address);
+
+                    // Send victim data Request Back to L1D with Victimized Data to be replicated to L2C
                     var victimizeResponseMessage = MessageBuilder
                             .withPayload(L1InMessage.DATA)
                             .setHeader("source", "L1Data")
                             .setHeader("address", l1Address)
-                            .setHeader("data", data)
+                            .setHeader("data", victimBlock)
                             .build();
 
                     ctx.getStateMachine().sendEvent(victimizeResponseMessage);
-
                 }
             }
-        };
-    }
-
-    @Bean
-    // TODO - Missing L1DataStoreInterface
-    public Action<L1ControllerState, L1InMessage> L1Victimize() {
-        return ctx -> {
-            var address = ctx.getMessage().getHeaders().get("address", Address.class);
-            System.out.println("L1C to L1D: Victimize(" + address + ")");
-
-            // Why not victimize a specific method
-//            CacheBlock evictedBlock = level1DataStore.writeDataToCache(address, b);
-//
-//            if(evictedBlock != null) {
-//                level1DataStore.victimCache.getCache().add(evictedBlock);
-//            }
         };
     }
 
