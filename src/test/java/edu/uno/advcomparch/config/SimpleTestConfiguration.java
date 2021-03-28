@@ -19,4 +19,9 @@ public class SimpleTestConfiguration {
         return new Level1WriteBuffer();
     }
 
+    @Bean
+    public Level2WriteBuffer level2WriteBuffer() {
+        return new Level2WriteBuffer();
+    }
+
 }

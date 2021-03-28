@@ -32,7 +32,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     StateMachineMessageBus messageBus;
 
     @Autowired
-    DynamicRandomAccessMemory<String> memory;
+    DynamicRandomAccessMemory memory;
 
     @Autowired
     DataRepository<String, String> l2DataRepository;
