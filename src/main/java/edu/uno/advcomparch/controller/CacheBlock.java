@@ -2,11 +2,14 @@ package edu.uno.advcomparch.controller;
 
 import lombok.Data;
 
+import java.nio.charset.StandardCharsets;
+
 @Data
 public class CacheBlock {
 
     //Beginning to wonder if there is really any reason for tag to be byte[]
-    private byte[] tag;
+    private Address address;
+//    private byte[] tag;  //not ready to delete yet. We'll see.
     private byte[] block;
 
     //TODO: When, precisely, do you set the dirty bit?
@@ -22,16 +25,22 @@ public class CacheBlock {
     private boolean valid;
 
     public CacheBlock(int tagSize, int blockSize) {
-        tag = new byte[tagSize];
+//        tag = new byte[tagSize];
         block = new byte[blockSize];
         dirty = false;
         valid = false;
+        address = new Address("", "", "");
+    }
+
+    //Foiled by Lombok. Rookie mistake. ;)
+    public void setAddress(Address address) {
+        this.address = new Address(address.getTag(), address.getIndex(), address.getOffset());
     }
 
     //Define isEmpty as both tag and block are empty
     public boolean isEmpty() {
 
-        if(byteArrayHasAnyValues(tag) && byteArrayHasAnyValues(block)) {
+        if(byteArrayHasAnyValues(address.getTag().getBytes()) && byteArrayHasAnyValues(block)) {
             return false;
         }
 
@@ -50,8 +59,12 @@ public class CacheBlock {
         return false;
     }
 
+    public byte[] getTag() {
+        return this.address.getTag().getBytes();
+    }
+
     public String getTagString() {
-        return new String(tag);
+        return address.getTag();
     }
 
     public boolean isNotDirty() {
@@ -66,8 +79,7 @@ public class CacheBlock {
      *      * true(dirty) if the data in the cache block has been modified
      *      * false(clean) if the data has not been modified
      *
-     * If clean, then there is no need to write it into the memory
+     * If clean, then there is no need to write it into the main memory
      *
-     * I think, therefore, that I am missing the distinction between CPU read and CPU write
      */
 }

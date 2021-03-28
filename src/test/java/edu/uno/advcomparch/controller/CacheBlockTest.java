@@ -21,7 +21,9 @@ public class CacheBlockTest {
 
     @Test
     public void blockWithDataIsNotEmpty() {
-        sut.setTag(new byte[] {1, 2, 3});
+        Address address = new Address("101", "010", "001");
+
+        sut.setAddress(address);
         sut.setBlock(new byte[] {4, 5, 6});
 
         assertEquals(false, sut.isEmpty());
@@ -29,7 +31,9 @@ public class CacheBlockTest {
 
     @Test
     public void getTagAsString() {
-        sut.setTag(new byte[]{49,48,49,48});
+        Address address = new Address("1010", "010", "001");
+
+        sut.setAddress(address);
 
         assertEquals("1010", sut.getTagString());
     }

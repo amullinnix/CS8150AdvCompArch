@@ -303,7 +303,7 @@ public class Level1DataStoreTest extends AbstractCompArchTest {
         dataStore.writeDataToCacheTriggeredByRead(address, b);
 
         var cache = l1VictimCache.getCache();
-        assertEquals(cache.size(), 5);
+        assertEquals(1, cache.size());
 
         assertEquals("000100", new String(cache.get(cache.size() - 1).getTag()));
     }

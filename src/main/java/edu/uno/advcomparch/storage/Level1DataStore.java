@@ -57,7 +57,6 @@ public class Level1DataStore {
 //        }
     }
 
-    //TODO: How the eff is eviction supposed to work here?
     public void writeDataToCacheTriggeredByRead(Address address, byte[] bytesToWrite) {
 
         for(int i = 0; i < bytesToWrite.length; i++) {
@@ -75,11 +74,10 @@ public class Level1DataStore {
         this.getCacheBlock(address).setDirty(false);
     }
 
-    //TODO: How the eff is eviction supposed to work here?
     public void writeDataToCache(Address address, byte[] bytesToWrite) {
 
         for(int i = 0; i < bytesToWrite.length; i++) {
-            this.writeDataToCache(address, bytesToWrite[i]);
+             this.writeDataToCache(address, bytesToWrite[i]);
 
             //must increment the offset by one to write the next byte in the correct location
             address.incrementOffset();
@@ -98,13 +96,13 @@ public class Level1DataStore {
             //then we are updating it, kind of
             CacheBlock block = set.getBlock(address);
 
-            block.setTag(address.getTag().getBytes());  //this might be unnecessary later
+            block.setAddress(address);  //might be unnecessary? follow up.
             block.getBlock()[address.getOffsetDecimal()] = b;
 
         } else {
             CacheBlock block = new CacheBlock(TAG_SIZE, BLOCK_SIZE);
 
-            block.setTag(address.getTag().getBytes());
+            block.setAddress(address);
             block.getBlock()[address.getOffsetDecimal()] = b;
             block.setDirty(true);
             block.setValid(true);
@@ -115,6 +113,7 @@ public class Level1DataStore {
         if (evicted != null) {
             victimCache.getCache().add(evicted);
         }
+
     }
 
     public byte getByteAtAddress(Address address) {
