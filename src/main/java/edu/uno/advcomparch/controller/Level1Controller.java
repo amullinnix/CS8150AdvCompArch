@@ -37,8 +37,6 @@ public class Level1Controller implements CacheControllerInterface {
 
     //TODO: this class still needs states, the controller has a state ;)
 
-    //TODO: This class still needs a write buffer and victim buffer. Do they belong here or in the dataStore?
-
     public Level1Controller(Queue<Message<ControllerMessage>> queue) {
 
         this.messageList = new ArrayList<>();

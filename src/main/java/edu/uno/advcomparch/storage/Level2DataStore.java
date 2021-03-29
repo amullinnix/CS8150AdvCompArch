@@ -19,9 +19,14 @@ public class Level2DataStore {
     public static final int NUMBER_OF_SETS = 512;   // 16KB divided by 32 byte blocks = 512 Cache Blocks
     //offset is 5 bits + 9 bit tag = 14 bits?
 
-    List<CacheBlock> cache;
+    private List<CacheBlock> cache;
 
-    public Level2DataStore() {
+    private final Level2WriteBuffer writeBuffer;
+
+    public Level2DataStore(Level2WriteBuffer writeBuffer) {
+
+        this.writeBuffer = writeBuffer;
+
         //initialize the cache
         cache = new ArrayList<>();
         for(int i = 0; i < NUMBER_OF_SETS; i++) {
@@ -68,7 +73,6 @@ public class Level2DataStore {
             byte[] cacheBlock = blockFromCache.getBlock();
             byte[] bytesToWrite = blockToWrite.getBlock();
             System.arraycopy(bytesToWrite, 0, cacheBlock, 0, bytesToWrite.length);
-
         }
     }
 

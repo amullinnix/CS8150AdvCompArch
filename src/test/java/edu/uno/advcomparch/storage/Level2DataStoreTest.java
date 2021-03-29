@@ -1,12 +1,16 @@
 package edu.uno.advcomparch.storage;
 
+import edu.uno.advcomparch.AbstractCompArchTest;
+import edu.uno.advcomparch.config.SimpleTestConfiguration;
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.DataResponseType;
 import edu.uno.advcomparch.statemachine.ControllerMessage;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Arrays;
 import java.util.Queue;
@@ -14,18 +18,22 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class Level2DataStoreTest {
+@ContextConfiguration(classes = SimpleTestConfiguration.class)
+public class Level2DataStoreTest extends AbstractCompArchTest {
 
 
     private Level2DataStore dataStore;
 
     private CacheBlock blockToWrite;
 
-    @Before
+    @Autowired
+    public Level2WriteBuffer writeBuffer;
+
+    @BeforeEach
     public void setup() {
         Queue<Message<ControllerMessage>> queue = new LinkedBlockingQueue<>();
 
-        dataStore = new Level2DataStore();
+        dataStore = new Level2DataStore(writeBuffer);
         blockToWrite = new CacheBlock(9, 32);
 
         byte[] bytes = new byte[]{1,2,3,4};

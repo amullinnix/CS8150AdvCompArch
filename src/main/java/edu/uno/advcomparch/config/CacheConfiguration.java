@@ -54,9 +54,8 @@ public class CacheConfiguration {
     }
 
     @Bean
-    // TODO - doesn't take a write buffer
-    public Level2DataStore level2DataStore() {
-        return new Level2DataStore();
+    public Level2DataStore level2DataStore(Level2WriteBuffer writeBuffer) {
+        return new Level2DataStore(writeBuffer);
     }
 
     @Bean

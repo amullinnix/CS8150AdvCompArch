@@ -3,6 +3,7 @@ package edu.uno.advcomparch.controller;
 import edu.uno.advcomparch.model.Data;
 import edu.uno.advcomparch.statemachine.ControllerMessage;
 import edu.uno.advcomparch.storage.Level2DataStore;
+import edu.uno.advcomparch.storage.Level2WriteBuffer;
 import org.springframework.messaging.Message;
 
 import javax.inject.Named;
@@ -20,8 +21,14 @@ public class Level2Controller implements CacheControllerInterface {
 
     private Level2DataStore dataStore;
 
+    private Level2WriteBuffer writeBuffer;
+
     public Level2Controller(Queue<Message<ControllerMessage>> queue) {
         this.queue = queue;
+
+        this.writeBuffer = new Level2WriteBuffer();
+
+        this.dataStore = new Level2DataStore(writeBuffer);
     }
 
     @Override
