@@ -33,9 +33,6 @@ public class CacheBlock {
     //Foiled by Lombok. Rookie mistake. ;)
     public void setAddress(Address address) {
         this.address = new Address(address.getTag(), address.getIndex(), address.getOffset());
-        // TODO - Seems odd to not set the full address intially if we have to run compartmentalize;
-        //this.address.setAddress(address.getAddress());
-        // TODO - Purpose was you could just call getAddress() Talk to Drew about this ;)
     }
 
     //Define isEmpty as both tag and block are empty

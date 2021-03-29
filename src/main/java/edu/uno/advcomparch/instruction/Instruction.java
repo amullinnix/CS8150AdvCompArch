@@ -1,6 +1,6 @@
 package edu.uno.advcomparch.instruction;
 
-import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.statemachine.ControllerMessage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Instruction {
 
-    private L1InMessage type;
+    private ControllerMessage type;
 
     private String address;
 

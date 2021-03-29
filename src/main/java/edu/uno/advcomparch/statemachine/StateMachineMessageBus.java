@@ -11,11 +11,11 @@ import java.util.Queue;
 @Named
 public class StateMachineMessageBus {
 
-    private Queue<Message<L1InMessage>> l1MessageQueue;
+    private Queue<Message<ControllerMessage>> l1MessageQueue;
 
-    private Queue<Message<L1InMessage>> l2MessageQueue;
+    private Queue<Message<ControllerMessage>> l2MessageQueue;
 
-    public Queue<Message<L1InMessage>> getL1MessageQueue() {
+    public Queue<Message<ControllerMessage>> getL1MessageQueue() {
         if (l1MessageQueue == null) {
             l1MessageQueue = new LinkedList<>();
         }
@@ -23,11 +23,11 @@ public class StateMachineMessageBus {
         return l1MessageQueue;
     }
 
-    public void enqueueL1Message(Message<L1InMessage> message) {
-        l1MessageQueue.add(message);
+    public void enqueueL1Message(Message<ControllerMessage> message) {
+        getL1MessageQueue().add(message);
     }
 
-    public Queue<Message<L1InMessage>> getL2MessageQueue() {
+    public Queue<Message<ControllerMessage>> getL2MessageQueue() {
         if (l2MessageQueue == null) {
             l2MessageQueue = new LinkedList<>();
         }
@@ -35,7 +35,7 @@ public class StateMachineMessageBus {
         return l2MessageQueue;
     }
 
-    public void enqueueL2Message(Message<L1InMessage> message) {
-        l2MessageQueue.add(message);
+    public void enqueueL2Message(Message<ControllerMessage> message) {
+        getL2MessageQueue().add(message);
     }
 }

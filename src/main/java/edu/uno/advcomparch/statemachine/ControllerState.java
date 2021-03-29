@@ -2,7 +2,7 @@ package edu.uno.advcomparch.statemachine;
 
 import java.util.EnumSet;
 
-public enum L1ControllerState {
+public enum ControllerState {
     // The requested line is hit in L1.
     HIT,
     // The requested line is a miss in L1 and the line present in the slot is in clean state.
@@ -30,7 +30,7 @@ public enum L1ControllerState {
     // Psuedo State to hang out for
     WRWAITDX;
 
-    public static final EnumSet<L1ControllerState> READ_STATES = EnumSet.of(RDWAITD, RDL2WAITD, RD2WAITD, RD1WAITD);
+    public static final EnumSet<ControllerState> READ_STATES = EnumSet.of(RDWAITD, RDL2WAITD, RD2WAITD, RD1WAITD);
 
-    public static final EnumSet<L1ControllerState> WRITE_STATES = EnumSet.of(WRWAITD, WRALLOC, WRWAIT1D, WRWAIT2D, WRWAITDX);
+    public static final EnumSet<ControllerState> WRITE_STATES = EnumSet.of(WRWAITD, WRALLOC, WRWAIT1D, WRWAIT2D, WRWAITDX);
 }

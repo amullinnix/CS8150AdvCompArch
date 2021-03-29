@@ -17,7 +17,7 @@ public class StateMachineRunner {
     private final DynamicRandomAccessMemory memory;
 
     @Autowired
-    private StateMachine<L1ControllerState, L1InMessage> stateMachine;
+    private StateMachine<ControllerState, ControllerMessage> stateMachine;
 
     @Inject
     public StateMachineRunner(DefaultCPU cpu,

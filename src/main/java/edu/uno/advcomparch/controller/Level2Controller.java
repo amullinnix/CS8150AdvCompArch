@@ -1,14 +1,11 @@
 package edu.uno.advcomparch.controller;
 
 import edu.uno.advcomparch.model.Data;
-import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.statemachine.ControllerMessage;
 import edu.uno.advcomparch.storage.Level2DataStore;
 import org.springframework.messaging.Message;
 
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Queue;
 
 // Requirements:
@@ -17,13 +14,13 @@ import java.util.Queue;
 //      L2 and L1 must support mutual inclusion policy, which means that if mutual inclusion is violated then you must do whatever is needed to restore it.
 @Named
 @lombok.Data
-public class Level2Controller implements CacheController {
+public class Level2Controller implements CacheControllerInterface {
 
-    private Queue<Message<L1InMessage>> queue;
+    private Queue<Message<ControllerMessage>> queue;
 
     private Level2DataStore dataStore;
 
-    public Level2Controller(Queue<Message<L1InMessage>> queue) {
+    public Level2Controller(Queue<Message<ControllerMessage>> queue) {
         this.queue = queue;
     }
 
@@ -39,7 +36,7 @@ public class Level2Controller implements CacheController {
 
 
     @Override
-    public void enqueueMessage(Message<L1InMessage> message) {
+    public void enqueueMessage(Message<ControllerMessage> message) {
         getQueue().add(message);
     }
 }

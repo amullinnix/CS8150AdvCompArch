@@ -1,5 +1,6 @@
 package edu.uno.advcomparch.storage;
 
+import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import lombok.Data;
 
@@ -53,6 +54,15 @@ public class Level1WriteBuffer {
     public void printData() {
 
         buffer.stream().forEach(System.out::println);
+    }
+
+    public CacheBlock getData(Address address) {
+        return buffer.stream()
+                .filter(cacheBlock ->
+                        cacheBlock.getAddress()
+                                .getAddress().equals(address.getAddress()))
+                .findFirst()
+                .orElse(null);
     }
 
     //If the buffer already contains other modified blocks, we compare addresses. In case of a match, we

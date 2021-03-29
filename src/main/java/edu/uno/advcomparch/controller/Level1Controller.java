@@ -1,7 +1,7 @@
 package edu.uno.advcomparch.controller;
 
 import edu.uno.advcomparch.model.Data;
-import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.statemachine.ControllerMessage;
 import edu.uno.advcomparch.storage.Level1DataStore;
 import edu.uno.advcomparch.storage.Level1WriteBuffer;
 import edu.uno.advcomparch.storage.VictimCache;
@@ -23,11 +23,11 @@ import java.util.Queue;
  */
 @lombok.Data
 @Named
-public class Level1Controller implements CacheController {
+public class Level1Controller implements CacheControllerInterface {
 
     private List<String> messageList;
 
-    private Queue<Message<L1InMessage>> queue;
+    private Queue<Message<ControllerMessage>> queue;
 
     private Level1DataStore dataStore;
 
@@ -39,7 +39,7 @@ public class Level1Controller implements CacheController {
 
     //TODO: This class still needs a write buffer and victim buffer. Do they belong here or in the dataStore?
 
-    public Level1Controller(Queue<Message<L1InMessage>> queue) {
+    public Level1Controller(Queue<Message<ControllerMessage>> queue) {
 
         this.messageList = new ArrayList<>();
         this.queue = queue;
@@ -74,7 +74,7 @@ public class Level1Controller implements CacheController {
     }
 
     @Override
-    public void enqueueMessage(Message<L1InMessage> message) {
+    public void enqueueMessage(Message<ControllerMessage> message) {
         getQueue().add(message);
     }
 

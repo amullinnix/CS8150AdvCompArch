@@ -26,11 +26,11 @@ import java.util.EnumSet;
 @Configuration
 @EnableStateMachine(name = "l1ControllerStateMachine")
 @AllArgsConstructor
-public class L1ControllerStateMachineConfiguration extends StateMachineConfigurerAdapter<L1ControllerState, L1InMessage> {
+public class L1ControllerStateMachineConfiguration extends StateMachineConfigurerAdapter<ControllerState, ControllerMessage> {
 
-    private static final int L1_TAG_SIZE = 1;
-    private static final int L1_INDEX_SIZE = 1;
-    private static final int L1_OFFSET_SIZE = 1;
+    private static final int L1_TAG_SIZE = 6;
+    private static final int L1_INDEX_SIZE = 6;
+    private static final int L1_OFFSET_SIZE = 5;
 
     @Autowired
     StateMachineMessageBus messageBus;
@@ -45,120 +45,120 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     VictimCache l1VictimCache;
 
     @Override
-    public void configure(StateMachineConfigurationConfigurer<L1ControllerState, L1InMessage> config) throws Exception {
+    public void configure(StateMachineConfigurationConfigurer<ControllerState, ControllerMessage> config) throws Exception {
         config.withConfiguration()
                 .autoStartup(false)
                 .listener(l1listener());
     }
 
     @Bean
-    public StateMachineListener<L1ControllerState, L1InMessage> l1listener() {
+    public StateMachineListener<ControllerState, ControllerMessage> l1listener() {
         return new StateMachineListenerAdapter<>() {
             @Override
-            public void stateChanged(State<L1ControllerState, L1InMessage> from, State<L1ControllerState, L1InMessage> to) {
+            public void stateChanged(State<ControllerState, ControllerMessage> from, State<ControllerState, ControllerMessage> to) {
                 System.out.println("State change to " + to.getId());
             }
         };
     }
 
     @Override
-    public void configure(StateMachineStateConfigurer<L1ControllerState, L1InMessage> states) throws Exception {
+    public void configure(StateMachineStateConfigurer<ControllerState, ControllerMessage> states) throws Exception {
         states.withStates()
-                .initial(L1ControllerState.HIT)
-                .end(L1ControllerState.HIT)
-                .state(L1ControllerState.HIT, processL1Message())
-                .state(L1ControllerState.RDWAITD, L1CPURead())
-                .state(L1ControllerState.RDL2WAITD, L2CCPURead())
-                .state(L1ControllerState.WRWAITDX, L1Data())
-                .state(L1ControllerState.WRALLOC, L1Data())
-                .state(L1ControllerState.WRWAITD, L2CCPURead())
-                .state(L1ControllerState.MISSC, L2CCPURead())
-                .state(L1ControllerState.MISSD, L2CCPURead())
-                .states(EnumSet.allOf(L1ControllerState.class));
+                .initial(ControllerState.HIT)
+                .end(ControllerState.HIT)
+                .state(ControllerState.HIT, processL1Message())
+                .state(ControllerState.RDWAITD, L1CPURead())
+                .state(ControllerState.RDL2WAITD, L2CCPURead())
+                .state(ControllerState.WRWAITDX, L1Data())
+                .state(ControllerState.WRALLOC, L1Data())
+                .state(ControllerState.WRWAITD, L2CCPURead())
+                .state(ControllerState.MISSC, L2CCPURead())
+                .state(ControllerState.MISSD, L2CCPURead())
+                .states(EnumSet.allOf(ControllerState.class));
     }
 
     @Override
-    public void configure(StateMachineTransitionConfigurer<L1ControllerState, L1InMessage> transitions) throws Exception {
+    public void configure(StateMachineTransitionConfigurer<ControllerState, ControllerMessage> transitions) throws Exception {
         transitions.withExternal()
-                .source(L1ControllerState.HIT).event(L1InMessage.CPUREAD)
-                .target(L1ControllerState.RDWAITD)
+                .source(ControllerState.HIT).event(ControllerMessage.CPUREAD)
+                .target(ControllerState.RDWAITD)
                 .and().withExternal()
-                .source(L1ControllerState.RDWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT).action(CPUData())
+                .source(ControllerState.RDWAITD).event(ControllerMessage.DATA)
+                .target(ControllerState.HIT).action(CPUData())
                 .and().withExternal()
                 // Why is this not also a state, some form of miss if L1D is a separate component
-                .source(L1ControllerState.RDWAITD).event(L1InMessage.MISSI)
-                .target(L1ControllerState.MISSI)
+                .source(ControllerState.RDWAITD).event(ControllerMessage.MISSI)
+                .target(ControllerState.MISSI)
                 .and().withExternal()
-                .source(L1ControllerState.RDWAITD).event(L1InMessage.MISSC)
-                .target(L1ControllerState.MISSC)
+                .source(ControllerState.RDWAITD).event(ControllerMessage.MISSC)
+                .target(ControllerState.MISSC)
                 .and().withExternal()
-                .source(L1ControllerState.RDWAITD).event(L1InMessage.MISSD)
-                .target(L1ControllerState.MISSD)
+                .source(ControllerState.RDWAITD).event(ControllerMessage.MISSD)
+                .target(ControllerState.MISSD)
                 .and().withExternal()
                 // End of newly added configuration
-                .source(L1ControllerState.MISSI).event(L1InMessage.CPUREAD)
-                .target(L1ControllerState.RDL2WAITD)
+                .source(ControllerState.MISSI).event(ControllerMessage.CPUREAD)
+                .target(ControllerState.RDL2WAITD)
                 .and().withExternal()
-                .source(L1ControllerState.RDL2WAITD).target(L1ControllerState.HIT)
-                .event(L1InMessage.DATA).action(L1Data()).action(CPUData())
+                .source(ControllerState.RDL2WAITD).target(ControllerState.HIT)
+                .event(ControllerMessage.DATA).action(L1Data()).action(CPUData())
                 .and().withExternal()
-                .source(L1ControllerState.MISSC).event(L1InMessage.CPUREAD)
-                .target(L1ControllerState.RDL2WAITD)
+                .source(ControllerState.MISSC).event(ControllerMessage.CPUREAD)
+                .target(ControllerState.RDL2WAITD)
                 .and().withExternal()
-                .source(L1ControllerState.MISSD).event(L1InMessage.CPUREAD)
-                .target(L1ControllerState.RD2WAITD)
+                .source(ControllerState.MISSD).event(ControllerMessage.CPUREAD)
+                .target(ControllerState.RD2WAITD)
                 .and().withExternal()
-                .source(L1ControllerState.RD2WAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.RD1WAITD) // no action
+                .source(ControllerState.RD2WAITD).event(ControllerMessage.DATA)
+                .target(ControllerState.RD1WAITD) // no action
                 .and().withExternal()
-                .source(L1ControllerState.RD1WAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT).action(L1Data()).action(L2CData()).action(CPUData())
+                .source(ControllerState.RD1WAITD).event(ControllerMessage.DATA)
+                .target(ControllerState.HIT).action(L1Data()).action(L2CData()).action(CPUData())
                 .and().withExternal()
-                .source(L1ControllerState.HIT).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAITDX)
+                .source(ControllerState.HIT).event(ControllerMessage.CPUWRITE)
+                .target(ControllerState.WRWAITDX)
                 .and().withExternal()
                 // Local States
-                .source(L1ControllerState.WRWAITDX).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT)
+                .source(ControllerState.WRWAITDX).event(ControllerMessage.DATA)
+                .target(ControllerState.HIT)
                 .and().withExternal()
-                .source(L1ControllerState.WRWAITDX).event(L1InMessage.MISSI)
-                .target(L1ControllerState.MISSI)
+                .source(ControllerState.WRWAITDX).event(ControllerMessage.MISSI)
+                .target(ControllerState.MISSI)
                 .and().withExternal()
-                .source(L1ControllerState.WRWAITDX).event(L1InMessage.MISSC)
-                .target(L1ControllerState.MISSC)
+                .source(ControllerState.WRWAITDX).event(ControllerMessage.MISSC)
+                .target(ControllerState.MISSC)
                 .and().withExternal()
-                .source(L1ControllerState.WRWAITDX).event(L1InMessage.MISSD)
-                .target(L1ControllerState.MISSD)
+                .source(ControllerState.WRWAITDX).event(ControllerMessage.MISSD)
+                .target(ControllerState.MISSD)
                 .and().withExternal()
                 // End Local
-                .source(L1ControllerState.MISSI).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAITD)
+                .source(ControllerState.MISSI).event(ControllerMessage.CPUWRITE)
+                .target(ControllerState.WRWAITD)
                 .and().withExternal()
-                .source(L1ControllerState.WRWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC)
+                .source(ControllerState.WRWAITD).event(ControllerMessage.DATA)
+                .target(ControllerState.WRALLOC)
                 .and().withExternal()
-                .source(L1ControllerState.WRALLOC).event(L1InMessage.DATA)
-                .target(L1ControllerState.HIT)
+                .source(ControllerState.WRALLOC).event(ControllerMessage.DATA)
+                .target(ControllerState.HIT)
                 .and().withExternal()
-                .source(L1ControllerState.MISSC).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAITD)//.action(L2CCPURead())
+                .source(ControllerState.MISSC).event(ControllerMessage.CPUWRITE)
+                .target(ControllerState.WRWAITD)//.action(L2CCPURead())
                 .and().withExternal()
-                .source(L1ControllerState.WRWAITD).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC)
+                .source(ControllerState.WRWAITD).event(ControllerMessage.DATA)
+                .target(ControllerState.WRALLOC)
                 .and().withExternal()
-                .source(L1ControllerState.MISSD).event(L1InMessage.CPUWRITE)
-                .target(L1ControllerState.WRWAIT2D)//.action(L1Victimize()).action(L2CCPURead())
+                .source(ControllerState.MISSD).event(ControllerMessage.CPUWRITE)
+                .target(ControllerState.WRWAIT2D)//.action(L1Victimize()).action(L2CCPURead())
                 .and().withExternal()
-                .source(L1ControllerState.WRWAIT2D).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRWAIT1D)
+                .source(ControllerState.WRWAIT2D).event(ControllerMessage.DATA)
+                .target(ControllerState.WRWAIT1D)
                 .and().withExternal()
-                .source(L1ControllerState.WRWAIT1D).event(L1InMessage.DATA)
-                .target(L1ControllerState.WRALLOC).action(L2CData());
+                .source(ControllerState.WRWAIT1D).event(ControllerMessage.DATA)
+                .target(ControllerState.WRALLOC).action(L2CData());
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> L1CPURead() {
+    public Action<ControllerState, ControllerMessage> L1CPURead() {
         return ctx -> {
             // If queue is non empty, on state transition perform one action.
             var message = ctx.getMessage();
@@ -177,7 +177,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             if (canRead == DataResponseType.HIT) {
 
                 var responseMessage = MessageBuilder
-                        .withPayload(L1InMessage.DATA)
+                        .withPayload(ControllerMessage.DATA)
                         .setHeader("source", "L1Data")
                         .setHeader("address", partitionedAddress)
                         .setHeader("data", data)
@@ -193,7 +193,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 if (victimCacheBlock != null) {
                     var victimCacheMessage = MessageBuilder
-                            .withPayload(L1InMessage.DATA)
+                            .withPayload(ControllerMessage.DATA)
                             .setHeader("source", "L1Data")
                             .setHeader("address", victimCacheBlock.getAddress())
                             .setHeader("data", victimCacheBlock.getBlock())
@@ -209,7 +209,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 // Else we have a MISSI or MISSC
                 // Send a miss to transition to miss state
                 var missMessage = MessageBuilder
-                        .withPayload(L1InMessage.fromControllerState(canRead))
+                        .withPayload(ControllerMessage.fromControllerState(canRead))
                         .setHeader("source", "L1Data")
                         .build();
 
@@ -217,7 +217,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 // Then send a read back
                 var cpuReadMessage = MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "L1Data")
                         .setHeader("address", partitionedAddress)
                         .setHeader("bytes", bytes)
@@ -225,13 +225,12 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 ctx.getStateMachine().sendEvent(cpuReadMessage);
 
-                // TODO - what? If MISSD, we need to send the evicted block back to
                 if (canRead == DataResponseType.MISSD) {
 
                     System.out.println("L1C to L1D: Victimize(" + address + ")");
 
                     var victimizeResponseMessage = MessageBuilder
-                            .withPayload(L1InMessage.DATA)
+                            .withPayload(ControllerMessage.DATA)
                             .setHeader("source", "L1Data")
                             .setHeader("address", address)
                             .setHeader("data", data)
@@ -244,7 +243,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> L1Data() {
+    public Action<ControllerState, ControllerMessage> L1Data() {
         return ctx -> {
             var message = ctx.getMessage();
             var address = message.getHeaders().get("address", String.class);
@@ -259,16 +258,16 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
                 var state = ctx.getStateMachine().getState().getId();
-                if (L1ControllerState.READ_STATES.contains(state)) {
+                if (ControllerState.READ_STATES.contains(state)) {
                     level1DataStore.writeDataToCacheTriggeredByRead(l1Address, data);
-                } else if (L1ControllerState.WRITE_STATES.contains(state)) {
+                } else if (ControllerState.WRITE_STATES.contains(state)) {
                     level1DataStore.writeDataToCache(l1Address, data);
                 } else {
                     throw new UnsupportedOperationException("L1D Write Operation received from unrecognized state." + state.toString());
                 }
 
                 var responseMessage = MessageBuilder
-                        .withPayload(L1InMessage.DATA)
+                        .withPayload(ControllerMessage.DATA)
                         .setHeader("source", "L1Data")
                         .setHeader("address", l1Address)
                         .setHeader("data", data)
@@ -278,14 +277,14 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 ctx.getStateMachine().sendEvent(responseMessage);
             } else {
                 var missMessage = MessageBuilder
-                        .withPayload(L1InMessage.fromControllerState(canWrite)) // TODO - Investigate Miss Types
+                        .withPayload(ControllerMessage.fromControllerState(canWrite))
                         .setHeader("source", "L1Data")
                         .build();
 
                 ctx.getStateMachine().sendEvent(missMessage);
 
                 var cpuWriteMessage = MessageBuilder
-                        .withPayload(L1InMessage.CPUWRITE)
+                        .withPayload(ControllerMessage.CPUWRITE)
                         .setHeader("source", "L1Data")
                         .setHeader("address", l1Address)
                         .setHeader("data", data)
@@ -293,7 +292,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 ctx.getStateMachine().sendEvent(cpuWriteMessage);
 
-                // TODO - what? If MISSD, we need to send the evicted block back to
                 if (canWrite == DataResponseType.MISSD) {
 
                     System.out.println("Victimize L1C to L1D (" + address + ")");
@@ -302,7 +300,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
                     // Send victim data Request Back to L1D with Victimized Data to be replicated to L2C
                     var victimizeResponseMessage = MessageBuilder
-                            .withPayload(L1InMessage.DATA)
+                            .withPayload(ControllerMessage.DATA)
                             .setHeader("source", "L1Data")
                             .setHeader("address", l1Address)
                             .setHeader("data", victimBlock)
@@ -315,7 +313,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> L2CCPURead() {
+    public Action<ControllerState, ControllerMessage> L2CCPURead() {
         return ctx -> {
             var message = ctx.getMessage();
             var address = message.getHeaders().get("address", Address.class);
@@ -327,20 +325,20 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
             var payload = message.getPayload();
 
-            if (payload == L1InMessage.CPUREAD) {
+            if (payload == ControllerMessage.CPUREAD) {
                 // To transition to RDL2WAITD
                 var readMessage = MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "L1Data")
                         .setHeader("address", address)
                         .setHeader("bytes", bytes)
                         .build();
 
                 ctx.getStateMachine().sendEvent(readMessage);
-            } else if (payload == L1InMessage.CPUWRITE) {
+            } else if (payload == ControllerMessage.CPUWRITE) {
                 // Transition to WRWAITD
                 var writeMessage = MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUWRITE)
                         .setHeader("source", "L1Data")
                         .setHeader("address", address)
                         .setHeader("bytes", bytes)
@@ -352,7 +350,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> L2CData() {
+    public Action<ControllerState, ControllerMessage> L2CData() {
         return ctx -> {
             var message = ctx.getMessage();
             var data = (byte[]) message.getHeaders().get("data");
@@ -363,7 +361,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> CPUData() {
+    public Action<ControllerState, ControllerMessage> CPUData() {
         return ctx -> {
             var data = (byte[]) ctx.getMessage().getHeaders().get("data");
             System.out.println("L1C to CPU: Data(" + Arrays.toString(data) + ")");
@@ -374,14 +372,14 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     }
 
     @Bean
-    public Action<L1ControllerState, L1InMessage> processL1Message() {
+    public Action<ControllerState, ControllerMessage> processL1Message() {
         return ctx -> {
             var message = messageBus.getL1MessageQueue().poll();
             var stateMachine = ctx.getStateMachine();
             var currentState = stateMachine.getState().getId();
 
             // If we have a message, start processing
-            if (message != null && currentState == L1ControllerState.HIT) {
+            if (message != null && currentState == ControllerState.HIT) {
                 stateMachine.sendEvent(message);
             }
         };

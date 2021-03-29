@@ -1,9 +1,9 @@
 package edu.uno.advcomparch.config;
 
-import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration;
 import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
 import edu.uno.advcomparch.storage.DynamicRandomAccessMemory;
+import edu.uno.advcomparch.storage.Level1WriteBuffer;
 import edu.uno.advcomparch.storage.Level2DataStore;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
@@ -13,11 +13,6 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import(L2ControllerStateMachineConfiguration.class)
 public class L2StateMachineTestConfiguration {
-
-    @Bean
-    public DataRepository<String, String> l2DataRepository() {
-        return Mockito.mock(DataRepository.class);
-    }
 
     @Bean
     public Level2DataStore level2DataStore() {
@@ -31,6 +26,11 @@ public class L2StateMachineTestConfiguration {
 
     @Bean
     public StateMachineMessageBus messageBus() {
-        return new StateMachineMessageBus();
+        return Mockito.mock(StateMachineMessageBus.class);
+    }
+
+    @Bean
+    public Level1WriteBuffer level1WriteBuffer() {
+        return Mockito.mock(Level1WriteBuffer.class);
     }
 }

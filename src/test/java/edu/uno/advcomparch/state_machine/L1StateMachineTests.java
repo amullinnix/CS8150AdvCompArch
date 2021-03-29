@@ -6,8 +6,8 @@ import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.DataResponseType;
 import edu.uno.advcomparch.cpu.DefaultCPU;
-import edu.uno.advcomparch.statemachine.L1ControllerState;
-import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.statemachine.ControllerMessage;
+import edu.uno.advcomparch.statemachine.ControllerState;
 import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
 import edu.uno.advcomparch.storage.Level1DataStore;
 import edu.uno.advcomparch.storage.VictimCache;
@@ -43,7 +43,7 @@ public class L1StateMachineTests extends AbstractCompArchTest {
     StateMachineMessageBus stateMachineMessageBus;
 
     @Autowired
-    private StateMachine<L1ControllerState, L1InMessage> l1ControllerStateMachine;
+    private StateMachine<ControllerState, ControllerMessage> l1ControllerStateMachine;
 
     @BeforeEach
     public void beforeEach() {
@@ -69,33 +69,25 @@ public class L1StateMachineTests extends AbstractCompArchTest {
 
     @Test
     public void testStartEvent() {
-        assertThat(l1ControllerStateMachine.getState().getId()).isEqualTo(L1ControllerState.HIT);
-    }
-
-    @Test
-    public void testExtendedStateMessage() {
-        l1ControllerStateMachine.getExtendedState().getVariables().put("data", "blargh");
-        assertThat(l1ControllerStateMachine.getState().getId()).isEqualTo(L1ControllerState.HIT);
-        l1ControllerStateMachine.sendEvent(L1InMessage.CPUREAD);
-        assertThat(l1ControllerStateMachine.getState().getId()).isEqualTo(L1ControllerState.RDWAITD);
+        assertThat(l1ControllerStateMachine.getState().getId()).isEqualTo(ControllerState.HIT);
     }
 
     @Test
     public void testL1HitCPUReadScenario1() throws Exception {
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(2)
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -110,20 +102,20 @@ public class L1StateMachineTests extends AbstractCompArchTest {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
                 .thenReturn(DataResponseType.MISSC);
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
-                .expectStates(L1ControllerState.RDL2WAITD)
+                .expectStates(ControllerState.RDL2WAITD)
                 .and()
                 .build()
                 .test();
@@ -144,20 +136,20 @@ public class L1StateMachineTests extends AbstractCompArchTest {
 
         when(victimCache.getData(any(Address.class))).thenReturn(victimCacheBlock);
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(2)
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -172,20 +164,20 @@ public class L1StateMachineTests extends AbstractCompArchTest {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
                 .thenReturn(DataResponseType.MISSI);
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
-                .expectStates(L1ControllerState.RDL2WAITD)
+                .expectStates(ControllerState.RDL2WAITD)
                 .and()
                 .build()
                 .test();
@@ -199,20 +191,20 @@ public class L1StateMachineTests extends AbstractCompArchTest {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
                 .thenReturn(DataResponseType.MISSD);
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
-                .expectStates(L1ControllerState.RD2WAITD)
+                .expectStates(ControllerState.RD2WAITD)
                 .and()
                 .build()
                 .test();
@@ -224,31 +216,31 @@ public class L1StateMachineTests extends AbstractCompArchTest {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
                 .thenReturn(DataResponseType.MISSI);
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(3)
-                .expectStates(L1ControllerState.RDL2WAITD)
+                .expectStates(ControllerState.RDL2WAITD)
                 .and()
                 .step()
                 // L2 Sends Data Back
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.DATA)
+                        .withPayload(ControllerMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address","101")
+                        .setHeader("address","10101010101010101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(1)
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -267,31 +259,31 @@ public class L1StateMachineTests extends AbstractCompArchTest {
         when(level1DataStore.isDataPresentInCache(any(Address.class)))
                 .thenReturn(DataResponseType.MISSD);
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUREAD)
+                        .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("bytes", 4)
                         .build())
                 .expectStateChanged(4)
-                .expectStates(L1ControllerState.RD1WAITD)
+                .expectStates(ControllerState.RD1WAITD)
                 .and()
                 .step()
                 // L2 Sends Data Back
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.DATA)
+                        .withPayload(ControllerMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(1)
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -307,20 +299,20 @@ public class L1StateMachineTests extends AbstractCompArchTest {
         when(level1DataStore.canWriteToCache(any(Address.class))).thenReturn(DataResponseType.HIT);
         doNothing().when(level1DataStore).writeDataToCache(any(Address.class), any());
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUWRITE)
+                        .withPayload(ControllerMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("data", new byte[]{10, 20, 30, 40})
                         .build())
                 .expectStateChanged(2)
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -337,31 +329,31 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .thenReturn(DataResponseType.MISSI)
                 .thenReturn(DataResponseType.HIT);
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUWRITE)
+                        .withPayload(ControllerMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(3)
-                .expectStates(L1ControllerState.WRWAITD)
+                .expectStates(ControllerState.WRWAITD)
                 .and()
                 .step()
                 // L2 Sends Data Back
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.DATA)
+                        .withPayload(ControllerMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(2)
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -378,31 +370,31 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .thenReturn(DataResponseType.MISSC)
                 .thenReturn(DataResponseType.HIT);
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUWRITE)
+                        .withPayload(ControllerMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(3)
-                .expectStates(L1ControllerState.WRWAITD)
+                .expectStates(ControllerState.WRWAITD)
                 .and()
                 .step()
                 // L2 Sends Data Back
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.DATA)
+                        .withPayload(ControllerMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(2)
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -420,28 +412,28 @@ public class L1StateMachineTests extends AbstractCompArchTest {
                 .thenReturn(DataResponseType.MISSD)
                 .thenReturn(DataResponseType.HIT);
 
-        StateMachineTestPlanBuilder.<L1ControllerState, L1InMessage>builder()
+        StateMachineTestPlanBuilder.<ControllerState, ControllerMessage>builder()
                 .stateMachine(l1ControllerStateMachine)
                 .step()
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.CPUWRITE)
+                        .withPayload(ControllerMessage.CPUWRITE)
                         .setHeader("source", "cpu")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(4)
-                .expectStates(L1ControllerState.WRWAIT1D)
+                .expectStates(ControllerState.WRWAIT1D)
                 .and()
                 .step()
                 // L2 Sends Data Back
                 .sendEvent(MessageBuilder
-                        .withPayload(L1InMessage.DATA)
+                        .withPayload(ControllerMessage.DATA)
                         .setHeader("source", "L2")
-                        .setHeader("address", "101")
+                        .setHeader("address", "10101010101010101")
                         .setHeader("data", data)
                         .build())
                 .expectStateChanged(2)
-                .expectStates(L1ControllerState.HIT)
+                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();

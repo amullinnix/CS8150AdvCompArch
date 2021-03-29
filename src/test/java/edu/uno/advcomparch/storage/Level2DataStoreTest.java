@@ -3,7 +3,7 @@ package edu.uno.advcomparch.storage;
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.DataResponseType;
-import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.statemachine.ControllerMessage;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.messaging.Message;
@@ -23,7 +23,7 @@ public class Level2DataStoreTest {
 
     @Before
     public void setup() {
-        Queue<Message<L1InMessage>> queue = new LinkedBlockingQueue<>();
+        Queue<Message<ControllerMessage>> queue = new LinkedBlockingQueue<>();
 
         dataStore = new Level2DataStore();
         blockToWrite = new CacheBlock(9, 32);

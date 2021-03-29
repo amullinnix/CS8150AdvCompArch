@@ -1,34 +1,34 @@
 package edu.uno.advcomparch;
 
-import edu.uno.advcomparch.statemachine.L1ControllerState;
-import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.statemachine.ControllerMessage;
+import edu.uno.advcomparch.statemachine.ControllerState;
 import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
 import edu.uno.advcomparch.utility.MessageReaderUtility;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateMachine;
-import org.springframework.stereotype.Controller;
 
+import javax.inject.Inject;
 import java.io.FileNotFoundException;
 
-@Controller
 public class CacheController {
 
-    @Autowired
-    StateMachine<L1ControllerState, L1InMessage> l1StateMachine;
+    private final StateMachine<ControllerState, ControllerMessage> l1StateMachine;
+    private final StateMachine<ControllerState, ControllerMessage> l2StateMachine;
+    private final StateMachineMessageBus messageBus;
 
-    @Autowired
-    StateMachine<L1ControllerState, L1InMessage> l2StateMachine;
+    @Inject
+    public CacheController(StateMachine<ControllerState, ControllerMessage> l1StateMachine,
+                           StateMachine<ControllerState, ControllerMessage> l2StateMachine,
+                           StateMachineMessageBus messageBus) {
+        this.l1StateMachine = l1StateMachine;
+        this.l2StateMachine = l2StateMachine;
+        this.messageBus = messageBus;
+    }
 
-    @Autowired
-    StateMachineMessageBus messageBus;
-
-    public void runCache(String file) throws FileNotFoundException {
+    public void runCacheOnFile(String file) throws FileNotFoundException {
         var messages = MessageReaderUtility.readMessages(file);
 
         // Enqueue L1 Messages
-        messages.forEach(message -> {
-            messageBus.enqueueL1Message(message);
-        });
+        messages.forEach(messageBus::enqueueL1Message);
 
         l1StateMachine.start();
         l2StateMachine.start();

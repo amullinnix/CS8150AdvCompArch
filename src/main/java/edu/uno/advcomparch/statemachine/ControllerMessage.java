@@ -2,7 +2,7 @@ package edu.uno.advcomparch.statemachine;
 
 import edu.uno.advcomparch.controller.DataResponseType;
 
-public enum L1InMessage {
+public enum ControllerMessage {
     CPUREAD,
     DATA,
     CPUWRITE,
@@ -11,9 +11,9 @@ public enum L1InMessage {
     MISSC,
     MISSD;
 
-    public static L1InMessage fromControllerState(DataResponseType dataResponseType) {
+    public static ControllerMessage fromControllerState(DataResponseType dataResponseType) {
         try {
-            return L1InMessage.valueOf(dataResponseType.toString());
+            return ControllerMessage.valueOf(dataResponseType.toString());
         } catch (IllegalArgumentException exception) {
             System.out.println("Failed to Translate DataResponse to L1InMessage");
             return null;

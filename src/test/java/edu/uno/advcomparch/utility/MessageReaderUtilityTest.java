@@ -2,7 +2,7 @@ package edu.uno.advcomparch.utility;
 
 import edu.uno.advcomparch.AbstractCompArchTest;
 import edu.uno.advcomparch.config.L1StateMachineTestConfiguration;
-import edu.uno.advcomparch.statemachine.L1InMessage;
+import edu.uno.advcomparch.statemachine.ControllerMessage;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -24,7 +24,7 @@ public class MessageReaderUtilityTest extends AbstractCompArchTest {
         assertThat(messages.get(0)).isNotNull();
         var cpuRead = messages.get(0);
 
-        assertThat(cpuRead.getPayload()).isEqualTo(L1InMessage.CPUREAD);
+        assertThat(cpuRead.getPayload()).isEqualTo(ControllerMessage.CPUREAD);
 
         assertThat(cpuRead.getHeaders()).isNotEmpty();
         var cpuReadHeaders = cpuRead.getHeaders();
@@ -36,7 +36,7 @@ public class MessageReaderUtilityTest extends AbstractCompArchTest {
         assertThat(messages.get(1)).isNotNull();
         var cpuWrite = messages.get(1);
 
-        assertThat(cpuWrite.getPayload()).isEqualTo(L1InMessage.CPUWRITE);
+        assertThat(cpuWrite.getPayload()).isEqualTo(ControllerMessage.CPUWRITE);
 
         assertThat(cpuWrite.getHeaders()).isNotEmpty();
         var cpuWriteHeaders = cpuWrite.getHeaders();
