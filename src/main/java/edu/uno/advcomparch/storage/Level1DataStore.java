@@ -55,11 +55,6 @@ public class Level1DataStore {
         CacheBlock block = set.getBlock(address);
 
         return this.canWriteToCache(address);
-//        if(block.isEmpty()) {
-//            return null;
-//        } else {
-//            return null;
-//        }
     }
 
     public void writeDataToCacheTriggeredByRead(Address address, byte[] bytesToWrite) {

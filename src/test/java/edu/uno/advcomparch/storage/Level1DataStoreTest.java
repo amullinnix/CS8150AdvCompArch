@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ContextConfiguration(classes = SimpleTestConfiguration.class)
 public class Level1DataStoreTest extends AbstractCompArchTest {
@@ -361,6 +362,28 @@ public class Level1DataStoreTest extends AbstractCompArchTest {
         assertEquals(DataResponseType.MISSD, dataResponseType);
     }
 
+    @Test
+    public void victimCacheHasCorrectBytes() {
+
+        Address address = new Address("000001", "000100", "00100");
+        byte[] b = new byte[]{1,2,3};
+
+        fillCacheToCapacity(dataStore);
+
+        //Now we must make the LRU block "clean" (we cheat by directly modifying it - for the test only)
+        dataStore.getCacheSet(address).getLeastRecentlyUsedBlock().setDirty(false);
+
+        //write to the full cache set (using the Level 1 Controller)
+        address.setTag("001000");
+
+        dataStore.writeDataToCache(address, b);
+
+        //victim buffer should have an entry, specifically the LRU cache block that was evicted
+        assertEquals(1, l1VictimCache.getCache().size());
+        assertEquals("000100", new String(l1VictimCache.getCache().get(0).getTag()));
+        assertEquals(0, writeBuffer.getBuffer().size());
+    }
+
     private void fillCacheToCapacity(Level1DataStore dataStore) {
         Address address = new Address("000100", "000100", "00100");
         byte b = 1;
@@ -376,4 +399,5 @@ public class Level1DataStoreTest extends AbstractCompArchTest {
         address.setTag("000111");
         dataStore.writeDataToCache(address, b);
     }
+
 }

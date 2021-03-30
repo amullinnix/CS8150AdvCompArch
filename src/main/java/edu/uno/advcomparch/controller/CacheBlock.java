@@ -33,7 +33,7 @@ public class CacheBlock {
     }
 
     public CacheBlock(CacheBlock block) {
-        this.address = block.getAddress();  //TODO: Might need a "copy constructor" for address as well
+        this.address = block.getAddress();
         this.block = Arrays.copyOf(block.getBlock(), block.getBlock().length);
     }
 
