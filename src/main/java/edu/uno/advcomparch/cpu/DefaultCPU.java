@@ -28,7 +28,7 @@ public class DefaultCPU implements CentralProcessingUnit<String> {
 
     @Override
     public void data(byte[] data) {
-        var dataString = "Received Data: " + Arrays.toString(data);
+        var dataString = "CPU Received Data: " + Arrays.toString(data);
         System.out.println(dataString);
 
         responseStringBuilder

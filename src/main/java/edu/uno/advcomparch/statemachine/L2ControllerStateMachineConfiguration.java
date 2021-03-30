@@ -113,7 +113,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(ControllerState.RDL2WAITD)
                 .and().withExternal()
                 .source(ControllerState.RDL2WAITD).target(ControllerState.HIT)
-                .event(ControllerMessage.DATA).action(L2Data()).action(L2toL1Data())
+                .event(ControllerMessage.DATA).action(L2toL1Data())
                 .and().withExternal()
                 .source(ControllerState.MISSC).event(ControllerMessage.CPUREAD)
                 .target(ControllerState.RDL2WAITD)
@@ -125,7 +125,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(ControllerState.RD1WAITD) // no action
                 .and().withExternal()
                 .source(ControllerState.RD1WAITD).event(ControllerMessage.DATA)
-                .target(ControllerState.HIT).action(L2Data()).action(MemData()).action(L2toL1Data())
+                .target(ControllerState.HIT).action(MemData()).action(L2toL1Data())
                 .and().withExternal()
                 .source(ControllerState.HIT).event(ControllerMessage.CPUWRITE)
                 .target(ControllerState.WRWAITDX)
@@ -154,7 +154,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(ControllerState.HIT)
                 .and().withExternal()
                 .source(ControllerState.MISSC).event(ControllerMessage.CPUWRITE)
-                .target(ControllerState.WRWAITD).action(L2CMemRead())
+                .target(ControllerState.WRWAITD)//.action(L2CMemRead())
                 .and().withExternal()
                 .source(ControllerState.WRWAITD).event(ControllerMessage.DATA)
                 .target(ControllerState.WRALLOC)
@@ -324,9 +324,6 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             var partitionedAddress = new Address(address);
             partitionedAddress.componentize(L2_TAG_SIZE, L2_INDEX_SIZE, L2_OFFSET_SIZE);
 
-            // Fetch from memory
-            memory.getMemoryAtAddress(partitionedAddress);
-
             var payload = message.getPayload();
 
             if (payload == ControllerMessage.CPUREAD) {
@@ -350,6 +347,12 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             }
 
             var memoryBlock = memory.getMemoryAtAddress(partitionedAddress);
+
+            // Mock data
+            if(memoryBlock.isEmpty()) {
+                byte [] fakeData = new byte[] {5,6,7,8};
+                System.arraycopy(fakeData, 0,  memoryBlock.getBlock(), 0,  4);
+            }
 
             // Need to fetch from memory, then send data request back
             var memResponseMessage = MessageBuilder
@@ -388,6 +391,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
 
             // report back to the L1 Controller
             messageBus.enqueueL1Message(message);
+//            l1ControllerStateMachine.sendEvent(message);
         };
     }
 

@@ -1,6 +1,7 @@
 package edu.uno.advcomparch.statemachine;
 
 import edu.uno.advcomparch.controller.Address;
+import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.DataResponseType;
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.storage.Level1DataStore;
@@ -59,7 +60,9 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 if(from == null) {
                     System.out.println("L1 State change to " + to.getId());
                 } else {
-                    System.out.println("L1 State change from " + from.getId() + " to " + to.getId());
+                    if(from.getId() != to.getId()) {
+                        System.out.println("L1 State change from: " + from.getId() + " to " + to.getId());
+                    }
                 }
             }
         };
@@ -90,6 +93,9 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 // Interesting, used this for polling
                 .source(ControllerState.HIT).target(ControllerState.HIT)
                 .and().withExternal()
+                // Waiting on L2 Response
+                .source(ControllerState.RDL2WAITD).target(ControllerState.RDL2WAITD)
+                .and().withExternal()
                 .source(ControllerState.RDWAITD).event(ControllerMessage.DATA)
                 .target(ControllerState.HIT).action(CPUData())
                 .and().withExternal()
@@ -108,7 +114,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(ControllerState.RDL2WAITD)
                 .and().withExternal()
                 .source(ControllerState.RDL2WAITD).target(ControllerState.HIT)
-                .event(ControllerMessage.DATA).action(L1Data()).action(CPUData())
+                .event(ControllerMessage.DATA).action(CPUData())
                 .and().withExternal()
                 .source(ControllerState.MISSC).event(ControllerMessage.CPUREAD)
                 .target(ControllerState.RDL2WAITD)
@@ -120,7 +126,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .target(ControllerState.RD1WAITD) // no action
                 .and().withExternal()
                 .source(ControllerState.RD1WAITD).event(ControllerMessage.DATA)
-                .target(ControllerState.HIT).action(L1Data()).action(L2CData()).action(CPUData())
+                .target(ControllerState.HIT).action(L2CData()).action(CPUData())
                 .and().withExternal()
                 .source(ControllerState.HIT).event(ControllerMessage.CPUWRITE)
                 .target(ControllerState.WRWAITDX)
@@ -254,7 +260,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
         return ctx -> {
             var message = ctx.getMessage();
             var address = message.getHeaders().get("address", String.class);
-            var data = (byte[]) message.getHeaders().get("data");
+            var data = message.getHeaders().get("data", CacheBlock.class);
 
             var l1Address = new Address(address);
             l1Address.componentize(L1_TAG_SIZE, L1_INDEX_SIZE, L1_OFFSET_SIZE);
@@ -262,13 +268,13 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var canWrite = level1DataStore.canWriteToCache(l1Address);
 
             if (canWrite == DataResponseType.HIT) {
-                System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
+                System.out.println("L1C to L1D: Write(" + Arrays.toString(data.getBlock()) + ")");
 
                 var state = ctx.getStateMachine().getState().getId();
                 if (ControllerState.READ_STATES.contains(state)) {
-                    level1DataStore.writeDataToCacheTriggeredByRead(l1Address, data);
+                    level1DataStore.writeDataToCacheTriggeredByRead(l1Address, data.getBlock());
                 } else if (ControllerState.WRITE_STATES.contains(state)) {
-                    level1DataStore.writeDataToCache(l1Address, data);
+                    level1DataStore.writeDataToCache(l1Address, data.getBlock());
                 } else {
                     throw new UnsupportedOperationException("L1D Write Operation received from unrecognized state." + state.toString());
                 }
@@ -322,37 +328,57 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<ControllerState, ControllerMessage> L2CCPURead() {
         return ctx -> {
-            var message = ctx.getMessage();
-            var address = message.getHeaders().get("address", Address.class);
-            var bytes = message.getHeaders().get("bytes", Integer.class);
-            System.out.println("L1C to L2C: CpuRead(" + address + ")");
 
-            // Place on the L2 Message Queue
-            messageBus.enqueueL2Message(message);
+            var wait = ctx.getExtendedState().get("wait", Boolean.class);
 
-            var payload = message.getPayload();
+            // If we haven't transitioned
+            if (wait != Boolean.TRUE) {
 
-            if (payload == ControllerMessage.CPUREAD) {
-                // To transition to RDL2WAITD
-                var readMessage = MessageBuilder
-                        .withPayload(ControllerMessage.CPUREAD)
-                        .setHeader("source", "L1Data")
-                        .setHeader("address", address)
-                        .setHeader("bytes", bytes)
-                        .build();
+                var message = ctx.getMessage();
+                var address = message.getHeaders().get("address", Address.class);
+                var bytes = message.getHeaders().get("bytes", Integer.class);
+                System.out.println("L1C to L2C: CpuRead(" + address + ")");
 
-                ctx.getStateMachine().sendEvent(readMessage);
-            } else if (payload == ControllerMessage.CPUWRITE) {
-                // Transition to WRWAITD
-                var writeMessage = MessageBuilder
-                        .withPayload(ControllerMessage.CPUWRITE)
-                        .setHeader("source", "L1Data")
-                        .setHeader("address", address)
-                        .setHeader("bytes", bytes)
-                        .build();
+                // Place on the L2 Message Queue
+                messageBus.enqueueL2Message(message);
 
-                ctx.getStateMachine().sendEvent(writeMessage);
+                var payload = message.getPayload();
+
+                if (payload == ControllerMessage.CPUREAD) {
+                    // To transition to RDL2WAITD
+                    var readMessage = MessageBuilder
+                            .withPayload(ControllerMessage.CPUREAD)
+                            .setHeader("source", "L1Data")
+                            .setHeader("address", address)
+                            .setHeader("bytes", bytes)
+                            .build();
+
+//                ctx.getStateMachine().sendEvent(readMessage);
+                } else if (payload == ControllerMessage.CPUWRITE) {
+                    // Transition to WRWAITD
+                    var writeMessage = MessageBuilder
+                            .withPayload(ControllerMessage.CPUWRITE)
+                            .setHeader("source", "L1Data")
+                            .setHeader("address", address)
+                            .setHeader("bytes", bytes)
+                            .build();
+
+//                ctx.getStateMachine().sendEvent(writeMessage);
+                }
+
+                ctx.getExtendedState().getVariables().put("wait", Boolean.TRUE);
+            } else {
+                // Poll for L2 Response
+                var l2Message = messageBus.getL1MessageQueue().poll();
+
+                if (l2Message != null) {
+                    System.out.println("Message Received on L1 from L2 Side, sending event: " + l2Message.getPayload());
+                    ctx.getStateMachine().sendEvent(l2Message);
+                    ctx.getExtendedState().getVariables().put("wait", Boolean.FALSE);
+                }
             }
+
+
         };
     }
 
@@ -370,18 +396,18 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<ControllerState, ControllerMessage> CPUData() {
         return ctx -> {
-            var data = (byte[]) ctx.getMessage().getHeaders().get("data");
-            System.out.println("L1C to CPU: Data(" + Arrays.toString(data) + ")");
+            var data = ctx.getMessage().getHeaders().get("data", CacheBlock.class);
+            System.out.println("L1C to CPU: Data(" + Arrays.toString(data.getBlock()) + ")");
 
             // report back to the cpu
-            cpu.data(data);
+            cpu.data(data.getBlock());
         };
     }
 
     @Bean
     public Action<ControllerState, ControllerMessage> processL1Message() {
         return ctx -> {
-            System.out.println("Attempting to poll L1 queue");
+//            System.out.println("Attempting to poll L1 queue");
             var stateMachine = ctx.getStateMachine();
             var currentState = stateMachine.getState().getId();
 
@@ -394,7 +420,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                     stateMachine.sendEvent(cpuMessage);
                 } else if (messageBus.getL1MessageQueue().isEmpty()) {
                     // If we've completed our L1 Instruction queue stop l1.
-                    ctx.getStateMachine().stop();
+//                    ctx.getStateMachine().stop();
                 }
             } else {
                 var l2Message = messageBus.getL1MessageQueue().poll();
