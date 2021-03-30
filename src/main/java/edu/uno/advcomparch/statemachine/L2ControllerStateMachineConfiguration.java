@@ -61,7 +61,9 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 if(from == null) {
                     System.out.println("L2 State change to " + to.getId());
                 } else {
-                    System.out.println("L2 State change from: " + from.getId() + " to " + to.getId());
+                    if(from.getId() != to.getId()) {
+                        System.out.println("L2 State change from: " + from.getId() + " to " + to.getId());
+                    }
                 }
             }
         };
@@ -180,6 +182,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
 
             var canRead = level2DataStore.isDataPresentInCache(address);
             var data = level2DataStore.getBlockAtAddress(address);           //block is empty message
+            var stateMachine = ctx.getStateMachine();
 
             // If we get nothing back send miss.
             if (canRead == DataResponseType.HIT) {
@@ -192,6 +195,8 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 // Send successful message back to the controller
+                System.out.println("L2 L2CPUREAD  1 state: " + stateMachine.getState() + " event: "  + responseMessage.getPayload());
+
                 ctx.getStateMachine().sendEvent(responseMessage);
 
             } else {
@@ -202,6 +207,8 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 //we just stop here on L2 miss. Maybe should not be doing this? Maybe need to enqueue L1 message?
+                System.out.println("L2 L2CPUREAD  2 state: " + stateMachine.getState() + " event: "  + missMessage.getPayload());
+
                 ctx.getStateMachine().sendEvent(missMessage);
 
                 // Then send a read back
@@ -212,6 +219,8 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 //Maybe here is where we enqueue for dram???
+                System.out.println("L2 L2CPUREAD  3 state: " + stateMachine.getState() + " event: "  + cpuReadMessage.getPayload());
+
                 ctx.getStateMachine().sendEvent(cpuReadMessage);
 
                 if (canRead == DataResponseType.MISSD) {
@@ -224,6 +233,8 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                             .setHeader("address", address)
                             .setHeader("data", data)
                             .build();
+
+                    System.out.println("L2 L2CPUREAD  2 state: " + stateMachine.getState() + " event: "  + victimizeResponseMessage.getPayload());
 
                     ctx.getStateMachine().sendEvent(victimizeResponseMessage);
                 }
@@ -383,7 +394,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<ControllerState, ControllerMessage> processL2Message() {
         return ctx -> {
-            System.out.println("MaK: attempting to poll L2 TWO queue");
+//            System.out.println("MaK: attempting to poll L2 TWO queue");
             var message = messageBus.getL2MessageQueue().poll();
             var stateMachine = ctx.getStateMachine();
             var currentState = stateMachine.getState().getId();
@@ -391,13 +402,14 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             if (currentState == ControllerState.HIT) {
                 // If we have a message, start processing
                 if (message != null) {
-                    System.out.println("Message Received on L2 side, sending event: " + message.getPayload());
+                    System.out.println("Message Received on L2 side, sending event: state: " + stateMachine.getState() + " event: "  + message.getPayload());
                     stateMachine.sendEvent(message);
                 }
 
                 // If we've completed our L1 Instruction queue stop both state machines.
-                if (messageBus.getL1MessageQueue().isEmpty()) {
-                    ctx.getStateMachine().stop();
+                if (messageBus.getCPUMessageQueue().isEmpty()) {
+//                    System.out.println("STOPPING L2");
+//                    ctx.getStateMachine().stop();
                 }
             }
         };
