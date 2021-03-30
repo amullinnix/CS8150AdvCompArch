@@ -15,6 +15,8 @@ public class StateMachineMessageBus {
 
     private Queue<Message<ControllerMessage>> l2MessageQueue;
 
+    private Queue<Message<ControllerMessage>> cpuMessageQueue;
+
     private Queue<Message<ControllerMessage>> dramQueue;
 
     public Queue<Message<ControllerMessage>> getL1MessageQueue() {
@@ -40,6 +42,18 @@ public class StateMachineMessageBus {
 
     public void enqueueL2Message(Message<ControllerMessage> message) {
         getL2MessageQueue().add(message);
+    }
+
+    public Queue<Message<ControllerMessage>> getCPUMessageQueue() {
+        if (cpuMessageQueue == null) {
+            cpuMessageQueue = new LinkedList<>();
+        }
+
+        return cpuMessageQueue;
+    }
+
+    public void enqueueCpuMessage(Message<ControllerMessage> message) {
+        getCPUMessageQueue().add(message);
     }
 
     public Queue<Message<ControllerMessage>> getDramQueue() {

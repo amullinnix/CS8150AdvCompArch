@@ -1,6 +1,7 @@
 package edu.uno.advcomparch;
 
 import edu.uno.advcomparch.config.ControllerConfiguration;
+import edu.uno.advcomparch.cpu.DefaultCPU;
 import edu.uno.advcomparch.statemachine.ControllerMessage;
 import edu.uno.advcomparch.statemachine.ControllerState;
 import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
@@ -27,12 +28,16 @@ public class CacheControllerTest extends AbstractCompArchTest {
     @Autowired
     public StateMachineMessageBus stateMachineMessageBus;
 
+    @Autowired
+    public static DefaultCPU cpu;
+
     @BeforeEach
     public void setUp() {
         cacheController = new CacheController(l1ControllerStateMachine,
                 l2ControllerStateMachine,
                 dramStateMachine,
-                stateMachineMessageBus);
+                stateMachineMessageBus,
+                cpu);
     }
 
     @Test

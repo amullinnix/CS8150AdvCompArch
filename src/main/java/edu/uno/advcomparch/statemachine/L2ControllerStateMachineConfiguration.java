@@ -23,6 +23,7 @@ import org.springframework.statemachine.state.State;
 
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Optional;
 
 @Configuration
 @EnableStateMachine(name = "l2ControllerStateMachine")
@@ -201,13 +202,13 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 //we just stop here on L2 miss. Maybe should not be doing this? Maybe need to enqueue L1 message?
-                //ctx.getStateMachine().sendEvent(missMessage);
+                ctx.getStateMachine().sendEvent(missMessage);
 
                 // Then send a read back
                 var cpuReadMessage = MessageBuilder
                         .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "L2Data")
-                        .setHeader("address", address)
+                        .setHeader("address", address.getAddress())
                         .build();
 
                 //Maybe here is where we enqueue for dram???
@@ -244,19 +245,20 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
 
             if (canWrite == DataResponseType.HIT) {
                 // TODO - Fetch from write buffer always? Disregard message data?
-                var writeBufferData = level1WriteBuffer.getData(l2Address);
+                // TODO - Check out, but if recieved from memory write buffer will be empty, and we'll need to fall back onto data
+                var hitData = Optional.ofNullable(level1WriteBuffer.getData(l2Address)).orElse(data);
                 // Clear buffer, mocking synchronous writes
                 level1WriteBuffer.getBuffer().clear();
 
-                System.out.println("L2C to L2D: Write(" + Arrays.toString(writeBufferData.getBlock()) + ")");
+                System.out.println("L2C to L2D: Write(" + Arrays.toString(hitData.getBlock()) + ")");
 
-                level2DataStore.writeDataToCache(l2Address, data);
+                level2DataStore.writeDataToCache(l2Address, hitData);
 
                 var responseMessage = MessageBuilder
                         .withPayload(ControllerMessage.DATA)
                         .setHeader("source", "L2Data")
                         .setHeader("address", l2Address.getAddress())
-                        .setHeader("data", data)
+                        .setHeader("data", hitData)
                         .build();
 
                 // Send successful message back to the controller
@@ -386,10 +388,17 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             var stateMachine = ctx.getStateMachine();
             var currentState = stateMachine.getState().getId();
 
-            // If we have a message, start processing
-            if (message != null && currentState == ControllerState.HIT) {
-                System.out.println("Message Received on L2 side, sending event: " + message.getPayload());
-                stateMachine.sendEvent(message);
+            if (currentState == ControllerState.HIT) {
+                // If we have a message, start processing
+                if (message != null) {
+                    System.out.println("Message Received on L2 side, sending event: " + message.getPayload());
+                    stateMachine.sendEvent(message);
+                }
+
+                // If we've completed our L1 Instruction queue stop both state machines.
+                if (messageBus.getL1MessageQueue().isEmpty()) {
+                    ctx.getStateMachine().stop();
+                }
             }
         };
     }

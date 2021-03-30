@@ -10,6 +10,8 @@ public class DefaultCPU implements CentralProcessingUnit<String> {
 
     private Queue<String> queue;
 
+    private StringBuilder responseStringBuilder = new StringBuilder();
+
     public DefaultCPU(Queue<String> queue) {
         this.queue = queue;
     }
@@ -26,7 +28,16 @@ public class DefaultCPU implements CentralProcessingUnit<String> {
 
     @Override
     public void data(byte[] data) {
-        System.out.println("Received Data: " + Arrays.toString(data));
+        var dataString = "Received Data: " + Arrays.toString(data);
+        System.out.println(dataString);
+
+        responseStringBuilder
+                .append(dataString)
+                .append(System.lineSeparator());
+    }
+
+    public void writeOutCPUReceivedData() {
+        System.out.println(responseStringBuilder.toString());
     }
 
     /**

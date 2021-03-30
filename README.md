@@ -81,3 +81,8 @@ Instead of putting TODOs everywhere, consider putting a few in here.
 * Need to address l2 Write buffer?!? not included in l2datastore
 
 * Need to fix victim cache test.
+  
+
+  * Fix Level2Data Store used in L2 Data public DataResponseType canWriteToCache(Address address) {
+  return DataResponseType.HIT; // TODO - FIXME
+  }

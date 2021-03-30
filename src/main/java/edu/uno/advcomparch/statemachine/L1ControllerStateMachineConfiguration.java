@@ -87,6 +87,9 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .source(ControllerState.HIT).event(ControllerMessage.CPUREAD)
                 .target(ControllerState.RDWAITD)
                 .and().withExternal()
+                // Interesting, used this for polling
+                .source(ControllerState.HIT).target(ControllerState.HIT)
+                .and().withExternal()
                 .source(ControllerState.RDWAITD).event(ControllerMessage.DATA)
                 .target(ControllerState.HIT).action(CPUData())
                 .and().withExternal()
@@ -379,14 +382,27 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<ControllerState, ControllerMessage> processL1Message() {
         return ctx -> {
             System.out.println("Attempting to poll L1 queue");
-            var message = messageBus.getL1MessageQueue().poll();
             var stateMachine = ctx.getStateMachine();
             var currentState = stateMachine.getState().getId();
 
-            // If we have a message, start processing
-            if (message != null && currentState == ControllerState.HIT) {
-                System.out.println("Message Received on L1 Side, sending event: " + message.getPayload());
-                stateMachine.sendEvent(message);
+            if (currentState == ControllerState.HIT) {
+                // If we have a message, start processing
+                var cpuMessage = messageBus.getCPUMessageQueue().poll();
+
+                if (cpuMessage != null) {
+                    System.out.println("Message Received on L1 from CPU Side, sending event: " + cpuMessage.getPayload());
+                    stateMachine.sendEvent(cpuMessage);
+                } else if (messageBus.getL1MessageQueue().isEmpty()) {
+                    // If we've completed our L1 Instruction queue stop l1.
+                    ctx.getStateMachine().stop();
+                }
+            } else {
+                var l2Message = messageBus.getL1MessageQueue().poll();
+
+                if (l2Message != null) {
+                    System.out.println("Message Received on L1 from L2 Side, sending event: " + l2Message.getPayload());
+                    stateMachine.sendEvent(l2Message);
+                }
             }
         };
     }

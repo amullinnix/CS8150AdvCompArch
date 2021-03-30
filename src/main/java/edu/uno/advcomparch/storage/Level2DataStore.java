@@ -109,7 +109,7 @@ public class Level2DataStore {
     }
 
     public DataResponseType canWriteToCache(Address address) {
-        return null;
+        return DataResponseType.HIT; // TODO - FIXME
     }
 
     public void writeDataToCache(Address address, byte[] blockToWrite) { }

@@ -2,7 +2,6 @@ package edu.uno.advcomparch.config;
 
 import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.cpu.DefaultCPU;
-import edu.uno.advcomparch.repository.DataRepository;
 import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
 import edu.uno.advcomparch.storage.*;
 import org.springframework.context.annotation.Bean;
@@ -12,16 +11,6 @@ import java.util.LinkedList;
 
 @Configuration
 public class CacheConfiguration {
-
-    @Bean
-    public DataRepository<String, String> l1DataRepository() {
-        return new DataRepository<>();
-    }
-
-    @Bean
-    public DataRepository<String, String> l2DataRepository() {
-        return new DataRepository<>();
-    }
 
     @Bean
     public CentralProcessingUnit cpu() {
