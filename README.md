@@ -1,11 +1,47 @@
 # CS8150AdvCompArch
 CS8150 - Advanced Computer Architecture - Course Project
 
+#Table of Contents
+1. [Basic Project Information](#basic-project-information)
+2. [General TODO Ideas](#general-todo-ideas)
+3. [Questions for the class](#questions-for-the-class)
+
+## Basic Project Information
+This section gives you basic information on "running" the project, so to speak. There are two parts to look at, the unit tests and the state machine tests.
+
+All tests are located in the src/test folder. 
+
+We recommend importing the project in your favorite IDE, but we can only confirm working with IntelliJ.
+
+Then, after doing a gradle build, you should simply be able to right click on any test and run it.
+
+Finally, also see the test method in CacheControllerTest. This will read actual commands from a file.
+
+--- 
+
+## General TODO Ideas
+Here are future project enhancements we would make if we had more time.
+
+* Validation and calculation for cache components. That is to say, provide a cache size and 
+  block size and automatically calculate the tag, index, and offset.
+  
+* Log4J / SLF4J instead of using System.out
+
+* Consider making DRAM a state machine instead of just a component.
+  
+* Need to handle transitions better between L1 data/CacheBlock
+
+* Need to fix victim cache test.
+
+* Fix Level2Data Store used in L2 Data public DataResponseType canWriteToCache(Address address) {
+  return DataResponseType.HIT; // TODO - FIXME
+  }
+  
+---
+
 ## Questions for the class
 In this section, let's start logging some questions, so we can finally ask the 
-professor at the beginning of class. It will make his day!
-
----
+professor at the beginning of class. 
 
 #### Q: In the project description, it talks about "CPURead A," "CPURead B," etc. Yet, in the beggining of class, we talked about tag, index, and offset. Do we need to actually calculate those, or just "fake" it with "A", "B", etc?
 
@@ -13,7 +49,7 @@ A: Yeah, we do. Definitely use real addresses, but they can be whatever form you
 
 #### Q: Can this be done single threaded, as in each entity processes the next message?
 
-A: TBD
+A: Per discussion, essentially yes. Can use pipelining or however we implement state machine.
 
 #### Q: I'm not sure what is meant by implementing buses. We were going to simply have each controller put messages on the other controller's queues for processing. Can you elaborate a bit more? 
 
@@ -38,11 +74,11 @@ A: They need to be separate, per the project doc.
 
 #### Q: When we victimize the block do we need to return the data?
 
-A: TBD
+A: Yes.
 
 #### Q: What are the subsequent requests for data to L1D for in the 2nd/3rd write scenario for?
 
-A: TBD
+A: Write the data block fetched from lower level first, then write the new data to the block.
 
 #### Q: How does the instantaneous miss scenario work?
 
@@ -54,35 +90,7 @@ A: ??
 
 #### Q: What's the significance of consecutive writes to L1? (writing on step 4, 5)
 
-A: ??
+A: Again, writing block first, then modifications
 
 
 ---
-## General TODO Ideas
-Instead of putting TODOs everywhere, consider putting a few in here.
-
-* Write buffer needs to be implemented
-* Improve the "full cache block" strategy
-* I also want to consider validation, i.e. cannot have 10 bit index for 8KB cache
-
-
-* So, I'm just not getting how the write buffer works.
-
-* What does Drew think of the writeDataTriggeredByRead methods? 
-
-* CacheBlock has tag, and not full address! WTF was I thinking?
-
-* Umm, in all examples, cache block only has tag. So, how does it get translated to L2? Ssshh
-
-* Need to handle transitions between L1 data/CacheBlock
-
-* Need to test wiring up
-
-* Need to address l2 Write buffer?!? not included in l2datastore
-
-* Need to fix victim cache test.
-  
-
-  * Fix Level2Data Store used in L2 Data public DataResponseType canWriteToCache(Address address) {
-  return DataResponseType.HIT; // TODO - FIXME
-  }
