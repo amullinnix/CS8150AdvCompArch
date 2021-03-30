@@ -78,7 +78,7 @@ public class AddressTest {
 
         assertEquals("011111100", address.getTag());
         assertEquals("10001", address.getOffset());
-
+        assertEquals("10101111110010001", address.getAddress());
     }
 
 }

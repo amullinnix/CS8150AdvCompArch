@@ -68,7 +68,7 @@ public class Level2DataStore {
         } else {
             System.out.println("block is NOT empty!");
             //We must eloquently consider the occupied block, take current block and write it back to DRAM
-            writeBuffer.getBuffer().add(blockFromCache);  //TODO: Michael write a test
+            writeBuffer.add(blockFromCache);
 
             blockFromCache.setAddress(address);
 

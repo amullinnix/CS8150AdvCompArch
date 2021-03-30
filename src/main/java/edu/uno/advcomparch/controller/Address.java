@@ -29,11 +29,11 @@ public class Address {
     }
 
     public String getAddress() {
-        if(Stream.of(tag, index, offset).allMatch(Objects::isNull)) {
-            return address;
+        if( address == null ) {
+            return tag + index + offset;
         }
 
-        return tag + index + offset;
+        return address;
     }
 
     public void setAddress(String address) {

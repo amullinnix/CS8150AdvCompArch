@@ -141,11 +141,17 @@ public class Level2DataStoreTest extends AbstractCompArchTest {
     public void writeBufferWorksForLevel2() {
         Address address = new Address("101010101", "", "00010");
 
+        //write the to an empty block
         dataStore.writeDataToCache(address, blockToWrite);
 
-        dataStore.printSingleCacheBlock(341);
+        blockToWrite.getBlock()[10] = 7;
 
-        //assertEquals(1, dataStore.getWriteBuffer().getBuffer().size());
+        //now, write to the same block as before, but with an update, should 'evict' to write buffer
+        dataStore.writeDataToCache(address, blockToWrite);
+
+        assertEquals(1, dataStore.getWriteBuffer().getBuffer().size());
+        System.out.println(dataStore.getWriteBuffer().getBuffer().get(0));
+        assertEquals(0, dataStore.getWriteBuffer().getBuffer().get(0).getBlock()[10]);
 
     }
 }

@@ -2,6 +2,8 @@ package edu.uno.advcomparch.controller;
 
 import lombok.Data;
 
+import java.util.Arrays;
+
 @Data
 public class CacheBlock {
 
@@ -32,7 +34,7 @@ public class CacheBlock {
 
     public CacheBlock(CacheBlock block) {
         this.address = block.getAddress();  //TODO: Might need a "copy constructor" for address as well
-        this.block = block.getBlock();
+        this.block = Arrays.copyOf(block.getBlock(), block.getBlock().length);
     }
 
     //Foiled by Lombok. Rookie mistake. ;)

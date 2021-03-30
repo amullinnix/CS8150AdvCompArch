@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,30 +26,17 @@ public class Level2WriteBuffer {
     }
 
     /**
-     * This add method automatically does write merging. Remember, '0' is an empty value in a byte array
+     * For Level 2, there really isn't write merging, as we deal in whole Cache Blocks only
      */
     public void add(CacheBlock evicted) {
 
-        buffer.add(new CacheBlock(evicted));
+        CacheBlock blockToAdd = new CacheBlock(9, 32);
 
-//        Optional<CacheBlock> match = buffer
-//                .stream()
-//                .filter(block -> block.getAddress().equals(evicted.getAddress()))
-//                .findFirst();
-//
-//        //TODO: Do not need to worry about byte level write merging
-//        if(match.isPresent()) {
-//            byte[] evictedBlock = evicted.getBlock();
-//            byte[] matchedBlock = match.get().getBlock();
-//
-//            for(int i = 0; i < evictedBlock.length; i++) {
-//                if(evictedBlock[i] != 0) {
-//                    matchedBlock[i] = evictedBlock[i];
-//                }
-//            }
-//        } else {
-//            buffer.add(evicted);
-//        }
+        blockToAdd.setAddress(evicted.getAddress());
+        blockToAdd.setBlock(Arrays.copyOf(evicted.getBlock(), evicted.getBlock().length));
+
+        buffer.add(blockToAdd);
+
     }
 
     public void printData() {
