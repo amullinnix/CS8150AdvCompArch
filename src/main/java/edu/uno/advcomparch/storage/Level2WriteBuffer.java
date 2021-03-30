@@ -29,23 +29,26 @@ public class Level2WriteBuffer {
      */
     public void add(CacheBlock evicted) {
 
-        Optional<CacheBlock> match = buffer
-                .stream()
-                .filter(block -> block.getAddress().equals(evicted.getAddress()))
-                .findFirst();
+        buffer.add(new CacheBlock(evicted));
 
-        if(match.isPresent()) {
-            byte[] evictedBlock = evicted.getBlock();
-            byte[] matchedBlock = match.get().getBlock();
-
-            for(int i = 0; i < evictedBlock.length; i++) {
-                if(evictedBlock[i] != 0) {
-                    matchedBlock[i] = evictedBlock[i];
-                }
-            }
-        } else {
-            buffer.add(evicted);
-        }
+//        Optional<CacheBlock> match = buffer
+//                .stream()
+//                .filter(block -> block.getAddress().equals(evicted.getAddress()))
+//                .findFirst();
+//
+//        //TODO: Do not need to worry about byte level write merging
+//        if(match.isPresent()) {
+//            byte[] evictedBlock = evicted.getBlock();
+//            byte[] matchedBlock = match.get().getBlock();
+//
+//            for(int i = 0; i < evictedBlock.length; i++) {
+//                if(evictedBlock[i] != 0) {
+//                    matchedBlock[i] = evictedBlock[i];
+//                }
+//            }
+//        } else {
+//            buffer.add(evicted);
+//        }
     }
 
     public void printData() {

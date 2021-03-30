@@ -30,6 +30,11 @@ public class CacheBlock {
         address = new Address("", "", "");
     }
 
+    public CacheBlock(CacheBlock block) {
+        this.address = block.getAddress();  //TODO: Might need a "copy constructor" for address as well
+        this.block = block.getBlock();
+    }
+
     //Foiled by Lombok. Rookie mistake. ;)
     public void setAddress(Address address) {
         this.address = new Address(address.getTag(), address.getIndex(), address.getOffset());

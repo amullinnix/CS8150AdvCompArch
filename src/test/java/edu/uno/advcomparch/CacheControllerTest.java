@@ -22,11 +22,17 @@ public class CacheControllerTest extends AbstractCompArchTest {
     public StateMachine<ControllerState, ControllerMessage> l2ControllerStateMachine;
 
     @Autowired
+    public StateMachine<ControllerState, ControllerMessage> dramStateMachine;
+
+    @Autowired
     public StateMachineMessageBus stateMachineMessageBus;
 
     @BeforeEach
     public void setUp() {
-        cacheController = new CacheController(l1ControllerStateMachine, l2ControllerStateMachine, stateMachineMessageBus);
+        cacheController = new CacheController(l1ControllerStateMachine,
+                l2ControllerStateMachine,
+                dramStateMachine,
+                stateMachineMessageBus);
     }
 
     @Test

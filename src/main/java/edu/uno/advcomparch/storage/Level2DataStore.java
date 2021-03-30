@@ -3,11 +3,13 @@ package edu.uno.advcomparch.storage;
 import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.controller.CacheBlock;
 import edu.uno.advcomparch.controller.DataResponseType;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Getter
 public class Level2DataStore {
 
     //Same as Level 1 Data Store, this will take requests from Level 2 controller and hand back
@@ -45,7 +47,7 @@ public class Level2DataStore {
             return DataResponseType.HIT;
         }
 
-        return null;
+        return DataResponseType.MISSC; //TODO: do we care what type of miss we have for L2?
     }
 
     public void writeDataToCache(Address address, CacheBlock blockToWrite) {
@@ -65,9 +67,9 @@ public class Level2DataStore {
             System.arraycopy(bytesToWrite, 0, cacheBlock, 0, bytesToWrite.length);
         } else {
             System.out.println("block is NOT empty!");
-            //is this where we need to do an eviction?
-            //TODO: I'm not sure eviction is valid for Level 2. By mutual inclusion, L1 will never send a conflict block.
-            //      Only see this happening for DRAM response, which is fine.
+            //We must eloquently consider the occupied block, take current block and write it back to DRAM
+            writeBuffer.getBuffer().add(blockFromCache);  //TODO: Michael write a test
+
             blockFromCache.setAddress(address);
 
             byte[] cacheBlock = blockFromCache.getBlock();

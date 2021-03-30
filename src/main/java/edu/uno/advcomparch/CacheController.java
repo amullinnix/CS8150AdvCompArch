@@ -13,14 +13,20 @@ public class CacheController {
 
     private final StateMachine<ControllerState, ControllerMessage> l1StateMachine;
     private final StateMachine<ControllerState, ControllerMessage> l2StateMachine;
+    private final StateMachine<ControllerState, ControllerMessage> dramStateMachine;
+
     private final StateMachineMessageBus messageBus;
 
     @Inject
     public CacheController(StateMachine<ControllerState, ControllerMessage> l1StateMachine,
                            StateMachine<ControllerState, ControllerMessage> l2StateMachine,
+                           StateMachine<ControllerState, ControllerMessage> dramStateMachine,
                            StateMachineMessageBus messageBus) {
+
         this.l1StateMachine = l1StateMachine;
         this.l2StateMachine = l2StateMachine;
+        this.dramStateMachine = dramStateMachine;
+
         this.messageBus = messageBus;
     }
 
@@ -32,5 +38,6 @@ public class CacheController {
 
         l1StateMachine.start();
         l2StateMachine.start();
+
     }
 }

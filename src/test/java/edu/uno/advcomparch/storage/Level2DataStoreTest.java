@@ -136,4 +136,16 @@ public class Level2DataStoreTest extends AbstractCompArchTest {
         byte[] subSetOfBlock = Arrays.copyOfRange(blockFromCache.getBlock(), 0, 4);
         assertEquals(Arrays.toString(new byte[] {1,2,3,4}), Arrays.toString(subSetOfBlock));
     }
+
+    @Test
+    public void writeBufferWorksForLevel2() {
+        Address address = new Address("101010101", "", "00010");
+
+        dataStore.writeDataToCache(address, blockToWrite);
+
+        dataStore.printSingleCacheBlock(341);
+
+        //assertEquals(1, dataStore.getWriteBuffer().getBuffer().size());
+
+    }
 }

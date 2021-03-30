@@ -57,7 +57,11 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
         return new StateMachineListenerAdapter<>() {
             @Override
             public void stateChanged(State<ControllerState, ControllerMessage> from, State<ControllerState, ControllerMessage> to) {
-                System.out.println("State change to " + to.getId());
+                if(from == null) {
+                    System.out.println("L2 State change to " + to.getId());
+                } else {
+                    System.out.println("L2 State change from: " + from.getId() + " to " + to.getId());
+                }
             }
         };
     }
@@ -85,6 +89,8 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
         transitions.withExternal()
                 .source(ControllerState.HIT).event(ControllerMessage.CPUREAD)
                 .target(ControllerState.RDWAITD)
+                .and().withExternal()
+                .source(ControllerState.HIT).target(ControllerState.HIT)
                 .and().withExternal()
                 .source(ControllerState.RDWAITD).event(ControllerMessage.DATA)
                 .target(ControllerState.HIT).action(L2toL1Data())
@@ -165,15 +171,14 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<ControllerState, ControllerMessage> L2CPURead() {
         return ctx -> {
             // If queue is non empty, on state transition perform one action.
-            var address = ctx.getMessage().getHeaders().get("address", String.class);
+            var address = ctx.getMessage().getHeaders().get("address", Address.class);
 
-            System.out.println("L1C to L2C: CPURead(" + address + ")");
+            System.out.println("L2 -> L1C to L2C: CPURead(" + address + ")");
 
-            var partitionedAddress = new Address(address);
-            partitionedAddress.componentize(L2_TAG_SIZE, L2_INDEX_SIZE, L2_OFFSET_SIZE);
+            address.componentize(L2_TAG_SIZE, L2_INDEX_SIZE, L2_OFFSET_SIZE);
 
-            var canRead = level2DataStore.isDataPresentInCache(partitionedAddress);
-            var data = level2DataStore.getBlockAtAddress(partitionedAddress);
+            var canRead = level2DataStore.isDataPresentInCache(address);
+            var data = level2DataStore.getBlockAtAddress(address);           //block is empty message
 
             // If we get nothing back send miss.
             if (canRead == DataResponseType.HIT) {
@@ -195,7 +200,9 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .setHeader("source", "L2Data")
                         .build();
 
-                ctx.getStateMachine().sendEvent(missMessage);
+                //we just stop here on L2 miss. Maybe should not be doing this? Maybe need to enqueue L1 message?
+                //ctx.getStateMachine().sendEvent(missMessage);
+
                 // Then send a read back
                 var cpuReadMessage = MessageBuilder
                         .withPayload(ControllerMessage.CPUREAD)
@@ -203,6 +210,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .setHeader("address", address)
                         .build();
 
+                //Maybe here is where we enqueue for dram???
                 ctx.getStateMachine().sendEvent(cpuReadMessage);
 
                 if (canRead == DataResponseType.MISSD) {
@@ -373,12 +381,14 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<ControllerState, ControllerMessage> processL2Message() {
         return ctx -> {
+            System.out.println("MaK: attempting to poll L2 TWO queue");
             var message = messageBus.getL2MessageQueue().poll();
             var stateMachine = ctx.getStateMachine();
             var currentState = stateMachine.getState().getId();
 
             // If we have a message, start processing
             if (message != null && currentState == ControllerState.HIT) {
+                System.out.println("Message Received on L2 side, sending event: " + message.getPayload());
                 stateMachine.sendEvent(message);
             }
         };

@@ -1,5 +1,6 @@
 package edu.uno.advcomparch.config;
 
+import edu.uno.advcomparch.statemachine.DramStateMachineConfiguration;
 import edu.uno.advcomparch.statemachine.L1ControllerStateMachineConfiguration;
 import edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration;
 import org.springframework.context.annotation.Configuration;
@@ -8,7 +9,8 @@ import org.springframework.context.annotation.Import;
 @Import({
         CacheConfiguration.class,
         L1ControllerStateMachineConfiguration.class,
-        L2ControllerStateMachineConfiguration.class
+        L2ControllerStateMachineConfiguration.class,
+        DramStateMachineConfiguration.class
 })
 @Configuration
 public class ControllerConfiguration {

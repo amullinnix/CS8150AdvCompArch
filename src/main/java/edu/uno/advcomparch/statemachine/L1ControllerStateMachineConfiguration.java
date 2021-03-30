@@ -56,7 +56,11 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
         return new StateMachineListenerAdapter<>() {
             @Override
             public void stateChanged(State<ControllerState, ControllerMessage> from, State<ControllerState, ControllerMessage> to) {
-                System.out.println("State change to " + to.getId());
+                if(from == null) {
+                    System.out.println("L1 State change to " + to.getId());
+                } else {
+                    System.out.println("L1 State change from " + from.getId() + " to " + to.getId());
+                }
             }
         };
     }
@@ -374,12 +378,14 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<ControllerState, ControllerMessage> processL1Message() {
         return ctx -> {
+            System.out.println("Attempting to poll L1 queue");
             var message = messageBus.getL1MessageQueue().poll();
             var stateMachine = ctx.getStateMachine();
             var currentState = stateMachine.getState().getId();
 
             // If we have a message, start processing
             if (message != null && currentState == ControllerState.HIT) {
+                System.out.println("Message Received on L1 Side, sending event: " + message.getPayload());
                 stateMachine.sendEvent(message);
             }
         };
