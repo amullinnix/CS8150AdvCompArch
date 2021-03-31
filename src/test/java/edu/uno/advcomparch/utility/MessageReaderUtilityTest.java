@@ -16,7 +16,7 @@ public class MessageReaderUtilityTest extends AbstractCompArchTest {
 
     @Test
     public void testRead() throws FileNotFoundException {
-        var messages = MessageReaderUtility.readMessages("./src/test/resources/MessagesTest.txt");
+        var messages = MessageReaderUtility.readMessages("./src/test/resources/ReaderTest.txt");
 
         assertThat(messages).hasSize(2);
 
@@ -42,7 +42,7 @@ public class MessageReaderUtilityTest extends AbstractCompArchTest {
         var cpuWriteHeaders = cpuWrite.getHeaders();
 
         assertThat(cpuWriteHeaders.get("address")).isEqualTo("B");
-        assertThat(cpuWriteHeaders.get("data")).isEqualTo("2");
+        assertThat(cpuWriteHeaders.get("data")).isEqualTo("2".getBytes());
     }
 
     @Test()

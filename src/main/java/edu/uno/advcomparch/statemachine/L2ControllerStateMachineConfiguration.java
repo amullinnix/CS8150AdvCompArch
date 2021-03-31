@@ -174,14 +174,15 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<ControllerState, ControllerMessage> L2CPURead() {
         return ctx -> {
             // If queue is non empty, on state transition perform one action.
-            var address = ctx.getMessage().getHeaders().get("address", Address.class);
+            var address = ctx.getMessage().getHeaders().get("address", String.class);
 
             System.out.println("L2 -> L1C to L2C: CPURead(" + address + ")");
 
-            address.componentize(L2_TAG_SIZE, L2_INDEX_SIZE, L2_OFFSET_SIZE);
+            var l2Address = new Address(address);
+            l2Address.componentize(L2_TAG_SIZE, L2_INDEX_SIZE, L2_OFFSET_SIZE);
 
-            var canRead = level2DataStore.isDataPresentInCache(address);
-            var data = level2DataStore.getBlockAtAddress(address);           //block is empty message
+            var canRead = level2DataStore.isDataPresentInCache(l2Address);
+            var data = level2DataStore.getBlockAtAddress(l2Address);           //block is empty message
             var stateMachine = ctx.getStateMachine();
 
             // If we get nothing back send miss.
@@ -215,7 +216,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 var cpuReadMessage = MessageBuilder
                         .withPayload(ControllerMessage.CPUREAD)
                         .setHeader("source", "L2Data")
-                        .setHeader("address", address.getAddress())
+                        .setHeader("address", l2Address.getAddress())
                         .build();
 
                 //Maybe here is where we enqueue for dram???
@@ -230,7 +231,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                     var victimizeResponseMessage = MessageBuilder
                             .withPayload(ControllerMessage.DATA)
                             .setHeader("source", "L1Data")
-                            .setHeader("address", address)
+                            .setHeader("address", l2Address.getAddress())
                             .setHeader("data", data)
                             .build();
 

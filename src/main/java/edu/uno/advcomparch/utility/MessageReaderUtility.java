@@ -36,7 +36,7 @@ public class MessageReaderUtility {
                 messages.add(MessageBuilder.withPayload(ControllerMessage.CPUWRITE)
                         .setHeader("source", "CPU")
                         .setHeader("address", messageSplit[1])
-                        .setHeader("data", messageSplit[2])
+                        .setHeader("data", messageSplit[2].getBytes())
                         .build());
             }
         }

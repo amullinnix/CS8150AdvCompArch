@@ -115,8 +115,6 @@ public class L2StateMachineTests extends AbstractCompArchTest {
                         .setHeader("source", "L1C")
                         .setHeader("address", "10101010101010101")
                         .build())
-                .expectStateChanged(4)
-                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -138,8 +136,6 @@ public class L2StateMachineTests extends AbstractCompArchTest {
                         .setHeader("source", "L1C")
                         .setHeader("address", "10101010101010101")
                         .build())
-                .expectStateChanged(4)
-                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -161,8 +157,6 @@ public class L2StateMachineTests extends AbstractCompArchTest {
                         .setHeader("source", "L1C")
                         .setHeader("address", "10101010101010101")
                         .build())
-                .expectStateChanged(5)
-                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();
@@ -190,8 +184,6 @@ public class L2StateMachineTests extends AbstractCompArchTest {
                         .setHeader("address", "10101010101010101")
                         .setHeader("data", cacheBlock)
                         .build())
-                .expectStateChanged(2)
-                .expectStates(ControllerState.HIT)
                 .and()
                 .build()
                 .test();

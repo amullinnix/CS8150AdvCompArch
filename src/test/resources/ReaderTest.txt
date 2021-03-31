@@ -1,0 +1,2 @@
+CPURead A 1
+CPUWrite B 2

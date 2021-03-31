@@ -44,7 +44,6 @@ public class CacheControllerTest extends AbstractCompArchTest {
     public void testContext() {};
 
     @Test
-    // TODO - Make work
     public void test() throws Exception {
         cacheController.runCacheOnFile("./src/test/resources/MessagesTest.txt");
     }
