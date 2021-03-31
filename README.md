@@ -2,12 +2,23 @@
 CS8150 - Advanced Computer Architecture - Course Project
 
 #Table of Contents
+1. [Author Information](#author-information)
 1. [Basic Project Information](#basic-project-information)
 2. [General TODO Ideas](#general-todo-ideas)
 3. [Questions for the class](#questions-for-the-class)
 
+## Author Information and Github Link
+
+**Drew Mullinnnix** - mullinnix.drew@gmail.com (or through UNO email)
+
+**Michael Kolakowski** - mkolakow@gmail.com (or through UNO email)
+
+**Github:** https://github.com/amullinnix/CS8150AdvCompArch
+
 ## Basic Project Information
-This section gives you basic information on "running" the project, so to speak. There are two parts to look at, the unit tests and the state machine tests.
+This section gives you basic information on "running" the project, so to speak. There are several 
+parts to look at. The application code, the unit tests, the state machine tests, and the file reader
+test.
 
 All tests are located in the src/test folder. 
 
@@ -16,6 +27,17 @@ We recommend importing the project in your favorite IDE, but we can only confirm
 Then, after doing a gradle build, you should simply be able to right click on any test and run it.
 
 Finally, also see the test method in CacheControllerTest. This will read actual commands from a file.
+
+We essentially have three different types of tests for this project
+
+1. Unit tests on all the domain objects - proving things like LRU and write merging
+2. State Machine Tests - proving the state machines work
+3. File Reader - read a command(s) and run it through the application 
+
+Finally - we also recommend looking at the github link provided above. In doing so, you'll be able to
+see the commit history and get a feel for how the project evolved over time.
+
+Any questions - please contact the authors. Thanks! 
 
 --- 
 
