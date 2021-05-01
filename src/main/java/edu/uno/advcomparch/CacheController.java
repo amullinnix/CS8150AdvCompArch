@@ -44,7 +44,7 @@ public class CacheController {
 
         // Spin in oblivion waiting on state machines
         // probably better to utilize sychronized variable to wait on thread.
-        while(!l1StateMachine.isComplete()) {}
+        // while(!l1StateMachine.isComplete()) {}
 
         // Dump what all was received by the CPU;
         cpu.writeOutCPUReceivedData();

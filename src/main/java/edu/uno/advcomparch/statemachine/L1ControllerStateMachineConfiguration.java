@@ -7,6 +7,8 @@ import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.storage.Level1DataStore;
 import edu.uno.advcomparch.storage.VictimCache;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +35,8 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     private static final int L1_TAG_SIZE = 6;
     private static final int L1_INDEX_SIZE = 6;
     private static final int L1_OFFSET_SIZE = 5;
+
+    private final Logger outputLogger = LoggerFactory.getLogger("output");
 
     @Autowired
     StateMachineMessageBus messageBus;
@@ -179,7 +183,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var address = message.getHeaders().get("address", String.class);
             var bytes = message.getHeaders().get("bytes", Integer.class);
 
-            System.out.println("CPU to L1C: CPURead(" + address + ")");
+            outputLogger.info("CPU to L1C: CPURead(" + address + ")");
 
             var partitionedAddress = new Address(address);
             partitionedAddress.componentize(L1_TAG_SIZE, L1_INDEX_SIZE, L1_OFFSET_SIZE);
@@ -241,7 +245,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 if (canRead == DataResponseType.MISSD) {
 
-                    System.out.println("L1C to L1D: Victimize(" + address + ")");
+                    outputLogger.info("L1C to L1D: Victimize(" + address + ")");
 
                     var victimizeResponseMessage = MessageBuilder
                             .withPayload(ControllerMessage.DATA)
@@ -275,7 +279,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var canWrite = level1DataStore.canWriteToCache(l1Address);
 
             if (canWrite == DataResponseType.HIT) {
-                System.out.println("L1C to L1D: Write(" + Arrays.toString(data) + ")");
+                outputLogger.info("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
                 var state = ctx.getStateMachine().getState().getId();
                 if (ControllerState.READ_STATES.contains(state)) {
@@ -314,7 +318,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 if (canWrite == DataResponseType.MISSD) {
 
-                    System.out.println("Victimize L1C to L1D (" + address + ")");
+                    outputLogger.info("Victimize L1C to L1D (" + address + ")");
 
                     var victimBlock = l1VictimCache.getData(l1Address);
 
@@ -348,7 +352,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 var partitionedAddress = new Address(address);
                 partitionedAddress.componentize(L1_TAG_SIZE, L1_INDEX_SIZE, L1_OFFSET_SIZE);
 
-                System.out.println("L1C to L2C: CpuRead(" + address + ")");
+                outputLogger.info("L1C to L2C: CpuRead(" + address + ")");
 
                 // Place on the L2 Message Queue
                 messageBus.enqueueL2Message(message);
@@ -374,7 +378,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
         return ctx -> {
             var message = ctx.getMessage();
             var data = (byte[]) message.getHeaders().get("data");
-            System.out.println("L1C to L2C: Data(" + Arrays.toString(data) + ")");
+            outputLogger.info("L1C to L2C: Data(" + Arrays.toString(data) + ")");
 
             messageBus.enqueueL2Message(message);
         };
@@ -384,7 +388,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<ControllerState, ControllerMessage> CPUData() {
         return ctx -> {
             var data = ctx.getMessage().getHeaders().get("data", CacheBlock.class);
-            System.out.println("L1C to CPU: Data(" + Arrays.toString(data.getBlock()) + ")");
+            outputLogger.info("L1C to CPU: Data(" + Arrays.toString(data.getBlock()) + ")");
 
             // report back to the cpu
             cpu.data(data.getBlock());

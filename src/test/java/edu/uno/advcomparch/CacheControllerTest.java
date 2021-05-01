@@ -7,12 +7,18 @@ import edu.uno.advcomparch.statemachine.ControllerState;
 import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.util.LinkedList;
+
 @ContextConfiguration(classes = ControllerConfiguration.class)
 public class CacheControllerTest extends AbstractCompArchTest {
+
+    private final Logger outputLogger = LoggerFactory.getLogger("output");
 
     private CacheController  cacheController;
 
@@ -28,11 +34,11 @@ public class CacheControllerTest extends AbstractCompArchTest {
     @Autowired
     public StateMachineMessageBus stateMachineMessageBus;
 
-    @Autowired
     public static DefaultCPU cpu;
 
     @BeforeEach
     public void setUp() {
+        cpu = new DefaultCPU(new LinkedList<>());
         cacheController = new CacheController(l1ControllerStateMachine,
                 l2ControllerStateMachine,
                 dramStateMachine,
@@ -45,7 +51,9 @@ public class CacheControllerTest extends AbstractCompArchTest {
 
     @Test
     public void test() throws Exception {
+        outputLogger.info("Starting Test");
         cacheController.runCacheOnFile("./src/test/resources/MessagesTest.txt");
+        outputLogger.info("Ending Test");
     }
 
 }

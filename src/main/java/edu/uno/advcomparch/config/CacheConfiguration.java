@@ -1,6 +1,5 @@
 package edu.uno.advcomparch.config;
 
-import edu.uno.advcomparch.cpu.CentralProcessingUnit;
 import edu.uno.advcomparch.cpu.DefaultCPU;
 import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
 import edu.uno.advcomparch.storage.*;
@@ -13,7 +12,7 @@ import java.util.LinkedList;
 public class CacheConfiguration {
 
     @Bean
-    public CentralProcessingUnit cpu() {
+    public DefaultCPU cpu() {
         return new DefaultCPU(new LinkedList<>());
     }
 

@@ -1,0 +1,13 @@
+1413 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1417 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1437 [pool-2-thread-1] INFO  output - L1C to CPU: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+1417 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1421 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1439 [pool-2-thread-1] INFO  output - L1C to CPU: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+1379 [Test worker] INFO  output - Starting Test 
+1402 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1412 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1473 [Test worker] INFO  output - Starting Test 
+1494 [Test worker] INFO  output - Ending Test 
+1497 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1501 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
