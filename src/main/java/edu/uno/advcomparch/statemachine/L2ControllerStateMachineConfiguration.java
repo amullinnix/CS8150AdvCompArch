@@ -136,7 +136,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 .and().withExternal()
                 // Local States
                 .source(ControllerState.WRWAITDX).event(ControllerMessage.DATA)
-                .target(ControllerState.HIT)
+                .target(ControllerState.HIT).action(L2toL1Data()) // send data back to l1 after write
                 .and().withExternal()
                 .source(ControllerState.WRWAITDX).event(ControllerMessage.MISSI)
                 .target(ControllerState.MISSI)
@@ -252,9 +252,15 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
         return ctx -> {
             var message = ctx.getMessage();
             var address = message.getHeaders().get("address", String.class);
-            var data = message.getHeaders().get("data", CacheBlock.class);
+            var messageData = message.getHeaders().get("data");
 
+            var data = Optional.of(messageData)
+                    .filter(CacheBlock.class::isInstance)
+                    .map(CacheBlock.class::cast)
+                    .map(CacheBlock::getBlock)
+                    .orElse((byte[]) messageData);
             var l2Address = new Address(address);
+
             l2Address.componentize(L2_TAG_SIZE, L2_INDEX_SIZE, L2_OFFSET_SIZE);
 
             var canWrite = level2DataStore.canWriteToCache(l2Address);
@@ -262,11 +268,14 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             if (canWrite == DataResponseType.HIT) {
                 // TODO - Fetch from write buffer always? Disregard message data?
                 // TODO - Check out, but if recieved from memory write buffer will be empty, and we'll need to fall back onto data
-                var hitData = Optional.ofNullable(level1WriteBuffer.getData(l2Address)).orElse(data);
+                var hitData = Optional.ofNullable(level1WriteBuffer.getData(l2Address))
+                        .map(CacheBlock::getBlock)
+                        .orElse(data);
+
                 // Clear buffer, mocking synchronous writes
                 level1WriteBuffer.getBuffer().clear();
 
-                outputLogger.info("L2C to L2D: Write(" + Arrays.toString(hitData.getBlock()) + ")");
+                outputLogger.info("L2C to L2D: Write(" + Arrays.toString(hitData) + ")");
 
                 level2DataStore.writeDataToCache(l2Address, hitData);
 
@@ -390,9 +399,15 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<ControllerState, ControllerMessage> L2toL1Data() {
         return ctx -> {
             var message = ctx.getMessage();
-            var cacheBlock = ctx.getMessage().getHeaders().get("data", CacheBlock.class);
+            var messageData = message.getHeaders().get("data");
 
-            outputLogger.info("L2C to L1: Data(" + Arrays.toString(cacheBlock.getBlock()) + ")");
+            var data = Optional.of(messageData)
+                    .filter(CacheBlock.class::isInstance)
+                    .map(CacheBlock.class::cast)
+                    .map(CacheBlock::getBlock)
+                    .orElse((byte[]) messageData);
+
+            outputLogger.info("L2C to L1: Data(" + Arrays.toString(data) + ")");
 
             // report back to the L1 Controller
             messageBus.enqueueL1Message(message);

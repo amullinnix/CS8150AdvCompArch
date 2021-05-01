@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.statemachine.action.Action;
 import org.springframework.statemachine.config.EnableStateMachine;
@@ -153,6 +154,9 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .source(ControllerState.MISSI).event(ControllerMessage.CPUWRITE)
                 .target(ControllerState.WRWAITD)
                 .and().withExternal()
+                // Poll in state while wainting for L2
+                .source(ControllerState.WRWAITD).target(ControllerState.WRWAITD)
+                .and().withExternal()
                 .source(ControllerState.WRWAITD).event(ControllerMessage.DATA)
                 .target(ControllerState.WRALLOC)
                 .and().withExternal()
@@ -276,7 +280,15 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var l1Address = new Address(address);
             l1Address.componentize(L1_TAG_SIZE, L1_INDEX_SIZE, L1_OFFSET_SIZE);
 
-            var canWrite = level1DataStore.canWriteToCache(l1Address);
+            // If message is received from L2, Hit
+            var canWrite = Optional.of(message)
+                    .map(Message::getHeaders)
+                    .map(headers -> headers.get("source"))
+                    .filter(String.class::isInstance)
+                    .map(String.class::cast)
+                    .filter(source -> source.equals("L2Data"))
+                    .map(nil -> DataResponseType.HIT)
+                    .orElse(level1DataStore.canWriteToCache(l1Address));
 
             if (canWrite == DataResponseType.HIT) {
                 outputLogger.info("L1C to L1D: Write(" + Arrays.toString(data) + ")");
@@ -387,11 +399,17 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<ControllerState, ControllerMessage> CPUData() {
         return ctx -> {
-            var data = ctx.getMessage().getHeaders().get("data", CacheBlock.class);
-            outputLogger.info("L1C to CPU: Data(" + Arrays.toString(data.getBlock()) + ")");
+            var messageData = ctx.getMessage().getHeaders().get("data");
+            var data = Optional.of(messageData)
+                    .filter(CacheBlock.class::isInstance)
+                    .map(CacheBlock.class::cast)
+                    .map(CacheBlock::getBlock)
+                    .orElse((byte[]) messageData);
+
+            outputLogger.info("L1C to CPU: Data(" + Arrays.toString(data) + ")");
 
             // report back to the cpu
-            cpu.data(data.getBlock());
+            cpu.data(data);
         };
     }
 

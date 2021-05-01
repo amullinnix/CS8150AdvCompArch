@@ -1,10 +1,12 @@
 package edu.uno.advcomparch;
 
 import edu.uno.advcomparch.config.ControllerConfiguration;
+import edu.uno.advcomparch.controller.Address;
 import edu.uno.advcomparch.cpu.DefaultCPU;
 import edu.uno.advcomparch.statemachine.ControllerMessage;
 import edu.uno.advcomparch.statemachine.ControllerState;
 import edu.uno.advcomparch.statemachine.StateMachineMessageBus;
+import edu.uno.advcomparch.storage.Level1DataStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -34,6 +36,9 @@ public class CacheControllerTest extends AbstractCompArchTest {
     @Autowired
     public StateMachineMessageBus stateMachineMessageBus;
 
+    @Autowired
+    Level1DataStore level1DataStore;
+
     public static DefaultCPU cpu;
 
     @BeforeEach
@@ -50,15 +55,45 @@ public class CacheControllerTest extends AbstractCompArchTest {
     public void testContext() {};
 
     @Test
-    public void testRead() throws Exception {
+    public void testReadScenarioA() throws Exception {
         outputLogger.info("Starting Read Test");
         cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioAReadTest.txt");
     }
 
     @Test
-    public void test() throws Exception {
+    public void testReadScenarioAWithPrepopulatedL1Cache() throws Exception {
+        byte b = 1;
+        level1DataStore.writeDataToCache(new Address("101010", "101010", "10101"), b);
+
+        outputLogger.info("Starting pre-populated Read Test");
+        cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioAReadTest.txt");
+    }
+
+    @Test
+    public void testWriteScenarioB() throws Exception {
         outputLogger.info("Starting Write Test");
         cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioBWriteTest.txt");
+    }
+
+    @Test
+    public void testWriteScenarioBWithPrepopulatedL1Cache() throws Exception {
+        byte b = 1;
+        level1DataStore.writeDataToCache(new Address("101010", "101010", "10101"), b);
+
+        outputLogger.info("Starting pre-populated Write Test");
+        cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioBWriteTest.txt");
+    }
+
+    @Test
+    public void testReadWriteSameScenario3() throws Exception {
+        outputLogger.info("Starting Read Write Same Test");
+        cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioCBackBackReadWriteSame.txt");
+    }
+
+    @Test
+    public void testReadWriteDiffScenario3() throws Exception {
+        outputLogger.info("Starting Read Write Diff Test");
+        cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioCBackBackReadWriteDiff.txt");
     }
 
 }

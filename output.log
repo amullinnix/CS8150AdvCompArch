@@ -1,0 +1,16 @@
+1470 [Test worker] INFO  output - Starting Read Write Same Test 
+1485 [Test worker] INFO  output - L1 State machine STARTING 
+1487 [Test worker] INFO  output - L2 State machine STARTING 
+1487 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1489 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1490 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1491 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+1493 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1496 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1430122709, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@2d98fd1, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@b6fc32d], regions=[], submachine=null]] event: CPUREAD 
+1497 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+1499 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+1499 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=30934145, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@1deb9096], regions=[], submachine=null]] event: MISSC 
+1500 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+1501 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1354821221, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@9ebe322], regions=[], submachine=null]] event: CPUREAD 
+1502 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+1503 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
