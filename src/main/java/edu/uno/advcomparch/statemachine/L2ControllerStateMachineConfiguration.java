@@ -63,10 +63,10 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             @Override
             public void stateChanged(State<ControllerState, ControllerMessage> from, State<ControllerState, ControllerMessage> to) {
                 if(from == null) {
-                    outputLogger.info("L2 State change to " + to.getId());
+                    outputLogger.info("L2 State machine STARTING");
                 } else {
                     if(from.getId() != to.getId()) {
-                        outputLogger.info("L2 State change from: " + from.getId() + " to " + to.getId());
+                        outputLogger.info("L2 State changing to: " + to.getId());
                     }
                 }
             }

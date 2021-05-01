@@ -63,10 +63,10 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             @Override
             public void stateChanged(State<ControllerState, ControllerMessage> from, State<ControllerState, ControllerMessage> to) {
                 if(from == null) {
-                    System.out.println("L1 State change to " + to.getId());
+                    outputLogger.info("L1 State machine STARTING");
                 } else {
                     if(from.getId() != to.getId()) {
-                        System.out.println("L1 State change from: " + from.getId() + " to " + to.getId());
+                        outputLogger.info("L1 State changing to: " + to.getId());
                     }
                 }
             }
