@@ -50,10 +50,15 @@ public class CacheControllerTest extends AbstractCompArchTest {
     public void testContext() {};
 
     @Test
+    public void testRead() throws Exception {
+        outputLogger.info("Starting Read Test");
+        cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioAReadTest.txt");
+    }
+
+    @Test
     public void test() throws Exception {
-        outputLogger.info("Starting Test");
-        cacheController.runCacheOnFile("./src/test/resources/MessagesTest.txt");
-        outputLogger.info("Ending Test");
+        outputLogger.info("Starting Write Test");
+        cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioBWriteTest.txt");
     }
 
 }
