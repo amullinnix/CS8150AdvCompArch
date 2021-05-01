@@ -7,6 +7,8 @@ import edu.uno.advcomparch.storage.DynamicRandomAccessMemory;
 import edu.uno.advcomparch.storage.Level1WriteBuffer;
 import edu.uno.advcomparch.storage.Level2DataStore;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +31,8 @@ import java.util.Optional;
 @EnableStateMachine(name = "l2ControllerStateMachine")
 @AllArgsConstructor
 public class L2ControllerStateMachineConfiguration extends StateMachineConfigurerAdapter<ControllerState, ControllerMessage> {
+
+    private final Logger outputLogger = LoggerFactory.getLogger("output");
 
     private static final int L2_TAG_SIZE = 9;
     private static final int L2_INDEX_SIZE = 0;
@@ -59,10 +63,10 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             @Override
             public void stateChanged(State<ControllerState, ControllerMessage> from, State<ControllerState, ControllerMessage> to) {
                 if(from == null) {
-                    System.out.println("L2 State change to " + to.getId());
+                    outputLogger.info("L2 State change to " + to.getId());
                 } else {
                     if(from.getId() != to.getId()) {
-                        System.out.println("L2 State change from: " + from.getId() + " to " + to.getId());
+                        outputLogger.info("L2 State change from: " + from.getId() + " to " + to.getId());
                     }
                 }
             }
@@ -176,7 +180,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             // If queue is non empty, on state transition perform one action.
             var address = ctx.getMessage().getHeaders().get("address", String.class);
 
-            System.out.println("L2 -> L1C to L2C: CPURead(" + address + ")");
+            outputLogger.info("L2 -> L1C to L2C: CPURead(" + address + ")");
 
             var l2Address = new Address(address);
             l2Address.componentize(L2_TAG_SIZE, L2_INDEX_SIZE, L2_OFFSET_SIZE);
@@ -196,7 +200,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 // Send successful message back to the controller
-                System.out.println("L2 L2CPUREAD  1 state: " + stateMachine.getState() + " event: "  + responseMessage.getPayload());
+                outputLogger.info("L2 L2CPUREAD  1 state: " + stateMachine.getState() + " event: "  + responseMessage.getPayload());
 
                 ctx.getStateMachine().sendEvent(responseMessage);
 
@@ -208,7 +212,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 //we just stop here on L2 miss. Maybe should not be doing this? Maybe need to enqueue L1 message?
-                System.out.println("L2 L2CPUREAD  2 state: " + stateMachine.getState() + " event: "  + missMessage.getPayload());
+                outputLogger.info("L2 L2CPUREAD  2 state: " + stateMachine.getState() + " event: "  + missMessage.getPayload());
 
                 ctx.getStateMachine().sendEvent(missMessage);
 
@@ -220,13 +224,13 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                         .build();
 
                 //Maybe here is where we enqueue for dram???
-                System.out.println("L2 L2CPUREAD  3 state: " + stateMachine.getState() + " event: "  + cpuReadMessage.getPayload());
+                outputLogger.info("L2 L2CPUREAD  3 state: " + stateMachine.getState() + " event: "  + cpuReadMessage.getPayload());
 
                 ctx.getStateMachine().sendEvent(cpuReadMessage);
 
                 if (canRead == DataResponseType.MISSD) {
 
-                    System.out.println("L2C to L2D: Victimize(" + address + ")");
+                    outputLogger.info("L2C to L2D: Victimize(" + address + ")");
 
                     var victimizeResponseMessage = MessageBuilder
                             .withPayload(ControllerMessage.DATA)
@@ -235,7 +239,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                             .setHeader("data", data)
                             .build();
 
-                    System.out.println("L2 L2CPUREAD  2 state: " + stateMachine.getState() + " event: "  + victimizeResponseMessage.getPayload());
+                    outputLogger.info("L2 L2CPUREAD  2 state: " + stateMachine.getState() + " event: "  + victimizeResponseMessage.getPayload());
 
                     ctx.getStateMachine().sendEvent(victimizeResponseMessage);
                 }
@@ -262,7 +266,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                 // Clear buffer, mocking synchronous writes
                 level1WriteBuffer.getBuffer().clear();
 
-                System.out.println("L2C to L2D: Write(" + Arrays.toString(hitData.getBlock()) + ")");
+                outputLogger.info("L2C to L2D: Write(" + Arrays.toString(hitData.getBlock()) + ")");
 
                 level2DataStore.writeDataToCache(l2Address, hitData);
 
@@ -294,7 +298,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 if (canWrite == DataResponseType.MISSD) {
 
-                    System.out.println("Victimize L1C to L1D (" + address + ")");
+                    outputLogger.info("Victimize L1C to L1D (" + address + ")");
 
                     // TODO - Correct data
                     // Force Data Response
@@ -320,7 +324,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             var message = ctx.getMessage();
             var address = message.getHeaders().get("address", String.class);
 
-            System.out.println("L2C to Mem: CpuRead(" + address + ")");
+            outputLogger.info("L2C to Mem: CpuRead(" + address + ")");
 
             var partitionedAddress = new Address(address);
             partitionedAddress.componentize(L2_TAG_SIZE, L2_INDEX_SIZE, L2_OFFSET_SIZE);
@@ -373,7 +377,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             var message = ctx.getMessage();
             var cacheBlock = message.getHeaders().get("data", CacheBlock.class);
             var address = message.getHeaders().get("address", String.class);
-            System.out.println("L2C to Mem: Data(" + Arrays.toString(cacheBlock.getBlock()) + ")");
+            outputLogger.info("L2C to Mem: Data(" + Arrays.toString(cacheBlock.getBlock()) + ")");
 
             var l2address = new Address(address);
             l2address.componentize(L2_TAG_SIZE, L2_INDEX_SIZE, L2_OFFSET_SIZE);
@@ -388,7 +392,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             var message = ctx.getMessage();
             var cacheBlock = ctx.getMessage().getHeaders().get("data", CacheBlock.class);
 
-            System.out.println("L2C to L1: Data(" + Arrays.toString(cacheBlock.getBlock()) + ")");
+            outputLogger.info("L2C to L1: Data(" + Arrays.toString(cacheBlock.getBlock()) + ")");
 
             // report back to the L1 Controller
             messageBus.enqueueL1Message(message);
@@ -407,7 +411,7 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             if (currentState == ControllerState.HIT) {
                 // If we have a message, start processing
                 if (message != null) {
-                    System.out.println("Message Received on L2 side, sending event: state: " + stateMachine.getState() + " event: "  + message.getPayload());
+                    outputLogger.info("Message Received on L2 side, sending event: state: " + stateMachine.getState() + " event: "  + message.getPayload());
                     stateMachine.sendEvent(message);
                 }
 
