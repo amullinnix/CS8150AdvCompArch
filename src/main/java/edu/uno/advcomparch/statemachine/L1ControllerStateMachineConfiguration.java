@@ -378,20 +378,8 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                     outputLogger.info("Message Received on L1 from L2 Side, sending event: " + l2Message.getPayload());
                     ctx.getStateMachine().sendEvent(l2Message);
                     ctx.getExtendedState().getVariables().put("waitingOnL2", Boolean.FALSE);
-                } {
-                    outputLogger.info("No L2 message, so polling cpu bus");
-                    var cpuMessage = messageBus.getCPUMessageQueue().poll();
-
-                    if(cpuMessage != null) {
-                        outputLogger.info("Message received on L1 from CPU, sending event: " + cpuMessage.getPayload());
-                        ctx.getStateMachine().sendEvent(cpuMessage);
-                        //need a waiting state here?
-                    }
                 }
-
             }
-
-
         };
     }
 
