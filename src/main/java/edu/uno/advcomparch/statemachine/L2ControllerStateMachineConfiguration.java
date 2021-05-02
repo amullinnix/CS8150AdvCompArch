@@ -362,15 +362,6 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
 
             var memoryBlock = memory.getMemoryAtAddress(partitionedAddress);
 
-            var mockCacheBlock = new CacheBlock(9, 32);
-            mockCacheBlock.setBlock(new byte[] {1, 2, 3, 4});
-            // Mock data
-//            if(memoryBlock.isEmpty()) {
-//                var mockCacheBlock = new CacheBlock(9, 32);
-//                mockCacheBlock.setBlock(new byte[] {1, 2, 3, 4});
-////                System.arraycopy(fakeData, 0,  memoryBlock.getBlock(), 0,  4);
-//            }
-
             // Need to fetch from memory, then send data request back
             var memResponseMessage = MessageBuilder
                     .withPayload(ControllerMessage.DATA)
