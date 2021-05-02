@@ -14,3 +14,359 @@
 1501 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1354821221, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@9ebe322], regions=[], submachine=null]] event: CPUREAD 
 1502 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
 1503 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1427 [Test worker] INFO  output - Starting Read Test 
+1441 [Test worker] INFO  output - L1 State machine STARTING 
+1445 [Test worker] INFO  output - L2 State machine STARTING 
+1445 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1447 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1448 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1450 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+1451 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1454 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=126103824, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@42f456b2, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@4dc51ba], regions=[], submachine=null]] event: CPUREAD 
+1455 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+1457 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+1457 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=719251990, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@e66a6be], regions=[], submachine=null]] event: MISSC 
+1458 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+1459 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=139588589, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@a7a2e7b], regions=[], submachine=null]] event: CPUREAD 
+1460 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+1461 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1545 [Test worker] INFO  output - Starting Read Test 
+4573 [Test worker] INFO  output - L1 State machine STARTING 
+4576 [Test worker] INFO  output - L2 State machine STARTING 
+4577 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+4578 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+5878 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+5879 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+5881 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+5885 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+5886 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+5887 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+5887 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+5888 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+5889 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+5890 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+5891 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1587 [Test worker] INFO  output - Starting Read Test 
+5071 [Test worker] INFO  output - L1 State machine STARTING 
+5074 [Test worker] INFO  output - L2 State machine STARTING 
+5075 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+5076 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+6986 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+6987 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+6989 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+6998 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+6999 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+7000 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+7001 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+7002 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+7002 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+7004 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+7005 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1524 [Test worker] INFO  output - Starting Read Test 
+1542 [Test worker] INFO  output - L1 State machine STARTING 
+1544 [Test worker] INFO  output - L2 State machine STARTING 
+1545 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1547 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+6013 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+6015 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+6016 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+6018 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+6019 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+6020 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+6021 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+6022 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+6022 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+6023 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+6024 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1520 [Test worker] INFO  output - Starting Read Test 
+1534 [Test worker] INFO  output - L1 State machine STARTING 
+1537 [Test worker] INFO  output - L2 State machine STARTING 
+1538 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1540 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+3757 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3758 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+3759 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+3762 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+3762 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+3764 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+3764 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+3764 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+3765 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+3766 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+3768 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1530 [Test worker] INFO  output - Starting Read Test 
+1546 [Test worker] INFO  output - L1 State machine STARTING 
+1548 [Test worker] INFO  output - L2 State machine STARTING 
+1549 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1551 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+18589 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+18591 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+18592 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+18595 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+18596 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+18598 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+18598 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+18599 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+18599 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+18600 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+18602 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+25856 [pool-2-thread-1] INFO  output - L2C to L1: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+25857 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+25861 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+25862 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+25862 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+25863 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+25863 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+25863 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+25863 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+25864 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+25864 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+28317 [pool-2-thread-1] INFO  output - L2C to L1: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+28317 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+28318 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+1538 [Test worker] INFO  output - Starting Read Test 
+1552 [Test worker] INFO  output - L1 State machine STARTING 
+1555 [Test worker] INFO  output - L2 State machine STARTING 
+1556 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1557 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+3804 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3805 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+3806 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+3811 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+3813 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+3814 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+3814 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+3815 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+3815 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+3816 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+3817 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+5307 [pool-2-thread-1] INFO  output - L2C to L1: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+5309 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1737 [Test worker] INFO  output - Starting Read Test 
+1753 [Test worker] INFO  output - L1 State machine STARTING 
+1757 [Test worker] INFO  output - L2 State machine STARTING 
+1758 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1760 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+3431 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3432 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+3434 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+3442 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+3443 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+3445 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+3445 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+3446 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+3447 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+3447 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+3449 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1470 [Test worker] INFO  output - Starting Read Test 
+1485 [Test worker] INFO  output - L1 State machine STARTING 
+1488 [Test worker] INFO  output - L2 State machine STARTING 
+1489 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1491 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+4087 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4088 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+4090 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+4093 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+4094 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+4096 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+4096 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+4097 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+4098 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+4099 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+4100 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1498 [Test worker] INFO  output - Starting Read Test 
+1512 [Test worker] INFO  output - L1 State machine STARTING 
+1515 [Test worker] INFO  output - L2 State machine STARTING 
+1516 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1518 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+3764 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3765 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+3766 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+3769 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+3770 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+3772 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+3772 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+3773 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+3773 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+3774 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+3777 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1506 [Test worker] INFO  output - Starting Read Test 
+1521 [Test worker] INFO  output - L1 State machine STARTING 
+1524 [Test worker] INFO  output - L2 State machine STARTING 
+1525 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1527 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+7950 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+7951 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+7952 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+7955 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+7956 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+7958 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+7958 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+7959 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+7959 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+7960 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+7962 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1697 [Test worker] INFO  output - Starting Read Test 
+1719 [Test worker] INFO  output - L1 State machine STARTING 
+1722 [Test worker] INFO  output - L2 State machine STARTING 
+1723 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1725 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+7508 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+7509 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+7510 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+7514 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+7515 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+7516 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+7516 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+7518 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+7518 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+7519 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+7521 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+11570 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+11570 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+1546 [Test worker] INFO  output - Starting Read Test 
+1562 [Test worker] INFO  output - L1 State machine STARTING 
+1565 [Test worker] INFO  output - L2 State machine STARTING 
+1566 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1567 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+3780 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3782 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+3783 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+3786 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+3788 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+3789 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+3789 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+3790 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+3790 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+3791 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+3793 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1559 [Test worker] INFO  output - Starting Read Test 
+1574 [Test worker] INFO  output - L1 State machine STARTING 
+1577 [Test worker] INFO  output - L2 State machine STARTING 
+1578 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1580 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+4080 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4081 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+4083 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+4091 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+4092 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+4094 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+4094 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+4095 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+4096 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+4096 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+4097 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1484 [Test worker] INFO  output - Starting Read Test 
+1499 [Test worker] INFO  output - L1 State machine STARTING 
+1501 [Test worker] INFO  output - L2 State machine STARTING 
+1502 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1504 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+4367 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4369 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+4370 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+4373 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+4379 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+4380 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+4381 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+4381 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+4382 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+4383 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+4384 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+256903 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+256904 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+1515 [Test worker] INFO  output - Starting Read Test 
+1531 [Test worker] INFO  output - L1 State machine STARTING 
+1534 [Test worker] INFO  output - L2 State machine STARTING 
+1535 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1537 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+8690 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+8692 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+8693 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+8696 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+8698 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+8699 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+8700 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+8701 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+8701 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+8702 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+8703 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+14079 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+14079 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+1563 [Test worker] INFO  output - Starting Read Test 
+1577 [Test worker] INFO  output - L1 State machine STARTING 
+1580 [Test worker] INFO  output - L2 State machine STARTING 
+1581 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1582 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+3286 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3287 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+3289 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+3292 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=707214485, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@2e130c8, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@51c1551d], regions=[], submachine=null]] event: CPUREAD 
+3293 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+3295 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+3295 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1504807999, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@25b322fb], regions=[], submachine=null]] event: MISSC 
+3296 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+3297 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1999850062, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@353ffe86], regions=[], submachine=null]] event: CPUREAD 
+3298 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+3299 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1533 [Test worker] INFO  output - Starting Read Test 
+1549 [Test worker] INFO  output - L1 State machine STARTING 
+1552 [Test worker] INFO  output - L2 State machine STARTING 
+1552 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1554 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+3530 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3531 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+3533 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+3537 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+3538 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+3540 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+3540 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+3541 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+3542 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+3543 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+3544 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+8389 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+1525 [Test worker] INFO  output - Starting Read Test 
+1540 [Test worker] INFO  output - L1 State machine STARTING 
+1543 [Test worker] INFO  output - L2 State machine STARTING 
+1543 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1545 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+3599 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3600 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+3602 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+3605 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+3606 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+3607 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+3608 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+3609 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+3609 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+3610 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+3612 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+19307 [pool-2-thread-1] INFO  output - L2C to L1: Data([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+19308 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+20878 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+20879 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+20879 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+20880 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+20881 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+20881 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+1558 [Test worker] INFO  output - Starting Read Test 
+1574 [Test worker] INFO  output - L1 State machine STARTING 
+1577 [Test worker] INFO  output - L2 State machine STARTING 
+1578 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1580 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+3082 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3083 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+3084 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+3088 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1902180996, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1b9c700c, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@36ca39af], regions=[], submachine=null]] event: CPUREAD 
+3089 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+3090 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+3091 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1996309363, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@5d0632df], regions=[], submachine=null]] event: MISSC 
+3092 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+3092 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1989420065, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@2830b961], regions=[], submachine=null]] event: CPUREAD 
+3093 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+3094 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+6622 [pool-2-thread-1] INFO  output - L2C to L1: Data([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+6623 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+9574 [pool-2-thread-1] INFO  output - L1C to CPU: Data([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+11284 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+11287 [pool-2-thread-1] INFO  output - L2 State machine STARTING 

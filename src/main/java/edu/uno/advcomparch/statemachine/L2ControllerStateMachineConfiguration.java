@@ -362,11 +362,14 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
 
             var memoryBlock = memory.getMemoryAtAddress(partitionedAddress);
 
+            var mockCacheBlock = new CacheBlock(9, 32);
+            mockCacheBlock.setBlock(new byte[] {1, 2, 3, 4});
             // Mock data
-            if(memoryBlock.isEmpty()) {
-                byte [] fakeData = new byte[] {5,6,7,8};
-                System.arraycopy(fakeData, 0,  memoryBlock.getBlock(), 0,  4);
-            }
+//            if(memoryBlock.isEmpty()) {
+//                var mockCacheBlock = new CacheBlock(9, 32);
+//                mockCacheBlock.setBlock(new byte[] {1, 2, 3, 4});
+////                System.arraycopy(fakeData, 0,  memoryBlock.getBlock(), 0,  4);
+//            }
 
             // Need to fetch from memory, then send data request back
             var memResponseMessage = MessageBuilder
@@ -401,13 +404,14 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
             var message = ctx.getMessage();
             var messageData = message.getHeaders().get("data");
 
-            var data = Optional.of(messageData)
-                    .filter(CacheBlock.class::isInstance)
-                    .map(CacheBlock.class::cast)
-                    .map(CacheBlock::getBlock)
-                    .orElse((byte[]) messageData);
+            byte[] output;
+            if (messageData instanceof CacheBlock) {
+                output = ((CacheBlock) messageData).getBlock();
+            } else {
+                output = (byte[]) messageData;
+            }
 
-            outputLogger.info("L2C to L1: Data(" + Arrays.toString(data) + ")");
+            outputLogger.info("L2C to L1: Data(" + Arrays.toString(output) + ")");
 
             // report back to the L1 Controller
             messageBus.enqueueL1Message(message);

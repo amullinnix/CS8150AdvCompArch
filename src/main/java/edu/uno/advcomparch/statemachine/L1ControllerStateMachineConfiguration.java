@@ -400,16 +400,18 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     public Action<ControllerState, ControllerMessage> CPUData() {
         return ctx -> {
             var messageData = ctx.getMessage().getHeaders().get("data");
-            var data = Optional.of(messageData)
-                    .filter(CacheBlock.class::isInstance)
-                    .map(CacheBlock.class::cast)
-                    .map(CacheBlock::getBlock)
-                    .orElse((byte[]) messageData);
 
-            outputLogger.info("L1C to CPU: Data(" + Arrays.toString(data) + ")");
+            byte[] output;
+            if (messageData instanceof CacheBlock) {
+                output = ((CacheBlock) messageData).getBlock();
+            } else {
+                output = (byte[]) messageData;
+            }
+
+            outputLogger.info("L1C to CPU: Data(" + Arrays.toString(output) + ")");
 
             // report back to the cpu
-            cpu.data(data);
+            cpu.data(output);
         };
     }
 
