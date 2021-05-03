@@ -362,6 +362,11 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
 
             var memoryBlock = memory.getMemoryAtAddress(partitionedAddress);
 
+            if(memoryBlock.isEmpty()) {
+                byte[] fakeData = new byte[] {5,6,7,8};
+                System.arraycopy(fakeData, 0, memoryBlock.getBlock(), 0, 4);
+            }
+
             // Need to fetch from memory, then send data request back
             var memResponseMessage = MessageBuilder
                     .withPayload(ControllerMessage.DATA)

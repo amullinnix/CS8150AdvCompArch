@@ -1,6 +1,8 @@
 package edu.uno.advcomparch.cpu;
 
 import edu.uno.advcomparch.instruction.Instruction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +18,8 @@ public class DefaultCPU implements CentralProcessingUnit<String> {
         this.queue = queue;
     }
 
+    private final Logger outputLogger = LoggerFactory.getLogger("output");
+
     @Override
     public void read() {
         //TODO: stubbed out
@@ -29,7 +33,7 @@ public class DefaultCPU implements CentralProcessingUnit<String> {
     @Override
     public void data(byte[] data) {
         var dataString = "CPU Received Data: " + Arrays.toString(data);
-        System.out.println(dataString);
+        outputLogger.info(dataString);
 
         responseStringBuilder
                 .append(dataString)
