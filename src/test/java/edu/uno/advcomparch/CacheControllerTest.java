@@ -58,6 +58,9 @@ public class CacheControllerTest extends AbstractCompArchTest {
     public void ReadScenarioA() throws Exception {
         outputLogger.info("Starting Read Test");
         cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioAReadTest.txt");
+
+        Thread.sleep(20000);
+
     }
 
     @Test
@@ -67,12 +70,18 @@ public class CacheControllerTest extends AbstractCompArchTest {
 
         outputLogger.info("Starting pre-populated Read Test");
         cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioAReadTest.txt");
+
+        Thread.sleep(20000);
+
     }
 
     @Test
     public void WriteScenarioB() throws Exception {
         outputLogger.info("Starting Write Test");
         cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioBWriteTest.txt");
+
+        Thread.sleep(20000);
+
     }
 
     @Test
@@ -82,34 +91,51 @@ public class CacheControllerTest extends AbstractCompArchTest {
 
         outputLogger.info("Starting pre-populated Write Test");
         cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioBWriteTest.txt");
+
+        Thread.sleep(20000);
+
     }
 
     @Test
     public void ReadWriteSameScenarioC() throws Exception {
         outputLogger.info("Starting Read Write Same Test");
         cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioCBackBackReadWriteSame.txt");
+
+        Thread.sleep(20000);
+
     }
 
     @Test
     public void ReadWriteDiffScenarioD() throws Exception {
         outputLogger.info("Starting Read Write Diff Test");
         cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioDBackBackReadWriteDiff.txt");
+
+        Thread.sleep(20000);
     }
 
     @Test
     public void ReadFromL1VictimCacheScenarioE() throws Exception {
         outputLogger.info("Starting Victim Cache Test");
-        cacheController.runCacheOnFile("/.src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioEReadWithVictimCache.txt");
+        cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioEReadWithVictimCache.txt");
+
+        Thread.sleep(20000);
+
     }
 
     @Test
     public void ReadL1WBL2WBScenarioF() throws Exception {
         outputLogger.info("Starting Read with L1 L2 Write Buffer Test");
         cacheController.runCacheOnFile("./src/test/resources/edu/uno/advcomparch/cache_tests/ScenarioFReadWithL1L2WriteBuffer.txt");
+
+        Thread.sleep(20000);
+
     }
 
     @Test
     public void MutualExclusionViolationSenarioG() throws Exception {
         // TODO - FIXME
+
+        Thread.sleep(20000);
+
     }
 }
