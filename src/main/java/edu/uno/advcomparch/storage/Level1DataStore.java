@@ -111,10 +111,9 @@ public class Level1DataStore {
         }
 
         if (evicted != null) {
+            victimCache.getCache().add(evicted);
             if(evicted.isDirty()) {
                 writeBuffer.add(evicted);
-            } else {
-                victimCache.getCache().add(evicted);
             }
         }
 

@@ -85,6 +85,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 .state(ControllerState.WRWAITDX, L1Data())
                 .state(ControllerState.WRALLOC, L1Data())
                 .state(ControllerState.WRWAITD, L2CCPURead())
+                .state(ControllerState.WRWAIT1D, L2CCPURead())
                 .state(ControllerState.MISSC, L2CCPURead())
                 .state(ControllerState.MISSD, L2CCPURead())
                 .states(EnumSet.allOf(ControllerState.class));
@@ -217,6 +218,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                     var victimCacheMessage = MessageBuilder
                             .withPayload(ControllerMessage.DATA)
                             .setHeader("source", "L1Data")
+                            .setHeader("isVictimCache", Boolean.TRUE)
                             .setHeader("address", victimCacheBlock.getAddress())
                             .setHeader("data", victimCacheBlock.getBlock())
                             .build();
@@ -270,6 +272,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             var message = ctx.getMessage();
             var address = message.getHeaders().get("address", String.class);
             var messageData = message.getHeaders().get("data");
+            var state = ctx.getStateMachine().getState().getId();
 
             var data = Optional.of(messageData)
                     .filter(CacheBlock.class::isInstance)
@@ -293,7 +296,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             if (canWrite == DataResponseType.HIT) {
                 outputLogger.info("L1C to L1D: Write(" + Arrays.toString(data) + ")");
 
-                var state = ctx.getStateMachine().getState().getId();
                 if (ControllerState.READ_STATES.contains(state)) {
                     level1DataStore.writeDataToCacheTriggeredByRead(l1Address, data);
                 } else if (ControllerState.WRITE_STATES.contains(state)) {
@@ -330,6 +332,11 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
 
                 if (canWrite == DataResponseType.MISSD) {
 
+                    // Victimize from L1
+                    if (ControllerState.WRITE_STATES.contains(state)) {
+                        level1DataStore.writeDataToCache(l1Address, data);
+                    }
+
                     outputLogger.info("Victimize L1C to L1D (" + address + ")");
 
                     var victimBlock = l1VictimCache.getData(l1Address);
@@ -338,7 +345,7 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                     var victimizeResponseMessage = MessageBuilder
                             .withPayload(ControllerMessage.DATA)
                             .setHeader("source", "L1Data")
-                            .setHeader("address", l1Address)
+                            .setHeader("address", l1Address.getAddress())
                             .setHeader("data", victimBlock)
                             .build();
 
@@ -358,13 +365,23 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
             if (waitingOnL2 != Boolean.TRUE) {
 
                 var message = ctx.getMessage();
-                var address = message.getHeaders().get("address", String.class);
-                var bytes = message.getHeaders().get("bytes", Integer.class);
+                var headers = message.getHeaders();
+                var address = headers.get("address", String.class);
+                var bytes = headers.get("bytes", Integer.class);
 
                 var partitionedAddress = new Address(address);
                 partitionedAddress.componentize(L1_TAG_SIZE, L1_INDEX_SIZE, L1_OFFSET_SIZE);
 
                 outputLogger.info("L1C to L2C: CpuRead(" + address + ")");
+
+                // If message is received from victim cache, forward a write, not data.
+                if (message.getPayload() == ControllerMessage.DATA) {
+                    message = MessageBuilder
+                            .withPayload(ControllerMessage.CPUWRITE)
+                            .setHeader("source", "L1Data")
+                            .setHeader("address", address)
+                            .build();
+                }
 
                 // Place on the L2 Message Queue
                 messageBus.enqueueL2Message(message);
@@ -416,7 +433,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<ControllerState, ControllerMessage> processL1Message() {
         return ctx -> {
-//            System.out.println("Attempting to poll L1 queue");
             var stateMachine = ctx.getStateMachine();
             var currentState = stateMachine.getState().getId();
 
@@ -427,9 +443,6 @@ public class L1ControllerStateMachineConfiguration extends StateMachineConfigure
                 if (cpuMessage != null) {
                     outputLogger.info("Message Received on L1 from CPU Side, sending event: " + cpuMessage.getPayload());
                     stateMachine.sendEvent(cpuMessage);
-                } else if (messageBus.getL1MessageQueue().isEmpty()) {
-                    // If we've completed our L1 Instruction queue stop l1.
-//                    ctx.getStateMachine().stop();
                 }
             } else {
                 var l2Message = messageBus.getL1MessageQueue().poll();

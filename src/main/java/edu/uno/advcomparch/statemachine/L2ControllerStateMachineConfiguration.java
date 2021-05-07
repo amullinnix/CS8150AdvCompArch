@@ -418,7 +418,6 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
     @Bean
     public Action<ControllerState, ControllerMessage> processL2Message() {
         return ctx -> {
-//            System.out.println("MaK: attempting to poll L2 TWO queue");
             var message = messageBus.getL2MessageQueue().poll();
             var stateMachine = ctx.getStateMachine();
             var currentState = stateMachine.getState().getId();
@@ -430,11 +429,6 @@ public class L2ControllerStateMachineConfiguration extends StateMachineConfigure
                     stateMachine.sendEvent(message);
                 }
 
-                // If we've completed our L1 Instruction queue stop both state machines.
-                if (messageBus.getCPUMessageQueue().isEmpty()) {
-//                    System.out.println("STOPPING L2");
-//                    ctx.getStateMachine().stop();
-                }
             }
         };
     }

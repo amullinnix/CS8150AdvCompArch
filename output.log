@@ -370,3 +370,1872 @@
 9574 [pool-2-thread-1] INFO  output - L1C to CPU: Data([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
 11284 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
 11287 [pool-2-thread-1] INFO  output - L2 State machine STARTING 
+1378 [Test worker] INFO  output - Starting Read Test 
+1392 [Test worker] INFO  output - L1 State machine STARTING 
+1392 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+1395 [Test worker] INFO  output - L2 State machine STARTING 
+1396 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1398 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1399 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1400 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+1402 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1405 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=191873837, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@b39387, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@3ab2601c], regions=[], submachine=null]] event: CPUREAD 
+1406 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+1408 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+1408 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=506380446, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@2fe2a7e5], regions=[], submachine=null]] event: MISSC 
+1409 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+1409 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=52498113, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@23255354], regions=[], submachine=null]] event: CPUREAD 
+1411 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+1412 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1421 [pool-2-thread-1] INFO  output - L2C to L1: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+1422 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1422 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1423 [pool-2-thread-1] INFO  output - L1C to CPU: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+1423 [pool-2-thread-1] INFO  output - CPU Received Data: [5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] 
+1423 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1358 [Test worker] INFO  output - Starting Write Test 
+1372 [Test worker] INFO  output - L1 State machine STARTING 
+1372 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1375 [Test worker] INFO  output - L2 State machine STARTING 
+1375 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1379 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1380 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1382 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1385 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=191873837, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@b39387, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@3ab2601c], regions=[], submachine=null]] event: CPUWRITE 
+1386 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1387 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+1388 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+1388 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1389 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1390 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1391 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+1394 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1395 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+1396 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1397 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1398 [pool-2-thread-1] INFO  output - L1C to CPU: Data([49]) 
+1398 [pool-2-thread-1] INFO  output - CPU Received Data: [49] 
+1399 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1349 [Test worker] INFO  output - Starting Read Write Same Test 
+1363 [Test worker] INFO  output - L1 State machine STARTING 
+1363 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+1366 [Test worker] INFO  output - L2 State machine STARTING 
+1366 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1368 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1369 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1371 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+1372 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1375 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1110356976, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1ffd7ff9, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@249569ee], regions=[], submachine=null]] event: CPUREAD 
+1376 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+1377 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+1378 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=126103824, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@42f456b2], regions=[], submachine=null]] event: MISSC 
+1379 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+1380 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=377435272, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@7144a827], regions=[], submachine=null]] event: CPUREAD 
+1380 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+1382 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1389 [pool-2-thread-1] INFO  output - L2C to L1: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+1389 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1390 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1390 [pool-2-thread-1] INFO  output - L1C to CPU: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+1390 [pool-2-thread-1] INFO  output - CPU Received Data: [5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] 
+1391 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1392 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1392 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1395 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1397 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1398 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1398 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1110356976, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1ffd7ff9, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@249569ee], regions=[], submachine=null]] event: CPUWRITE 
+1399 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1401 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+1401 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+1401 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1402 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1402 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1403 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+1406 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1407 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+1408 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1408 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1409 [pool-2-thread-1] INFO  output - L1C to CPU: Data([50]) 
+1409 [pool-2-thread-1] INFO  output - CPU Received Data: [50] 
+1409 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1410 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1411 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1412 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+1413 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+29361 [Test worker] INFO  output - Starting Read Write Same Test 
+29591 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+29593 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+29593 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+29593 [pool-2-thread-1] INFO  output - L1C to CPU: Data([51]) 
+29593 [pool-2-thread-1] INFO  output - CPU Received Data: [51] 
+29593 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+29709 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+29934 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+29934 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+29934 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+29935 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+29935 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1337 [Test worker] INFO  output - Starting Read Write Same Test 
+1352 [Test worker] INFO  output - L1 State machine STARTING 
+1352 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+1354 [Test worker] INFO  output - L2 State machine STARTING 
+1355 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1356 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1357 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1358 [pool-2-thread-1] INFO  output - L1 State changing to: RDL2WAITD 
+1360 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1363 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1110356976, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1ffd7ff9, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@249569ee], regions=[], submachine=null]] event: CPUREAD 
+1364 [pool-2-thread-1] INFO  output - L2 State changing to: RDWAITD 
+1366 [pool-2-thread-1] INFO  output - L2 -> L1C to L2C: CPURead(10101010101010101) 
+1366 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  2 state: ObjectState [getIds()=[RDWAITD], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=126103824, toString()=AbstractState [id=RDWAITD, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$603/0x0000000800e15a78@42f456b2], regions=[], submachine=null]] event: MISSC 
+1367 [pool-2-thread-1] INFO  output - L2 State changing to: MISSC 
+1368 [pool-2-thread-1] INFO  output - L2 L2CPUREAD  3 state: ObjectState [getIds()=[MISSC], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=377435272, toString()=AbstractState [id=MISSC, pseudoState=null, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$605/0x0000000800e15eb8@7144a827], regions=[], submachine=null]] event: CPUREAD 
+1369 [pool-2-thread-1] INFO  output - L2 State changing to: RDL2WAITD 
+1370 [pool-2-thread-1] INFO  output - L2C to Mem: CpuRead(10101010101010101) 
+1380 [pool-2-thread-1] INFO  output - L2C to L1: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+1380 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1381 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1381 [pool-2-thread-1] INFO  output - L1C to CPU: Data([5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]) 
+1381 [pool-2-thread-1] INFO  output - CPU Received Data: [5, 6, 7, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] 
+1382 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1383 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1384 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1388 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1389 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1390 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(10101010101010101) 
+1391 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1110356976, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1ffd7ff9, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@249569ee], regions=[], submachine=null]] event: CPUWRITE 
+1392 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1393 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+1394 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+1394 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1394 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1395 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1396 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+1398 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1399 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+1400 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+1401 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+1402 [pool-2-thread-1] INFO  output - L1C to CPU: Data([50]) 
+1402 [pool-2-thread-1] INFO  output - CPU Received Data: [50] 
+1402 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1403 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1403 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1405 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+1409 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+36389 [Test worker] INFO  output - Starting Read Write Same Test 
+36390 [Test worker] INFO  output - Starting Read Write Same Test 
+36392 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+36393 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+36394 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+36394 [pool-2-thread-1] INFO  output - L1C to CPU: Data([51]) 
+36394 [pool-2-thread-1] INFO  output - CPU Received Data: [51] 
+36394 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+36395 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+36395 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+36395 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+36396 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+36396 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+36396 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+36396 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+36396 [pool-2-thread-1] INFO  output - L1C to CPU: Data([50]) 
+36396 [pool-2-thread-1] INFO  output - CPU Received Data: [50] 
+36396 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+36397 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+36397 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+36397 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+36398 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+36398 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+36399 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+36399 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+36400 [pool-2-thread-1] INFO  output - L1C to CPU: Data([51]) 
+36400 [pool-2-thread-1] INFO  output - CPU Received Data: [51] 
+36400 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+36400 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+36400 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+36401 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+36401 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+36401 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUREAD 
+36401 [pool-2-thread-1] INFO  output - L1 State changing to: RDWAITD 
+36401 [pool-2-thread-1] INFO  output - CPU to L1C: CPURead(10101010101010101) 
+36402 [pool-2-thread-1] INFO  output - L1C to CPU: Data([50]) 
+36402 [pool-2-thread-1] INFO  output - CPU Received Data: [50] 
+36402 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+36402 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+36402 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+36402 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+36403 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1404 [Test worker] INFO  output - Starting Victim Cache Test 
+1417 [Test worker] INFO  output - L1 State machine STARTING 
+1417 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1420 [Test worker] INFO  output - L2 State machine STARTING 
+1422 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1426 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1427 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1428 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+1431 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1110356976, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1ffd7ff9, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@249569ee], regions=[], submachine=null]] event: CPUWRITE 
+1432 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1434 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+1435 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+1435 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1436 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1437 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1438 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+1441 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1442 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1443 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1445 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1446 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1448 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+1449 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1110356976, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1ffd7ff9, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@249569ee], regions=[], submachine=null]] event: CPUWRITE 
+1450 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1451 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+1451 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+1452 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1452 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1452 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1454 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+1455 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1456 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1457 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1458 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1459 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1460 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+1461 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1110356976, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1ffd7ff9, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@249569ee], regions=[], submachine=null]] event: CPUWRITE 
+1461 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1462 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+1462 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+1463 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1463 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1464 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1465 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+1466 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1467 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1468 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1469 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1471 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1472 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+1472 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=1110356976, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1ffd7ff9, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@249569ee], regions=[], submachine=null]] event: CPUWRITE 
+1473 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1473 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+1474 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+1474 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1474 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1475 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1476 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+1476 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1477 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1477 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1478 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+1479 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+1479 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+1483 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+1626 [Test worker] INFO  output - Starting Victim Cache Test 
+5076 [Test worker] INFO  output - L1 State machine STARTING 
+5076 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+5080 [Test worker] INFO  output - L2 State machine STARTING 
+5081 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+10139 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+13877 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+16480 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+16484 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+16485 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+16488 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+20400 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+20400 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+23823 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+23824 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+26665 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+31090 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+34341 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+34341 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+34344 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+34345 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+34347 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+34348 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+34348 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+34349 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+34350 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+34350 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+34351 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+34352 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+34353 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+34354 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+34355 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+34357 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+34359 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+34360 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+34361 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+34363 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+34364 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+34365 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+34366 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+34366 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+34366 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+34367 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+34369 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+34370 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+34372 [pool-2-thread-1] INFO  output - L2 State machine STARTING 
+34372 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+34373 [pool-2-thread-1] INFO  output - L1 State machine STARTING 
+1545 [Test worker] INFO  output - Starting Victim Cache Test 
+1560 [Test worker] INFO  output - L1 State machine STARTING 
+1560 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1562 [Test worker] INFO  output - L2 State machine STARTING 
+1563 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1566 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1567 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1568 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+1571 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+1573 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1575 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+1576 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+1576 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1577 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1578 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1579 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+1582 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1583 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1584 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1586 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1587 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1588 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+1589 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+1590 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1591 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+1592 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+1592 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1592 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1593 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1594 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+1595 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1596 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1597 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1599 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1600 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1600 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+1601 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+1601 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1602 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+1603 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+1603 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1603 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1604 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1605 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+1605 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1606 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1606 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1608 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1608 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1609 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+1609 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+1609 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1610 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+1610 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+1611 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1611 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1612 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1612 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+1613 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1613 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1614 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1615 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+1616 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+41316 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+136230 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+136242 [pool-2-thread-1] INFO  output - L2 State machine STARTING 
+1532 [Test worker] INFO  output - Starting Victim Cache Test 
+1548 [Test worker] INFO  output - L1 State machine STARTING 
+1548 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1551 [Test worker] INFO  output - L2 State machine STARTING 
+1552 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1557 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1558 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1560 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+1564 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+1565 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1567 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+1568 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+1568 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1569 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1569 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1571 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+1574 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1575 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1576 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1578 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1579 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1580 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+1581 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+1582 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1583 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+1583 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+1584 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1584 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1585 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1586 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+1586 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1588 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1589 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1591 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1592 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1593 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+1593 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+1594 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1595 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+1595 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+1596 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1596 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1597 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1598 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+1599 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1599 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1599 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1600 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1601 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1602 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+1603 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+1604 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1605 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+1605 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+1606 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1606 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1606 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1607 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+1609 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1609 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1610 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1611 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+1612 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+5385 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+1646 [Test worker] INFO  output - Starting Victim Cache Test 
+1662 [Test worker] INFO  output - L1 State machine STARTING 
+1662 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1665 [Test worker] INFO  output - L2 State machine STARTING 
+1666 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1670 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1671 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1673 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+1676 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+1677 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1680 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+1681 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+1682 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1682 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1684 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1686 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+1689 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1691 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1692 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1694 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1696 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1697 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+1698 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+1699 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1701 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+1701 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+1702 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1702 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1703 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1704 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+1705 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1707 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1708 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1710 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1711 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1712 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+1713 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+1713 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1715 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+1716 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+1716 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1717 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1718 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1720 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+1721 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1722 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1723 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1724 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1725 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+1726 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+1726 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+1727 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1728 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+1728 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+1729 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+1729 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+1729 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+1730 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+1731 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+1732 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1733 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1734 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+1735 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+10747 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+10749 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+22011 [pool-2-thread-1] INFO  output - L2 State machine STARTING 
+1540 [Test worker] INFO  output - Starting Victim Cache Test 
+1557 [Test worker] INFO  output - L1 State machine STARTING 
+1557 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1560 [Test worker] INFO  output - L2 State machine STARTING 
+1560 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1564 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1565 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4183 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+4186 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+4188 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+4681 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+4682 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+4682 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+5315 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+5316 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+5317 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+5320 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+5321 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+5321 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+5324 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+5325 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+5909 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+5910 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+5910 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+6527 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+6528 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+6528 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+7793 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+7793 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+7794 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+7795 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+7797 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+7797 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+7799 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+7800 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+8781 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+8781 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+8782 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+9482 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+9482 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+9482 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+10121 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+10122 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+10123 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+10124 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+10125 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+10125 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+10126 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+10127 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+10717 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+10718 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+10718 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+11271 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+11272 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+11272 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+11797 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+11797 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+11798 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+11799 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+11799 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+11800 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+11801 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+11802 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+13623 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+13624 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+1592 [Test worker] INFO  output - Starting Victim Cache Test 
+1606 [Test worker] INFO  output - L1 State machine STARTING 
+1606 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1608 [Test worker] INFO  output - L2 State machine STARTING 
+1609 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1613 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1614 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+3939 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+3942 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+3943 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+3946 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+3947 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+3948 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+3948 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+3949 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+3950 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+3954 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+3955 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+3956 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+3958 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3960 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4853 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+4854 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+4854 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+4856 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+4856 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+4856 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+4856 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+4857 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+4858 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+4859 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+4860 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+4860 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+4862 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4864 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+5645 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+5646 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+5647 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+5648 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+5649 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+5649 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+5649 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+5650 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+5651 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+5652 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+5653 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+5654 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+5656 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+5656 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+6341 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+6342 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+6342 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+6343 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+6344 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+6344 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+6344 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+6345 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+6345 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+6346 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+6347 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+6348 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+6349 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+6350 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+1535 [Test worker] INFO  output - Starting Victim Cache Test 
+1550 [Test worker] INFO  output - L1 State machine STARTING 
+1550 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1553 [Test worker] INFO  output - L2 State machine STARTING 
+1554 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1559 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1561 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+3871 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+3874 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+3876 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+3878 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+3879 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+3879 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+3880 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+3881 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+3882 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+3884 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+3885 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+3885 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+3887 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3888 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4371 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+4372 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+4373 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+4374 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+4374 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+4374 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+4375 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+4376 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+4377 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+4378 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+4379 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+4380 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+4382 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4383 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4835 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+4835 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+4836 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+4836 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+4837 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+4837 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+4838 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+4838 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+4839 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+4840 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+4841 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+4842 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+4844 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4845 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+5335 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+5336 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+5336 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+5337 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+5337 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+5338 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+5338 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+5339 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+5340 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+5340 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+5341 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+5341 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+5343 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+5344 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+6306 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+6307 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+17877 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010110101010101) 
+18941 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: DATA 
+1520 [Test worker] INFO  output - Starting Victim Cache Test 
+1535 [Test worker] INFO  output - L1 State machine STARTING 
+1535 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1538 [Test worker] INFO  output - L2 State machine STARTING 
+1539 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+3398 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3400 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+7847 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+8872 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+8874 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+8876 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+8877 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+8878 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+8878 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+8879 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+13317 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+13321 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+13322 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+13323 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+13325 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+13327 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+14712 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+16061 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+16061 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+16062 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+16062 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+16063 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+16063 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+16063 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+16064 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+16065 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+16067 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+16068 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+16070 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+16071 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+17058 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+17831 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+17832 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+17832 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+17833 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+17833 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+17833 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+17834 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+17835 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+17836 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+17836 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+17837 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+17838 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+17839 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+18495 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+19167 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+19167 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+19168 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+19169 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+19169 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+19169 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+19169 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+19170 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+19170 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+19171 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+19172 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+19173 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+19174 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+20685 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+20686 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+22680 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010110101010101) 
+1552 [Test worker] INFO  output - Starting Victim Cache Test 
+1569 [Test worker] INFO  output - L1 State machine STARTING 
+1569 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1572 [Test worker] INFO  output - L2 State machine STARTING 
+1573 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1577 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1578 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+5674 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+21032 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+21033 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+21035 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+21036 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+21036 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+21037 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+21038 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+21039 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+21042 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+21042 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+21043 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+21044 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+21045 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+24358 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+25984 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+25985 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+25986 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+25986 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+25987 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+25987 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+25988 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+25989 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+25990 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+25992 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+25992 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+25994 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+25995 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+34030 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+42042 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+42043 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+42044 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+42044 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+42045 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+42045 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+42045 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+42046 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+42048 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+42049 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+42049 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+42050 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+42050 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+56969 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+57976 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+57976 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+57977 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+57977 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+57977 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+57977 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+57977 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+57978 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+1502 [Test worker] INFO  output - Starting Victim Cache Test 
+1520 [Test worker] INFO  output - L1 State machine STARTING 
+1520 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1524 [Test worker] INFO  output - L2 State machine STARTING 
+1524 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1529 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1530 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+3708 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+4845 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+4846 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+4848 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+4849 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+4850 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+4850 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+4851 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+4853 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+4856 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+4857 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+4857 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+4859 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4859 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+5832 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+6706 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+6707 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+6708 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+6708 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+6708 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+6709 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+6709 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+6710 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+6711 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+6712 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+6712 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+6714 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+6715 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+7519 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+8264 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+8264 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+8265 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+8266 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+8266 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+8266 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+8267 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+8268 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+8268 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+8269 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+8269 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+8271 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+8271 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+9195 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+10059 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+10060 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+10061 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+10061 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+10061 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+10061 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+10062 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+10063 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+10063 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+10064 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+10065 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+10066 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+10067 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+11758 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+11759 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+1558 [Test worker] INFO  output - Starting Victim Cache Test 
+1574 [Test worker] INFO  output - L1 State machine STARTING 
+1574 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1577 [Test worker] INFO  output - L2 State machine STARTING 
+1578 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1583 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1584 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+35315 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+36275 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+36275 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+36278 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+36279 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+36279 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+36280 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+36280 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+36282 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+36285 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+36286 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+36287 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+36290 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+36291 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+37065 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+37754 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+37755 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+37755 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+37755 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+37756 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+37756 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+37756 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+37757 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+37757 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+37758 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+37758 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+37760 [pool-2-thread-1] INFO  output - L2 State machine STARTING 
+1554 [Test worker] INFO  output - Starting Victim Cache Test 
+1571 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1571 [Test worker] INFO  output - L1 State machine STARTING 
+1575 [Test worker] INFO  output - L2 State machine STARTING 
+1576 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1580 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1582 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+2949 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+3940 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+3941 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+3944 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+3945 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+3945 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+3946 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+3947 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+3948 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+3950 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+3951 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+3952 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+3953 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3954 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+5259 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+6118 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+6119 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+6120 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+6120 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+6121 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+6121 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+6121 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+6122 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+6123 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+6124 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+6125 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+6126 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+6127 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+6738 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+7397 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+7398 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+7399 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+7399 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+7399 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+7399 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+7400 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+7401 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+7401 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+7402 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+7403 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+7404 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+7405 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+8087 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+8821 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+8822 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+8823 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+8823 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+8823 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+8824 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+8824 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+8825 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+8826 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+8827 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+8827 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+8829 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+8829 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+10227 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+10228 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+1573 [Test worker] INFO  output - Starting Victim Cache Test 
+1592 [Test worker] INFO  output - L1 State machine STARTING 
+1592 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1596 [Test worker] INFO  output - L2 State machine STARTING 
+1597 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1601 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1603 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+2250 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+2779 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+2780 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+2785 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+2786 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+2787 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+2787 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+2788 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+2793 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+2796 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+2797 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+2798 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+2800 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+2801 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+3231 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+3648 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+3649 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+3650 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+3651 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+3651 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+3651 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+3652 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+3653 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+3654 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+3655 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+3656 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+3657 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3658 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4157 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+4800 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+4801 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+4802 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+4802 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+4803 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+4803 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+4804 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+4805 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+4805 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+4806 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+4806 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+4808 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4809 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+5277 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+5796 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+5796 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+5797 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+5797 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+5798 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+5798 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+5799 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+5800 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+5800 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+5801 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+5801 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+5803 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+5803 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+8203 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+1495 [Test worker] INFO  output - Starting Victim Cache Test 
+1513 [Test worker] INFO  output - L1 State machine STARTING 
+1513 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1515 [Test worker] INFO  output - L2 State machine STARTING 
+1516 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1520 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1521 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+2995 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+3897 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+3898 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+3900 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+3901 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+3901 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+3902 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+3903 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+3904 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+7006 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+7007 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+7008 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+7010 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+7011 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+7695 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+8534 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+8534 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+8536 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+8536 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+8536 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+8536 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+8537 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+8538 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+9629 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+9630 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+9630 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+9632 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+9632 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+10775 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+11790 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+11791 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+11792 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+11793 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+11793 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+11793 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+11794 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+11797 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+12975 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+12976 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+12976 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+12978 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+12978 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+15327 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+16385 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+16386 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+16387 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+16387 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+16387 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+16387 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+16388 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+16389 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+17522 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+17522 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+17522 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+17523 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+17524 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+18978 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+29535 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+31126 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010110101010101) 
+31985 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: DATA 
+32011 [pool-2-thread-1] INFO  output - L2 State machine STARTING 
+1517 [Test worker] INFO  output - Starting Victim Cache Test 
+1532 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1532 [Test worker] INFO  output - L1 State machine STARTING 
+1534 [Test worker] INFO  output - L2 State machine STARTING 
+1535 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1538 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+1539 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4203 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+5343 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+5344 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+5346 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+5347 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+5347 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+5348 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+5348 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+5350 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+6301 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+6302 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+6303 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+6304 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+6305 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+6875 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+7836 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+7836 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+7837 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+7838 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+7838 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+7838 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+7839 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+7840 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+8905 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+8906 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+8907 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+8909 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+8909 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+9465 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+10174 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+10175 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+10176 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+10176 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+10176 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+10177 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+10177 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+10178 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+10956 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+10956 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+10957 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+10958 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+10959 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+11500 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+12509 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+12510 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+12511 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+12511 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+12511 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+12512 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+12512 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+12512 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+13588 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+13588 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+13588 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+13590 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+13590 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+14472 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+16033 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+24073 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010110101010101) 
+24613 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: DATA 
+24642 [pool-2-thread-1] INFO  output - L2 State machine STARTING 
+1529 [Test worker] INFO  output - Starting Victim Cache Test 
+1543 [Test worker] INFO  output - L1 State machine STARTING 
+1543 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1546 [Test worker] INFO  output - L2 State machine STARTING 
+1547 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+8191 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+8192 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+9060 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+9790 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+9791 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+9794 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+9794 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+9795 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+9795 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+9796 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+10559 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+11186 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+11188 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+11189 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+11852 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+11853 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+12619 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+14122 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+14123 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+14124 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+14125 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+14125 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+14125 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+14126 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+15291 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+18523 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+18523 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+18524 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+21538 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+21539 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+23416 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+25298 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+25298 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+25299 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+25300 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+25300 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+25300 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+25301 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+26761 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+26762 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+26763 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+26764 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+39917 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+39917 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+45304 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+46392 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+46393 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+46394 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+46394 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+46394 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+46395 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+46395 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+48170 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+48172 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+48173 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+48173 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1556 [Test worker] INFO  output - Starting Victim Cache Test 
+1571 [Test worker] INFO  output - L1 State machine STARTING 
+1571 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1574 [Test worker] INFO  output - L2 State machine STARTING 
+1575 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+5005 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+5006 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+7493 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+11455 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+11456 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+11458 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+11458 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+11459 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+11460 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+11460 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+14761 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+18049 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+18050 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+18051 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+19370 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+19371 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+20703 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+20704 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+20705 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+20706 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+20706 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+20707 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+20707 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+20707 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+21945 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+23411 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+23413 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+23414 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+24534 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+24535 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+25620 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+25621 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+25621 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+25622 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+25623 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+25623 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+25623 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+25624 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+26777 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+28104 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+28105 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+28106 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+29163 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+29164 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+30249 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+30250 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+30250 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+30251 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+30252 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+30252 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+30252 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+30253 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+31237 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+32074 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+32075 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+32076 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1499 [Test worker] INFO  output - Starting Victim Cache Test 
+1514 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1514 [Test worker] INFO  output - L1 State machine STARTING 
+1516 [Test worker] INFO  output - L2 State machine STARTING 
+1517 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+3637 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3637 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4295 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+4299 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+4300 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+4303 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+4303 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+4308 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+4309 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+4309 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+5098 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+6335 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+6336 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+6337 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+7213 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+7214 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+7860 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+7861 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+7862 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+7862 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+7863 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+7863 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+7863 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+7864 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+8591 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+10017 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+10018 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+10019 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+11147 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+11148 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+14055 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+14056 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+14056 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+14057 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+14057 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+14058 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+14058 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+14058 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+18535 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+19180 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+19181 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+19181 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+20001 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+20002 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+23649 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+23649 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+23650 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+23651 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+23651 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+23651 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+23651 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+23652 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+24467 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+26371 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+26372 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+26372 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+31331 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+31332 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+1557 [Test worker] INFO  output - Starting Victim Cache Test 
+1572 [Test worker] INFO  output - L1 State machine STARTING 
+1572 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1575 [Test worker] INFO  output - L2 State machine STARTING 
+1576 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+3746 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3747 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4447 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+4450 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+4451 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+4453 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+4454 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+4454 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+4454 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+4455 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+5324 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+8933 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+8935 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+8936 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+16105 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+16107 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+20937 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+20938 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+20938 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+20939 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+20940 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+20940 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+20940 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+20941 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+22563 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+24793 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+24794 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+24796 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+25863 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+25864 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+26946 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+26947 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+26948 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+26949 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+26950 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+26950 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+26950 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+26951 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+27763 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+28653 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+28654 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+28655 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+29601 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+29602 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+30273 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+30274 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+30274 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+30275 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+30276 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+30276 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+30276 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+30276 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+30894 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+31465 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+31465 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+31465 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1555 [Test worker] INFO  output - Starting Victim Cache Test 
+1573 [Test worker] INFO  output - L1 State machine STARTING 
+1573 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1576 [Test worker] INFO  output - L2 State machine STARTING 
+1577 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+3811 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+3812 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4675 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+4678 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+4679 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+4681 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+4682 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+4682 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+4682 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+4683 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+5674 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+6512 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+6513 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+6514 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+7536 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+7537 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+8038 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+8040 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+8040 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+8042 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+8042 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+8042 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+8042 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+8043 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+8697 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+9126 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+9127 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+9128 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+9593 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+9594 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+10074 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+10075 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+10075 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+10076 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+10077 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+10077 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+10077 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+10078 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+10610 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+11073 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+11074 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+11074 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+11666 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+11666 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+12259 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+12259 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+12260 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+12260 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+12260 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+12261 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+12261 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+12261 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+12834 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+13281 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+13282 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+13282 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+16270 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+16271 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+27435 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+85758 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+98077 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010110101010101) 
+103550 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: DATA 
+1516 [Test worker] INFO  output - Starting Victim Cache Test 
+1532 [Test worker] INFO  output - L1 State machine STARTING 
+1532 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1534 [Test worker] INFO  output - L2 State machine STARTING 
+1535 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+7974 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+7975 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+9121 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+13903 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+13904 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+13906 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+13907 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+13907 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+13908 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+13908 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+13909 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+15024 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+15025 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+15026 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+15027 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+15028 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+30572 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+33051 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+33051 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+33052 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+33053 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+33053 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+33054 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+33055 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+33056 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+37087 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+37088 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+37089 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+37095 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+37096 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+72918 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+76055 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+76055 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+76056 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+76056 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+76057 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+76057 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+76058 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+76060 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+76061 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+76061 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+76062 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+76063 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+76064 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+77083 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+77762 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+77762 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+77763 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+77763 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+77763 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+77763 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+77764 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+77764 [pool-2-thread-1] INFO  output - L2 State machine STARTING 
+77764 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+1602 [Test worker] INFO  output - Starting Victim Cache Test 
+1618 [Test worker] INFO  output - L1 State machine STARTING 
+1618 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1621 [Test worker] INFO  output - L2 State machine STARTING 
+1621 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1625 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+6014 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+6598 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+7318 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+7319 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+7321 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+7322 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+7322 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+7322 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+7323 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+7324 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+7327 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+7327 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+7328 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+7330 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+8049 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+8849 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+9858 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+9858 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+9859 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+9859 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+9860 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+9860 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+9861 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+9862 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+9863 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+9864 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+9865 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+9867 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+10700 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+11280 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+11820 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+11820 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+11821 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+11821 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+11822 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+11822 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+11823 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+11823 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+11824 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+11824 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+11825 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+11826 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+12537 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+13197 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+14464 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+14464 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+14465 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+14465 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+14465 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+14465 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+14466 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+14466 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+14467 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+14467 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+14467 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+14468 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+15377 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+15378 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+1547 [Test worker] INFO  output - Starting Victim Cache Test 
+1562 [Test worker] INFO  output - L1 State machine STARTING 
+1563 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1565 [Test worker] INFO  output - L2 State machine STARTING 
+1567 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1571 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+5349 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+6591 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+7972 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+7973 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+7975 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+7975 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+7975 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+7976 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+7976 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+7977 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+7979 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+7980 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+7980 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+7982 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+9406 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+10621 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+23007 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+23008 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+23009 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+23009 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+23009 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+23009 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+23010 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+23011 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+23012 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+23013 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+23013 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+23015 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+47899 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+49696 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+55681 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+55682 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+55683 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+55684 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+55684 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+55684 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+55685 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+55686 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+55687 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+55688 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+55688 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+55689 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+64007 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+64781 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+65776 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+65776 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+65776 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+65777 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+65777 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+65777 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+65777 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+65778 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+65778 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+65779 [pool-2-thread-1] INFO  output - L2 State machine STARTING 
+65779 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1455 [Test worker] INFO  output - Starting Victim Cache Test 
+1469 [Test worker] INFO  output - L1 State machine STARTING 
+1470 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1472 [Test worker] INFO  output - L2 State machine STARTING 
+1473 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1476 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+2942 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+4243 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+6256 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+6257 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+6259 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+6260 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+6260 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+6261 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+6262 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+6263 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+6265 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+6266 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+6267 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+6268 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+8588 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+9438 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+9819 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+9819 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+9820 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+9820 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+9821 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+9821 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+9821 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+9822 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+9823 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+9824 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+9825 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+9826 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+10378 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+11256 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+11939 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+11940 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+11941 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+11941 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+11941 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+11942 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+11942 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+11943 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+11944 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+11944 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+11945 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+11947 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+15813 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+16621 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+17827 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+17827 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+17828 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+17828 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+17829 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+17829 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+17829 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+17830 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+17831 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+17831 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+17832 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+17833 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+52301 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+52302 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
+55658 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT1D 
+58200 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010110101010101) 
+59110 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=632496891, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@32ef8d20, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@68860910], regions=[], submachine=null]] event: CPUWRITE 
+59111 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+1469 [Test worker] INFO  output - Starting Victim Cache Test 
+1485 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1485 [Test worker] INFO  output - L1 State machine STARTING 
+1488 [Test worker] INFO  output - L2 State machine STARTING 
+1488 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1491 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4548 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+7236 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+10418 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+10419 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+10421 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+10421 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+10421 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+10422 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+10422 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+10423 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+10425 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+10426 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+10426 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+10427 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+11910 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+27869 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+28936 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+28936 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+28937 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+28938 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+28938 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+28939 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+28939 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+28940 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+28941 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+28942 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+28943 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+28944 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+29959 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+52105 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+55327 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+55327 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+55328 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+55328 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+55329 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+55329 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+55330 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+55331 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+55332 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+55333 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+55333 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+55334 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+56328 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+61553 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+64178 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+64178 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+64179 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+1490 [Test worker] INFO  output - Starting Victim Cache Test 
+1509 [Test worker] INFO  output - L1 State machine STARTING 
+1509 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+1511 [Test worker] INFO  output - L2 State machine STARTING 
+1512 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+1516 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+4437 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+18315 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00000110101010101) 
+18319 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+18321 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+18323 [pool-2-thread-1] INFO  output - L2C to L2D: Write([49]) 
+18328 [pool-2-thread-1] INFO  output - L2C to L1: Data([49]) 
+18328 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+18328 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+18329 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+18330 [pool-2-thread-1] INFO  output - L1C to L1D: Write([49]) 
+18332 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+18333 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+18333 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+18335 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+18335 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+19505 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001010101010101) 
+19506 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+19507 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+19508 [pool-2-thread-1] INFO  output - L2C to L2D: Write([50]) 
+19508 [pool-2-thread-1] INFO  output - L2C to L1: Data([50]) 
+19509 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+19509 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+19510 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+19511 [pool-2-thread-1] INFO  output - L1C to L1D: Write([50]) 
+19512 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+19513 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+19513 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+19515 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+19516 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+23327 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00001110101010101) 
+23328 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+23328 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+23329 [pool-2-thread-1] INFO  output - L2C to L2D: Write([51]) 
+23329 [pool-2-thread-1] INFO  output - L2C to L1: Data([51]) 
+23330 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+23330 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+23331 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+23331 [pool-2-thread-1] INFO  output - L1C to L1D: Write([51]) 
+23332 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+23333 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+23333 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+23335 [pool-2-thread-1] INFO  output - L1 State changing to: MISSI 
+23336 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITD 
+25927 [pool-2-thread-1] INFO  output - L1C to L2C: CpuRead(00010010101010101) 
+25928 [pool-2-thread-1] INFO  output - Message Received on L2 side, sending event: state: ObjectState [getIds()=[HIT], getClass()=class org.springframework.statemachine.state.ObjectState, hashCode()=919222703, toString()=AbstractState [id=HIT, pseudoState=org.springframework.statemachine.state.DefaultPseudoState@1f521c7b, deferred=[], entryActions=[], exitActions=[], stateActions=[edu.uno.advcomparch.statemachine.L2ControllerStateMachineConfiguration$$Lambda$608/0x0000000800e16518@699071cf], regions=[], submachine=null]] event: CPUWRITE 
+25929 [pool-2-thread-1] INFO  output - L2 State changing to: WRWAITDX 
+25929 [pool-2-thread-1] INFO  output - L2C to L2D: Write([52]) 
+25930 [pool-2-thread-1] INFO  output - L2C to L1: Data([52]) 
+25930 [pool-2-thread-1] INFO  output - L2 State changing to: HIT 
+25930 [pool-2-thread-1] INFO  output - Message Received on L1 from L2 Side, sending event: DATA 
+25930 [pool-2-thread-1] INFO  output - L1 State changing to: WRALLOC 
+25931 [pool-2-thread-1] INFO  output - L1C to L1D: Write([52]) 
+25933 [pool-2-thread-1] INFO  output - L1 State changing to: HIT 
+25934 [pool-2-thread-1] INFO  output - Message Received on L1 from CPU Side, sending event: CPUWRITE 
+25934 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAITDX 
+25936 [pool-2-thread-1] INFO  output - L1 State changing to: MISSD 
+25936 [pool-2-thread-1] INFO  output - L1 State changing to: WRWAIT2D 
+25937 [pool-2-thread-1] INFO  output - Victimize L1C to L1D (00010110101010101) 
